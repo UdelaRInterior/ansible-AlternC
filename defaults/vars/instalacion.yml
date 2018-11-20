@@ -1,0 +1,93 @@
+---
+###############################################
+##### Oscar Ford: oscarf@ei.udelar.edu.uy #####
+##### Espacio Interdisciplinario, Udelar. #####
+###############################################
+
+
+##### Configuraciones ##########
+
+# Punto de montaje de la partición que contiene los directorios web
+# de los sitios administrados por el panel AlternC. Por defecto "/var".
+#ansible_pto_montaje_web: '/var/'
+
+# Password deseada para el usuario "root" de MySql.
+root_pass_mysql: 'Clave_rooT_1234'
+
+# Repositorio de AlternC 3.5.
+alternc35_repo: 'http://debian.koumbit.net/debian'
+alternc35_rama: 'alternc35 main'
+
+#####################
+#####  debconf  #####
+#####################
+
+# Servidor web que desea reconfigurar automáticamente (apache2/lighttpd).
+phpmyadmin_debconf_reconfigure_webserver: 'apache2'
+
+# Nombre de tu servicio de hospedaje (AlternC).
+alternc_debconf_hostingname: 'Espacio Interdisciplinario'
+
+# Nombre de dominio completo del panel de hospedaje (mipanelalternc.com).
+#alternc_debconf_desktopname: 'deneb.ei.udelar.edu.uy'
+alternc_debconf_desktopname: 'pitanga.interior.edu.uy'
+
+# La ip principal del servidor.
+#alternc_debconf_public_ip: '164.73.16.92'
+alternc_debconf_public_ip: '164.73.98.30'
+
+# La dirección ip interna del servidor.
+alternc_debconf_internal_ip: '164.73.98.30'
+
+# Nombre de dominio del servidor DNS primario.
+alternc_debconf_ns1: 'gould.csic.edu.uy'
+
+# Nombre de dominio del servidor DNS secundario.
+alternc_debconf_ns2: 'anaconda.cure.edu.uy'
+
+# El MX por omisión que se asigna a los nuevos dominios (mipanelalternc.com).
+#alternc_debconf_default_mx: 'deneb.ei.udelar.edu.uy'
+alternc_debconf_default_mx: 'pitanga.interior.edu.uy'
+
+# Se debe utilizar el servidor MySql local identificado automáticamente?
+# (No cambiar éste valor, si el servidor mysql es remoto ésta variable se configura con
+# '' y entran en juego otras no disponibles en ésta versión del playbook. La pregunta es de
+# opción si/no, pero su variable no es booleana.)
+alternc_debconf_mysql_host: '127.0.0.1'
+
+# Carpeta en que los archivos HTML de los usuarios AlternC serán almacenados (/var/www/alternc/).
+alternc_debconf_alternc_html: '/var/www/alternc/'
+
+# Carpeta en la que se almacenan los correos de los usuarios (/var/mail/alternc/).
+alternc_debconf_alternc_mail: '/var/mail/alternc/'
+
+# Carpeta en la que se almacenarán las bitácoras de AlternC (/var/log/alternc/sites/).
+alternc_debconf_alternc_logs: '/var/log/alternc/sites/'
+
+# Desea configurar la base de datos para phpmyadmin con dbconfig-common (si/no). Variable booleana.
+phpmyadmin_debconf_dbconfig_upgrade: true
+
+# Contraseña de aplicación MySql para phpmyadmin (vacío genera pass aleatoria).
+phpmyadmin_debconf_mysql_admin_pass: ''
+phpmyadmin_debconf_mysql_app_pass: ''
+phpmyadmin_debconf_app_password_confirm: ''
+
+##### La siguiente pregunta aparece cuando phpmyadmin en su instalación detecta una bd existente.
+# Desea reinstalar la base de datos phpmyadmin? (si/no). Variable booleana.
+phpmyadmin_debconf_dbconfig_reinstall: false
+#####
+
+# Idiomas a soportar (mailman) (ar (Arabic), ca (Catalan), cs (Czech), da (Danish), de (German), en (English), es (Spanish), et (Estonian), eu (Basque), fi (Finnish), fr (French), hr (Croatian), hu (Hungarian), ia (Interlingua), it (Italian), ja (Japanese), ko (Korean), lt (Lithuanian), nl (Dutch), no (Norwegian), pl (Polish), pt (Portuguese), pt_BR (Brasilian Portuguese), ro (Romanian), ru (Russian), sl (Slovenian), sr (Serbian), sv (Swedish), tr (Turkish), uk (Ukrainian), vi (Vietnamese), zh_CN (Chinese - China), zh_TW (Chinese - Taiwan)).
+mailman_debconf_site_languages: 'de (German), en (English), es (Spanish), fr (French), it (Italian), pt (Portuguese), pt_BR (Brasilian Portuguese)'
+
+# Idioma por omisión para "mailman" (uno de los presentes en la variable anterior).
+mailman_debconf_default_server_language: 'es (Spanish)'
+
+# Quieres instalar el patch mailman proporcionado por "koumbit.org" para el soporte de listas virtuales? (si/no). Variable booleana.
+alternc_mailman_debconf_patch_mailman: true
+
+###########################
+#####  debconf (fin)  #####
+###########################
+
+...

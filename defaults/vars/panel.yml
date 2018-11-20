@@ -1,0 +1,122 @@
+---
+###############################################
+##### Oscar Ford: oscarf@ei.udelar.edu.uy #####
+##### Espacio Interdisciplinario, Udelar. #####
+###############################################
+
+##### Configuraciones ##########
+
+# Opciones de consulta MySql.
+alternc_opciones_consulta: " --defaults-file=/etc/alternc/my.cnf --skip-column-names alternc -B -e "
+alternc_admin_user: "admin"
+
+# Clave para el usuario "admin", administrador del panel AlternC.
+# Minúsculas, mayúsculas y números; 10 caracteres mínimo (default: "Adm1n1stradoR").
+alternc_admin_pass: '"Adm1n1stradoR"'
+
+### Configuración de cuotas. ###
+  # aws: Awstats - Estadísticas.
+  # cron: Tareas planificadas.
+  # dom: Dominios.
+  # ftp: Cuentas ftp.
+  # mail: Cuentas de correo.
+  # mailman: Listas de correo.
+  # mysql: Bases de datos.
+  # piwiki: Estadisticas a través de piwiki (no habilitado).
+  # web: Espacio de almacenamiento (1Gb=10448576).
+# Cuotas para el administrador.
+alternc_cuotas_admin:
+  - { key: '"aws"', value: '"10"' }
+  - { key: '"cron"', value: '"10"' }
+  - { key: '"dom"', value: '"20"' }
+  - { key: '"ftp"', value: '"40"' }
+  - { key: '"mail"', value: '"40"' }
+  - { key: '"mailman"', value: '"20"' }
+  - { key: '"mysql"', value: '"40"' }
+  - { key: '"piwik"', value: '"0"' }
+  - { key: '"web"', value: '"10485760"' }
+# Cuotas "default". El perfil "default" debe existir.
+alternc_cuotas_usuarios_default:
+  - { key: '"aws"', value: '"2"' }
+  - { key: '"cron"', value: '"0"' }
+  - { key: '"dom"', value: '"1"' }
+  - { key: '"ftp"', value: '"2"' }
+  - { key: '"mail"', value: '"5"' }
+  - { key: '"mailman"', value: '"1"' }
+  - { key: '"mysql"', value: '"1"' }
+  - { key: '"piwik"', value: '"0"' }
+  - { key: '"web"', value: '"524288"' }
+# Cuotas personalizadas. El nombre solo admite minúsculas y números.
+# Elimine, agregue o edite cada bloque por completo; un único nombre por bloque, bloques distintos con nombres distintos.
+alternc_cuotas_usuarios:
+# Bloque "udelar1gb"
+  - { nombre: '"udelar1gb"', key: '"aws"', value: '"5"' }
+  - { nombre: '"udelar1gb"', key: '"cron"', value: '"5"' }
+  - { nombre: '"udelar1gb"', key: '"dom"', value: '"5"' }
+  - { nombre: '"udelar1gb"', key: '"ftp"', value: '"10"' }
+  - { nombre: '"udelar1gb"', key: '"mail"', value: '"50"' }
+  - { nombre: '"udelar1gb"', key: '"mailman"', value: '"10"' }
+  - { nombre: '"udelar1gb"', key: '"mysql"', value: '"10"' }
+  - { nombre: '"udelar1gb"', key: '"piwik"', value: '"0"' }
+  - { nombre: '"udelar1gb"', key: '"web"', value: '"1048576"' }
+# Bloque "udelar5gb"
+  - { nombre: '"udelar5gb"', key: '"aws"', value: '"10"' }
+  - { nombre: '"udelar5gb"', key: '"cron"', value: '"10"' }
+  - { nombre: '"udelar5gb"', key: '"dom"', value: '"10"' }
+  - { nombre: '"udelar5gb"', key: '"ftp"', value: '"20"' }
+  - { nombre: '"udelar5gb"', key: '"mail"', value: '"100"' }
+  - { nombre: '"udelar5gb"', key: '"mailman"', value: '"20"' }
+  - { nombre: '"udelar5gb"', key: '"mysql"', value: '"20"' }
+  - { nombre: '"udelar5gb"', key: '"piwik"', value: '"0"' }
+  - { nombre: '"udelar5gb"', key: '"web"', value: '"5242850"' }
+## Bloque "nombre"
+#  - { nombre: '"nombre"', key: '"aws"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"cron"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"dom"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"ftp"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"mail"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"mailman"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"mysql"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"piwik"', value: '"0"' }
+#  - { nombre: '"nombre"', key: '"web"', value: '"0"' }
+
+# Lista de dominios autorizados. Modifique, elimine o agregue líneas según su configuración; respete la estructura, identación
+# y las comillas. Por defecto todos los dominios se insertan en modo = 1, que corresponde a: "verificar el DNS primario en la base WHOIS"
+# otros 4 modos están disponibles desde la configuración del panel.
+alternc_dominios_autorizados:
+  - '"ei.udelar.edu.uy"'
+  - '"csic.edu.uy"'
+  - '"udelar.edu.uy"'
+  - '"cure.edu.uy"'
+  - '"universidad.edu.uy"'
+  - '"unorte.edu.uy"'
+  - '"cup.edu.uy"'
+  - '"tacuarembo.udelar.edu.uy"'
+  - '"rivera.udelar.edu.uy"'
+  - '"cci.edu.uy"'
+  - '"edu.uy"'
+
+# Bloqueo de disco en función de la cuota asignada (0: bloqueo de datos cuando la cuota asignada es excedida;
+# 1: solo muestra la cuota pero no bloquea nada -default-).
+alternc_disk_quota_not_blocking: '"1"'
+
+# Acceso "https" al panel de control (0: los usuarios pueden acceder via "http"; 1: acceso "https" forzado).
+# La instalación de alternc-certbot redirige todas las conexiones al protocolo "https" via configuración en el virtual host.
+# En principio el valor de ésta varible no afecta el comportamiento.
+alternc_force_https: '"1"'
+
+# Fijado en 1 habilita el debug del panel en /var/log/alternc/bureau.log (0: deshabilitado).
+alternc_debug_panel: '"1"'
+
+# Dirección de email para la notificación de creación de cuentas nuevas (0: deshabilitado).
+alternc_new_email: '"0"'
+
+# Servidores de bases de datos MySql externos. Al crear un nuevo usuario AlternC se le puede asignar un
+# servidor de bd distinto del localhost, aquí se define ese servidor; el login proporcionado debe tener 
+# permisos para crear bd y usuarios.
+alternc_db_servers:
+  - { name: '""', host: '""', login: '""', password: '""'}
+#  - { name: '""', host: '""', login: '""', password: '""'}
+#  - { name: '""', host: '""', login: '""', password: '""'}
+
+...
