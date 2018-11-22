@@ -17,7 +17,8 @@
 #- name: Dump all vars
 #  action: template src=templates/debug/dumpall.j2 dest=/tmp/ansible.all
 - name: ver variables
-  debug var: vars
+  debug:
+    var: vars
 
 
 ###################################################
