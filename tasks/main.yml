@@ -1,8 +1,8 @@
 ---
 # tasks file for ansible-AlternC
 #########################################################################
-## First playbook: https://git.interior.edu.uy/oscarf/alternc35_ansible 
-### Oscar Ford: oscarf@ei.udelar.edu.uy - Espacio Interdisciplinario, Udelar. 
+## First playbook: https://git.interior.edu.uy/oscarf/alternc35_ansible
+### Oscar Ford: oscarf@ei.udelar.edu.uy - Espacio Interdisciplinario, Udelar.
 ### Convert to role: Cristhian Choque - CCI - UdelaR
 ### Publish role: Daniel Viñar - CCI - UdelaR (ulvida
 ###############################################
@@ -35,7 +35,7 @@
 
 ###############################################################
 #####  Agregando repositorio "Koumbit" para AlternC 3.5.  #####
-###############################################################       
+###############################################################
 
 - name: Agregando repositorio "Koumbit" para AlternC 3.5.
   template:
@@ -53,19 +53,19 @@
 
 - name: Actualizando lista de paquetes.
   apt:
-    update_cache: yes  
+    update_cache: yes
 
 #- name: Aplicando las actualizaciones de paquetes disponibles.
 #  apt:
 #    upgrade: yes
-#    force_apt_get: yes 
+#    force_apt_get: yes
 
 #- name: Actualizando sistema base si corresponde.
 #  apt:
 #    upgrade: dist
 #    autoremove: yes
-#    autoclean: yes 
-#    force_apt_get: yes  
+#    autoclean: yes
+#    force_apt_get: yes
 
 #################################
 #####  acl, quota, mountops #####
@@ -78,7 +78,7 @@
 #  vars:
 #    paquetes:
 #    - acl
-#    - quota 
+#    - quota
 #
 #- name: Instalando "python-pip" para administrar dependencias del módulo "mountopts". Sea paciente !!.
 #  apt:
@@ -89,7 +89,7 @@
 #- name: Instalando dependencias para el módulo "mountopts".
 #  pip:
 #    name: fstab
-#    state: latest 
+#    state: latest
 
 #- name: Repaldando fichero "fstab".
 #  command: "cp /etc/fstab /etc/fstab.bk.{{ansible_date_time.iso8601_basic}}"
@@ -97,31 +97,31 @@
 #- name: Activando opción "acl" en partición "{{ ansible_pto_montaje_web }}".
 #  mountopts:
 #    name: "{{ ansible_pto_montaje_web }}"
-#    option: acl 
+#    option: acl
 #    state: present
 #  register: acl_cambio
 #
 #- name: Activando opción "usrquota" en partición "{{ ansible_pto_montaje_web }}".
 #  mountopts:
 #    name: "{{ ansible_pto_montaje_web }}"
-#    option: usrquota 
+#    option: usrquota
 #    state: present
 #  register: usrquota_cambio
 #
 #- name: Activando opción "grpquota" en partición "{{ ansible_pto_montaje_web }}".
 #  mountopts:
 #    name: "{{ ansible_pto_montaje_web }}"
-#    option: grpquota 
+#    option: grpquota
 #    state: present
 #  register: grpquota_cambio
 #
 #- name: Activando opción "defaults" en partición "{{ ansible_pto_montaje_web }}".
 #  mountopts:
 #    name: "{{ ansible_pto_montaje_web }}"
-#    option: defaults 
+#    option: defaults
 #    state: present
 #  register: defaults_cambio
-#  
+#
 ######  Reinicio del sistema. Aplicando nuevas opciones en partición.  #####
 #
 #- name: Aplicando nuevas opciones en partición "{{ ansible_pto_montaje_web }}". Reinicio del sistema si es necesario.
@@ -129,7 +129,7 @@
 #    connect_timeout: 10
 #    pre_reboot_delay: 5
 #    post_reboot_delay: 10
-#  when: (acl_cambio.changed | bool== True) or 
+#  when: (acl_cambio.changed | bool== True) or
 #        (usrquota_cambio.changed | bool == True) or
 #        (grpquota_cambio.changed | bool == True) or
 #        (defaults_cambio.changed | bool == True)
@@ -301,7 +301,7 @@
     name: mailman
     question: mailman/site_languages
     value: "{{ mailman_debconf_site_languages }}"
-    vtype: multiselect        
+    vtype: multiselect
 
 - name: Fijando opción de configuración (Idioma por omisión para "mailman").
   debconf:
@@ -315,7 +315,7 @@
     name: alternc-mailman
     question: alternc-mailman/patch-mailman
     value: "{{ alternc_mailman_debconf_patch_mailman }}"
-    vtype: boolean        
+    vtype: boolean
 
 ###########################
 #####  debconf (fin)  #####
@@ -323,12 +323,12 @@
 
 ###########################################################################################
 #####  Instalación de AlternC 3.5, mailman (listas de correo), awstats (estadísticas) #####
-########################################################################################### 
+###########################################################################################
 
 - name: Instalando AlternC 3.5 (alternc). Tenga paciencia. Espere !!. Mientras puede atender sus redes sociales.
   apt:
     name: "{{ paquetes }}"
-    state: latest 
+    state: latest
   vars:
     paquetes:
     - apt-transport-https
@@ -337,15 +337,15 @@
 - name: Instalando "mailman", sistema de gestión de listas de correo.
   apt:
     name: alternc-mailman
-    state: latest  
+    state: latest
 
 - name: Iniciando "mailman".
-  shell: "/etc/init.d/mailman start"   
+  shell: "/etc/init.d/mailman start"
 
 - name: Instalando "awstats", estadísticas para los sitios web.
   apt:
     name: alternc-awstats
-    state: latest  
+    state: latest
 
 - name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
   lineinfile:
@@ -424,18 +424,34 @@
 
 - name: Registrando servidores externos MySql si fueron proporcionados.
   shell: "mysql {{ alternc_opciones_consulta }} 'INSERT INTO db_servers (name, host, login, password, client) VALUES ({{ item.name }}, {{ item.host }}, {{ item.login }}, {{ item.password}}, \"%\")'"
-  when: 
+  when:
     - item.name != '""'
     - item.host != '""'
     - item.login != '""'
     - item.password != '""'
   loop: "{{ alternc_db_servers }}"
 
-- name: Generando certificados ssl (certbot-letsencrypt). 
+- name: Generando certificados ssl (certbot-letsencrypt).
   shell: "php /usr/lib/alternc/generate_certbot.php"
 
 - name: Ejecutando alternc.install
   shell: "alternc.install"
+
+- name: Asegurando que módulo php7.0-intl se encuentra instalado # Módulo de propósito general pero que no se incluye en el instalador de AlternC
+  apt:
+    name: php7.0-intl
+    state: latest
+
+- name: Configurando redirección de tráfico HTTP a HTTPS
+  template:
+    dest: "/etc/apache2/sites-available/000-default.conf"
+    src: etc/apache2/sites-available/000-default.conf.j2
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart apache2
+
 
 #- name: Reiniciando el sistema y finalizando. Buena suerte !!
 #  reboot:
