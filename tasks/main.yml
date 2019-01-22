@@ -437,10 +437,24 @@
 - name: Ejecutando alternc.install
   shell: "alternc.install"
 
-- name: Asegurando que módulo php7.0-intl se encuentra instalado # Módulo de propósito general pero que no se incluye en el instalador de AlternC
+- name: Asegurando que los módulos php mas populares se encuentran actualizados e instalados # Módulo de propósito general pero que no se incluye en el instalador de AlternC
   apt:
-    name: php7.0-intl
+    name: "{{ item }}"
     state: latest
+  loop:
+    - "php7.0-common"
+    - "php7.0-curl"
+    - "php7.0-gd"
+    - "php7.0-intl"
+    - "php7.0-json"
+    - "php7.0-mysql"
+    - "php7.0-mbstring"
+    - "php7.0-mcrypt"
+    - "php7.0-imagick"
+    - "php7.0-xml"
+    - "php7.0-xmlrpc"
+    - "php7.0-zip"
+
 
 - name: Configurando redirección de tráfico HTTP a HTTPS
   template:

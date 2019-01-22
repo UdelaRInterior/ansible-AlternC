@@ -5,7 +5,7 @@
 ###############################################
 
 ################################################
-# Ex archivo instalacion.yml / 
+# Ex archivo instalacion.yml /
 # Ansible no permite varios archivos en defaults
 # Ya vendrá, está en dev: https://github.com/ansible/ansible/pull/36357
 
@@ -30,28 +30,25 @@ alternc35_rama: 'alternc35 main'
 phpmyadmin_debconf_reconfigure_webserver: 'apache2'
 
 # Nombre de tu servicio de hospedaje (AlternC).
-alternc_debconf_hostingname: 'Espacio Interdisciplinario'
+alternc_debconf_hostingname: 'Mi nombre de hostng'
 
 # Nombre de dominio completo del panel de hospedaje (mipanelalternc.com).
-#alternc_debconf_desktopname: 'deneb.ei.udelar.edu.uy'
-alternc_debconf_desktopname: 'pitanga.interior.edu.uy'
+alternc_debconf_desktopname: 'mipanelalternc.com'
 
 # La ip principal del servidor.
-#alternc_debconf_public_ip: '164.73.16.92'
-alternc_debconf_public_ip: '164.73.98.30'
+alternc_debconf_public_ip: '200.200.200.200'
 
 # La dirección ip interna del servidor.
-alternc_debconf_internal_ip: '164.73.98.30'
+alternc_debconf_internal_ip: '172.16.1.1'
 
 # Nombre de dominio del servidor DNS primario.
-alternc_debconf_ns1: 'gould.csic.edu.uy'
+alternc_debconf_ns1: 'ns1.com'
 
 # Nombre de dominio del servidor DNS secundario.
-alternc_debconf_ns2: 'anaconda.cure.edu.uy'
+alternc_debconf_ns2: 'ns2.com'
 
 # El MX por omisión que se asigna a los nuevos dominios (mipanelalternc.com).
-#alternc_debconf_default_mx: 'deneb.ei.udelar.edu.uy'
-alternc_debconf_default_mx: 'pitanga.interior.edu.uy'
+alternc_debconf_default_mx: 'mipanelalternc.com'
 
 # Se debe utilizar el servidor MySql local identificado automáticamente?
 # (No cambiar éste valor, si el servidor mysql es remoto ésta variable se configura con
@@ -95,7 +92,7 @@ alternc_mailman_debconf_patch_mailman: true
 ###########################
 
 ################################################
-# Ex archivo panel.yml / 
+# Ex archivo panel.yml /
 
 ##### Configuraciones ##########
 
@@ -142,26 +139,26 @@ alternc_cuotas_usuarios_default:
 # Cuotas personalizadas. El nombre solo admite minúsculas y números.
 # Elimine, agregue o edite cada bloque por completo; un único nombre por bloque, bloques distintos con nombres distintos.
 alternc_cuotas_usuarios:
-# Bloque "udelar1gb"
-  - { nombre: '"udelar1gb"', key: '"aws"', value: '"5"' }
-  - { nombre: '"udelar1gb"', key: '"cron"', value: '"5"' }
-  - { nombre: '"udelar1gb"', key: '"dom"', value: '"5"' }
-  - { nombre: '"udelar1gb"', key: '"ftp"', value: '"10"' }
-  - { nombre: '"udelar1gb"', key: '"mail"', value: '"50"' }
-  - { nombre: '"udelar1gb"', key: '"mailman"', value: '"10"' }
-  - { nombre: '"udelar1gb"', key: '"mysql"', value: '"10"' }
-  - { nombre: '"udelar1gb"', key: '"piwik"', value: '"0"' }
-  - { nombre: '"udelar1gb"', key: '"web"', value: '"1048576"' }
-# Bloque "udelar5gb"
-  - { nombre: '"udelar5gb"', key: '"aws"', value: '"10"' }
-  - { nombre: '"udelar5gb"', key: '"cron"', value: '"10"' }
-  - { nombre: '"udelar5gb"', key: '"dom"', value: '"10"' }
-  - { nombre: '"udelar5gb"', key: '"ftp"', value: '"20"' }
-  - { nombre: '"udelar5gb"', key: '"mail"', value: '"100"' }
-  - { nombre: '"udelar5gb"', key: '"mailman"', value: '"20"' }
-  - { nombre: '"udelar5gb"', key: '"mysql"', value: '"20"' }
-  - { nombre: '"udelar5gb"', key: '"piwik"', value: '"0"' }
-  - { nombre: '"udelar5gb"', key: '"web"', value: '"5242850"' }
+# Bloque "myalternc1gb"
+  - { nombre: '"myalternc1gb"', key: '"aws"', value: '"5"' }
+  - { nombre: '"myalternc1gb"', key: '"cron"', value: '"5"' }
+  - { nombre: '"myalternc1gb"', key: '"dom"', value: '"5"' }
+  - { nombre: '"myalternc1gb"', key: '"ftp"', value: '"10"' }
+  - { nombre: '"myalternc1gb"', key: '"mail"', value: '"50"' }
+  - { nombre: '"myalternc1gb"', key: '"mailman"', value: '"10"' }
+  - { nombre: '"myalternc1gb"', key: '"mysql"', value: '"10"' }
+  - { nombre: '"myalternc1gb"', key: '"piwik"', value: '"0"' }
+  - { nombre: '"myalternc1gb"', key: '"web"', value: '"1048576"' }
+# Bloque "myalternc5gb"
+  - { nombre: '"myalternc5gb"', key: '"aws"', value: '"10"' }
+  - { nombre: '"myalternc5gb"', key: '"cron"', value: '"10"' }
+  - { nombre: '"myalternc5gb"', key: '"dom"', value: '"10"' }
+  - { nombre: '"myalternc5gb"', key: '"ftp"', value: '"20"' }
+  - { nombre: '"myalternc5gb"', key: '"mail"', value: '"100"' }
+  - { nombre: '"myalternc5gb"', key: '"mailman"', value: '"20"' }
+  - { nombre: '"myalternc5gb"', key: '"mysql"', value: '"20"' }
+  - { nombre: '"myalternc5gb"', key: '"piwik"', value: '"0"' }
+  - { nombre: '"myalternc5gb"', key: '"web"', value: '"5242850"' }
 ## Bloque "nombre"
 #  - { nombre: '"nombre"', key: '"aws"', value: '"0"' }
 #  - { nombre: '"nombre"', key: '"cron"', value: '"0"' }
@@ -177,17 +174,8 @@ alternc_cuotas_usuarios:
 # y las comillas. Por defecto todos los dominios se insertan en modo = 1, que corresponde a: "verificar el DNS primario en la base WHOIS"
 # otros 4 modos están disponibles desde la configuración del panel.
 alternc_dominios_autorizados:
-  - '"ei.udelar.edu.uy"'
-  - '"csic.edu.uy"'
-  - '"udelar.edu.uy"'
-  - '"cure.edu.uy"'
-  - '"universidad.edu.uy"'
-  - '"unorte.edu.uy"'
-  - '"cup.edu.uy"'
-  - '"tacuarembo.udelar.edu.uy"'
-  - '"rivera.udelar.edu.uy"'
-  - '"cci.edu.uy"'
-  - '"edu.uy"'
+  - '"mipanelalternc.com"'
+  - '"mydomain.com"'
 
 # Bloqueo de disco en función de la cuota asignada (0: bloqueo de datos cuando la cuota asignada es excedida;
 # 1: solo muestra la cuota pero no bloquea nada -default-).
@@ -205,7 +193,7 @@ alternc_debug_panel: '"1"'
 alternc_new_email: '"0"'
 
 # Servidores de bases de datos MySql externos. Al crear un nuevo usuario AlternC se le puede asignar un
-# servidor de bd distinto del localhost, aquí se define ese servidor; el login proporcionado debe tener 
+# servidor de bd distinto del localhost, aquí se define ese servidor; el login proporcionado debe tener
 # permisos para crear bd y usuarios.
 alternc_db_servers:
   - { name: '""', host: '""', login: '""', password: '""'}
