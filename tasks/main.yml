@@ -160,7 +160,6 @@
     state: latest
   vars:
     paquetes:
-    paquetes:
     - mysql-server
     - mysql-client
 
