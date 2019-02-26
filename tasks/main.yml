@@ -42,30 +42,17 @@
     src: etc/apt/sources.list.d/alternc35.list.j2
     dest: /etc/apt/sources.list.d/alternc35.list
 
-- name: Descargando clave de verificación para "apt".
-  get_url:
-    url: "{{ alternc35_repo }}/key.asc"
-    dest: /etc/apt/trusted.gpg.d/alternc35.asc
-    mode: 0644
 
-- name: Agregando clave de verificación para "apt".
-  shell: "apt-key add /etc/apt/trusted.gpg.d/alternc35.asc"
+- name: Agregar llave apt de repositorio "Koumbit" para AlternC 3.5.
+  apt_key:
+    url: "{{ alternc35_repo }}/key.asc"
+    state: present
+
 
 - name: Actualizando lista de paquetes.
   apt:
     update_cache: yes
 
-#- name: Aplicando las actualizaciones de paquetes disponibles.
-#  apt:
-#    upgrade: yes
-#    force_apt_get: yes
-
-#- name: Actualizando sistema base si corresponde.
-#  apt:
-#    upgrade: dist
-#    autoremove: yes
-#    autoclean: yes
-#    force_apt_get: yes
 
 #################################
 #####  acl, quota, mountops #####
