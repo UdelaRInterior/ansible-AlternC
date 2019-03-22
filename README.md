@@ -25,7 +25,7 @@ $ cd myroles
 # Install altenrc role
 $ ansible-galaxy install UdselaRInterior.alternc
 ```
-and coall it in your playbooks to run it against a freshlly installed debian stretch. 
+and call it in your playbooks to run it against a freshlly installed debian stretch. 
 
 ## Role Variables
 
