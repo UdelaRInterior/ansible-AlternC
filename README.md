@@ -1,53 +1,57 @@
-# Role Name
+# Role AlternC
 
-Adds a <SERVICE_NAME> service to your [Ansible Container](https://github.com/ansible/ansible-container) project. Run the following commands
-to install the service:
+Install and configure [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container.
 
-```
-# Set the working directory to your Ansible Container project root
-$ cd myproject
+Configures AltenrC hosting panel, that allows any user thas has an account to access AltenrC web GUI, to manage
+the hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts and mailboxes. 
 
-# Install the service
-$ ansible-container install <USERNAME.ROLE_NAME>
-```
+Content of web site can be uploaded through FTP as well as through Alternc web GUI. 
 
 ## Requirements
 
-- [Ansible Container](https://github.com/ansible/ansible-container)
-- An existing Ansible Container project. To create a project, simply run the following:
-    ```
-    # Create an empty project directory
-    $ mkdir myproject
+AlternC runs on a debian distro. Put the role in your `requirements.xml` file : 
 
-    # Set the working directory to the new directory
-    $ cd myproject
+```
+# Role Alternc
+- name: alternc
+  src: https://github.com/UdelaRInterior/ansible-AlternC.git
+  scm: git
+```
+Or install it manually in your roles' folder:  
+```
+# Set the working directory to your Ansible AltenrnC project root
+$ cd myroles
 
-    # Initialize the project
-    $ ansible-container init
-    ```
-
-- Continue listing any prerequisites here...
-
+# Install altenrc role
+$ ansible-galaxy install UdselaRInterior.alternc
+```
+and call it in your playbooks to run it against a freshlly installed debian stretch. 
 
 ## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set
-via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Variables needed are listed and documented in the `/defaults/main.yml` file. They include the debconf paramenters 
+needed when installing AltenrC package and demendencies, as well as those needed to cofigure after the AltenrC panel
+(hosting web GUI). 
+
+Most of them need to be defined when calling the role, according to your environement. 
 
 ## Dependencies
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+There are no dependencies form other ansible roles, but you need to have a host with a debian stretch installed. 
 
 ## License
 
-GPL-v3 
+(c) Universidad de la República (UdelaR), Red de Unidades Informáticas de la UdelaR en el Interior. 
+licenced under GPL-v3
 
 ## Author Information
 
-First playbook for a baremetal server: [oscarf/alternc35_ansible](https://git.interior.edu.uy/oscarf/alternc35_ansible)
-Oscar Ford: oscarf@ei.udelar.edu.uy - Espacio Interdisciplinario, Udelar. 
-Convert to role: Cristhian Choque - CCI - UdelaR
-Publish role: Daniel Viñar - CCI - UdelaR (ulvida)
+Oscar Ford: oscarf@ei.udelar.edu.uy - Espacio Interdisciplinario, UdelaR
+Cristhian Choque - Comisión Coordinadora del Interior (CCI) - UdelaR
+Daniel Viñar - CCI - UdelaR (ulvida)
+Santiago Martínez - CCI - UdelaR
+
+Work derived froma first playbook for a baremetal server: [oscarf/alternc35_ansible](https://git.interior.edu.uy/oscarf/alternc35_ansible).
 
 
 

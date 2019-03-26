@@ -26,30 +26,40 @@ alternc35_rama: 'alternc35 main'
 #####  debconf  #####
 #####################
 
+# Web server package (apache2/lighttpd)
 # Servidor web que desea reconfigurar automáticamente (apache2/lighttpd).
 phpmyadmin_debconf_reconfigure_webserver: 'apache2'
 
+# Name for your web hosting service (AlternC)
 # Nombre de tu servicio de hospedaje (AlternC).
 alternc_debconf_hostingname: 'Mi nombre de hostng'
 
+# Full domain name for hosting panel
 # Nombre de dominio completo del panel de hospedaje (mipanelalternc.com).
 alternc_debconf_desktopname: 'mipanelalternc.com'
 
+# Main server's IP
 # La ip principal del servidor.
 alternc_debconf_public_ip: '200.200.200.200'
 
+# Internal server's IP (if you have NAT)
 # La dirección ip interna del servidor.
 alternc_debconf_internal_ip: '172.16.1.1'
 
-# Nombre de dominio del servidor DNS primario.
+# Primary DNS server for zones installed in panel (can be the host itself)
+# DNS primario para las zonas instaladas en el panel (puede ser el mismo servidor)
 alternc_debconf_ns1: 'ns1.com'
 
+# Secondary DNS server for zones installed in this panel 
+# (must have alternc-slave, and and an accunt sychronizing zones definitions)
 # Nombre de dominio del servidor DNS secundario.
 alternc_debconf_ns2: 'ns2.com'
 
+# Default MX record for zones installed in the hosting  
 # El MX por omisión que se asigna a los nuevos dominios (mipanelalternc.com).
 alternc_debconf_default_mx: 'mipanelalternc.com'
 
+# 
 # Se debe utilizar el servidor MySql local identificado automáticamente?
 # (No cambiar éste valor, si el servidor mysql es remoto ésta variable se configura con
 # '' y entran en juego otras no disponibles en ésta versión del playbook. La pregunta es de
