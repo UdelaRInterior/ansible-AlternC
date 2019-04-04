@@ -453,6 +453,16 @@
     - restart apache2
 
 
+- name: Configurar tamaño máximo permitido en la subida de archivos
+  lineinfile:
+    path: "/etc/alternc/apache2.conf"
+    regexp: "{{ item.parameter }}"
+    line: "{{ item.parameter }} {{ item.value }}"
+  with_items: "{{ alternc_apache_php_max_file_size }}"
+  tags: phpalternc
+  notify:
+    - restart apache2
+
 #- name: Reiniciando el sistema y finalizando. Buena suerte !!
 #  reboot:
 #    connect_timeout: 10

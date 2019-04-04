@@ -50,16 +50,16 @@ alternc_debconf_internal_ip: '172.16.1.1'
 # DNS primario para las zonas instaladas en el panel (puede ser el mismo servidor)
 alternc_debconf_ns1: 'ns1.com'
 
-# Secondary DNS server for zones installed in this panel 
+# Secondary DNS server for zones installed in this panel
 # (must have alternc-slave, and and an accunt sychronizing zones definitions)
 # Nombre de dominio del servidor DNS secundario.
 alternc_debconf_ns2: 'ns2.com'
 
-# Default MX record for zones installed in the hosting  
+# Default MX record for zones installed in the hosting
 # El MX por omisión que se asigna a los nuevos dominios (mipanelalternc.com).
 alternc_debconf_default_mx: 'mipanelalternc.com'
 
-# 
+#
 # Se debe utilizar el servidor MySql local identificado automáticamente?
 # (No cambiar éste valor, si el servidor mysql es remoto ésta variable se configura con
 # '' y entran en juego otras no disponibles en ésta versión del playbook. La pregunta es de
@@ -100,5 +100,13 @@ alternc_mailman_debconf_patch_mailman: true
 ###########################
 #####  debconf (fin)  #####
 ###########################
+
+
+# Parámetros a setear en el archivo apache2.conf de AlternC
+alternc_apache_php_max_file_size:
+  - parameter: 'php_value upload_max_filesize'
+    value: 2G
+  - parameter: 'php_value post_max_size'
+    value: 2G
 
 ...
