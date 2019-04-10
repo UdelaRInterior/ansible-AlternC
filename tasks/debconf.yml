@@ -1,0 +1,150 @@
+---
+
+- name: Verificando disponibilidad de "debconf" y "debconf-utils" e instalando si es necesario.
+  apt:
+    name: "{{ paquetes }}"
+    state: latest
+  vars:
+    paquetes:
+    - debconf
+    - debconf-utils
+
+- name: Fijando opción de configuración (Nombre de dominio completo del panel de hospedaje).
+  debconf:
+    name: phpmyadmin
+    question: phpmyadmin/reconfigure-webserver
+    value: "{{ phpmyadmin_debconf_reconfigure_webserver }}"
+    vtype: multiselect
+
+- name: Fijando opción de configuración (Nombre de tu servicio de hospedaje).
+  debconf:
+    name: alternc
+    question: alternc/hostingname
+    value: "{{ alternc_debconf_hostingname }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Nombre de dominio completo del panel de hospedaje).
+  debconf:
+    name: alternc
+    question: alternc/desktopname
+    value: "{{ alternc_debconf_desktopname }}"
+    vtype: string
+
+- name: Fijando opción de configuración (La ip principal del servidor).
+  debconf:
+    name: alternc
+    question: alternc/public_ip
+    value: "{{ alternc_debconf_public_ip }}"
+    vtype: string
+
+- name: Fijando opción de configuración (La dirección ip interna del servidor).
+  debconf:
+    name: alternc
+    question: alternc/internal_ip
+    value: "{{ alternc_debconf_internal_ip }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Nombre de dominio del servidor DNS primario).
+  debconf:
+    name: alternc
+    question: alternc/ns1
+    value: "{{ alternc_debconf_ns1 }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Nombre de dominio del servidor DNS secundario).
+  debconf:
+    name: alternc
+    question: alternc/ns2
+    value: "{{ alternc_debconf_ns2 }}"
+    vtype: string
+
+- name: Fijando opción de configuración (El MX por omisión que se asigna a los nuevos dominios).
+  debconf:
+    name: alternc
+    question: alternc/default_mx
+    value: "{{ alternc_debconf_default_mx }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Se debe utilizar el servidor MySql local identificado automáticamente?).
+  debconf:
+    name: alternc
+    question: alternc/mysql/host
+    value: "{{ alternc_debconf_mysql_host }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Carpeta en que los archivos HTML de los usuarios AlternC serán almacenados).
+  debconf:
+    name: alternc
+    question: alternc/alternc_html
+    value: "{{ alternc_debconf_alternc_html }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Carpeta en la que se almacenan los correos de los usuarios).
+  debconf:
+    name: alternc
+    question: alternc/alternc_mail
+    value: "{{ alternc_debconf_alternc_mail }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Carpeta en la que se almacenarán las bitácoras de AlternC).
+  debconf:
+    name: alternc
+    question: alternc/alternc_logs
+    value: "{{ alternc_debconf_alternc_logs }}"
+    vtype: string
+
+- name: Fijando opción de configuración (Desea configurar la base de datos para phpmyadmin con dbconfig-common).
+  debconf:
+    name: phpmyadmin
+    question: phpmyadmin/dbconfig-upgrade
+    value: "{{ phpmyadmin_debconf_dbconfig_upgrade }}"
+    vtype: boolean
+
+- name: Fijando opción de configuración (Contraseña de aplicación MySql para phpmyadmin (1)).
+  debconf:
+    name: phpmyadmin
+    question: phpmyadmin/mysql/admin-pass
+    value: "{{ phpmyadmin_debconf_mysql_admin_pass }}"
+    vtype: password
+
+- name: Fijando opción de configuración (Contraseña de aplicación MySql para phpmyadmin (2)).
+  debconf:
+    name: phpmyadmin
+    question: phpmyadmin/mysql/app-pass
+    value: "{{ phpmyadmin_debconf_mysql_app_pass }}"
+    vtype: password
+
+- name: Fijando opción de configuración (Contraseña de aplicación MySql para phpmyadmin (3)).
+  debconf:
+    name: phpmyadmin
+    question: phpmyadmin/app-password-confirm
+    value: "{{ phpmyadmin_debconf_app_password_confirm }}"
+    vtype: password
+
+- name: Fijando opción de configuración (Desea reinstalar la base de datos phpmyadmin?).
+  debconf:
+    name: phpmyadmin
+    question: phpmyadmin/dbconfig-reinstall
+    value: "{{ phpmyadmin_debconf_dbconfig_reinstall }}"
+    vtype: boolean
+
+- name: Fijando opción de configuración (Idiomas a soportar (mailman)).
+  debconf:
+    name: mailman
+    question: mailman/site_languages
+    value: "{{ mailman_debconf_site_languages }}"
+    vtype: multiselect
+
+- name: Fijando opción de configuración (Idioma por omisión para "mailman").
+  debconf:
+    name: mailman
+    question: mailman/default_server_language
+    value: "{{ mailman_debconf_default_server_language }}"
+    vtype: select
+
+- name: Fijando opción de configuración (Patch mailman proporcionado por "koumbit.org" para el soporte de listas virtuales).
+  debconf:
+    name: alternc-mailman
+    question: alternc-mailman/patch-mailman
+    value: "{{ alternc_mailman_debconf_patch_mailman }}"
+    vtype: boolean

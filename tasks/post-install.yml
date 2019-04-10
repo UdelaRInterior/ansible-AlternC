@@ -1,0 +1,48 @@
+---
+
+- name: Configurando redirección de tráfico HTTP a HTTPS
+  template:
+    dest: "/etc/apache2/sites-available/000-default.conf"
+    src: etc/apache2/sites-available/000-default.conf.j2
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart apache2
+
+
+- name: Configurar tamaño máximo permitido en la subida de archivos
+  lineinfile:
+    path: "/etc/alternc/apache2.conf"
+    regexp: "{{ item.parameter }}"
+    insertafter: '<Directory /usr/share/alternc/panel/admin/>'
+    line: "  {{ item.parameter }} {{ item.value }}"
+    backup: yes
+  with_items: "{{ alternc_apache_php_ini_configurations }}"
+  tags: phpalternc
+  notify:
+    - restart apache2
+
+
+- name: Configurar tamaño máximo permitido en la subida de archivos a PHPMyAdmin
+  lineinfile:
+    path: "/etc/alternc/apache2.conf"
+    regexp: "{{ item.parameter }}"
+    insertafter: '<Directory /usr/share/phpmyadmin>'
+    line: "  {{ item.parameter }} {{ item.value }}"
+    backup: yes
+  with_items: "{{ alternc_phpmyadmin_configurations }}"
+  tags: phpalternc
+  notify:
+    - restart apache2
+
+
+- name: Asegurar largo suficiente de blowfish_secret
+  lineinfile:
+    path: "/etc/alternc/phpmyadmin.inc.php"
+    regexp: \$cfg\[\'blowfish_secret\'\]
+    line: "$cfg['blowfish_secret'] = '{{ my_blowfish_secret }}';"
+    backup: yes
+  tags: phpalternc
+  notify:
+    - restart apache2

@@ -1,0 +1,15 @@
+---
+
+- name: Creando credenciales "root" para base de datos MySql.
+  template:
+    src: root/.my.cnf.j2
+    dest: /root/.my.cnf
+
+- name: Instalando servidor de base de datos MySql. Sírvase un café!!. Calme la ansiedad, puede tardar un poco!!.
+  apt:
+    name: "{{ paquetes }}"
+    state: latest
+  vars:
+    paquetes:
+    - mysql-server
+    - mysql-client

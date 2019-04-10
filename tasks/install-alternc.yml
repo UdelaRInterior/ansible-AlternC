@@ -1,0 +1,113 @@
+---
+
+- name: Instalando AlternC 3.5 (alternc). Tenga paciencia. Espere !!. Mientras puede atender sus redes sociales.
+  apt:
+    name: "{{ paquetes }}"
+    state: latest
+  vars:
+    paquetes:
+    - apt-transport-https
+    - alternc
+
+- name: Instalando "mailman", sistema de gestión de listas de correo.
+  apt:
+    name: alternc-mailman
+    state: latest
+
+- name: Iniciando "mailman".
+  shell: "/etc/init.d/mailman start"
+
+- name: Instalando "awstats", estadísticas para los sitios web.
+  apt:
+    name: alternc-awstats
+    state: latest
+
+- name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
+  lineinfile:
+    path: /etc/awstats/awstats.conf
+    regexp: 'SiteDomain='
+    line: 'SiteDomain="{{ alternc_debconf_desktopname }}"'
+    state: present
+    backup: yes
+
+- name: Construyendo base de datos para estadísticas (awstats).
+  shell: "perl /usr/lib/cgi-bin/awstats.pl -config={{ alternc_debconf_desktopname }} -update"
+
+- name: Configurando política de contraseñas. 10 caracteres mínimo. Mayúsculas, minúsculas y números son obligatorios.
+  shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE policy SET minsize='10', classcount='3''"
+
+- name: Ejecutando alternc.install
+  shell: "alternc.install"
+  register: resultado_alternc_install
+
+- debug: msg="{{resultado_alternc_install}}"
+
+- name: Recuperando id del administrador (admin).
+  shell: mysql {{ alternc_opciones_consulta }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
+  register: user_id
+
+- name: Generando semilla aleatoria de encriptación para el password.
+  script: rnd.sh
+  register: rnd
+
+- debug: msg="{{user_id}}"
+
+- debug: msg="{{rnd}}"
+
+- name: Estableciendo password de acceso para el administrador AlternC.
+  shell: mysql {{ alternc_opciones_consulta }} 'UPDATE membres SET pass=ENCRYPT({{ alternc_admin_pass }}, {{ rnd.stdout }} ) WHERE uid = {{ user_id.stdout }} '
+
+- name: Configurando cuotas por defecto para el administrador.
+  shell: mysql {{ alternc_opciones_consulta }} 'UPDATE quotas SET total={{ item.value }} WHERE uid={{ user_id.stdout }} AND name={{ item.key }}'
+  loop: "{{ alternc_cuotas_admin }}"
+
+- name: Creando el perfil de cuotas "administrador".
+  shell: mysql {{ alternc_opciones_consulta }} 'INSERT INTO defquotas (quota, value, type) VALUES ({{ item.key }}, {{ item.value }}, "administrador")'
+  loop: "{{ alternc_cuotas_admin }}"
+  ignore_errors: yes
+
+- name: Registrando perfil de cuota "administrador" en la cuenta del administrador.
+  shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE membres SET type=\"administrador\" WHERE uid={{ user_id.stdout }}'"
+
+- name: Definiendo cuota "default" para los usuarios.
+  shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE defquotas SET value={{ item.value }} WHERE quota={{ item.key }} AND type=\"default\"'"
+  loop: "{{ alternc_cuotas_usuarios_default }}"
+
+- name: Definiendo otros tipos de cuotas para los usuarios.
+  shell: "mysql {{ alternc_opciones_consulta }} 'INSERT INTO defquotas (quota, value, type) VALUES ({{ item.key }}, {{ item.value }}, {{ item.nombre }})'"
+  loop: "{{ alternc_cuotas_usuarios }}"
+  ignore_errors: yes
+
+- name: Eliminando dominios válidos instalados por defecto.
+  shell: "mysql {{ alternc_opciones_consulta }} 'DELETE FROM tld'"
+
+- name: Configurando los nuevos dominios válidos admitidos por AlternC.
+  shell: "mysql {{ alternc_opciones_consulta }} 'INSERT INTO tld (tld, mode) VALUES ({{ item }}, '1')'"
+  loop: "{{ alternc_dominios_autorizados }}"
+
+- name: Configurando según corresponda el bloqueo de datos en función de la cuota de disco para los usuarios.
+  shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE variable SET value={{ alternc_disk_quota_not_blocking }} WHERE id='17''"
+
+- name: Configurando protocolo de acceso al panel de administración AlternC.
+  shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE variable SET value={{ alternc_force_https }} WHERE id='2''"
+
+- name: Habilitando el registro del debug para AlternC en "/var/log/alternc/bureau.log".
+  shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE variable SET value={{ alternc_debug_panel }} WHERE id='25''"
+
+- name: Configurando email para notificaciones.
+  shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE variable SET value={{ alternc_new_email }} WHERE id='26''"
+
+- name: Registrando servidores externos MySql si fueron proporcionados.
+  shell: "mysql {{ alternc_opciones_consulta }} 'INSERT INTO db_servers (name, host, login, password, client) VALUES ({{ item.name }}, {{ item.host }}, {{ item.login }}, {{ item.password}}, \"%\")'"
+  when:
+    - item.name != '""'
+    - item.host != '""'
+    - item.login != '""'
+    - item.password != '""'
+  loop: "{{ alternc_db_servers }}"
+
+- name: Generando certificados ssl (certbot-letsencrypt).
+  shell: "php /usr/lib/alternc/generate_certbot.php"
+
+- name: Ejecutando alternc.install
+  shell: "alternc.install"
