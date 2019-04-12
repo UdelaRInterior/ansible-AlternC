@@ -13,7 +13,7 @@
 
 - name: Configurar tamaño máximo permitido en la subida de archivos
   lineinfile:
-    path: "/etc/alternc/apache2.conf"
+    path: "/etc/alternc/templates/alternc/apache2.conf"
     regexp: "{{ item.parameter }}"
     insertafter: '<Directory /usr/share/alternc/panel/admin/>'
     line: "  {{ item.parameter }} {{ item.value }}"
@@ -26,7 +26,7 @@
 
 - name: Configurar tamaño máximo permitido en la subida de archivos a PHPMyAdmin
   lineinfile:
-    path: "/etc/alternc/apache2.conf"
+    path: "/etc/alternc/templates/alternc/apache2.conf"
     regexp: "{{ item.parameter }}"
     insertafter: '<Directory /usr/share/phpmyadmin>'
     line: "  {{ item.parameter }} {{ item.value }}"
@@ -39,10 +39,14 @@
 
 - name: Asegurar largo suficiente de blowfish_secret
   lineinfile:
-    path: "/etc/alternc/phpmyadmin.inc.php"
+    path: "/etc/alternc/templates/alternc/phpmyadmin.inc.php"
     regexp: \$cfg\[\'blowfish_secret\'\]
-    line: "$cfg['blowfish_secret'] = '{{ my_blowfish_secret }}';"
+    line: "$cfg['blowfish_secret'] = '{{ alternc_phpmyadmin_blowfish_secret }}';"
     backup: yes
   tags: phpalternc
   notify:
     - restart apache2
+
+
+- name: Ejecutando alternc.install para reflejar los cambios de configuración
+  shell: "alternc.install"

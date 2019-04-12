@@ -215,14 +215,12 @@ alternc_db_servers:
 
 
 
-# Parámetros a setear en el archivo apache2.conf de AlternC
-
+# Parámetros a setear en el template apache2.conf de AlternC
 alternc_apache_php_ini_configurations:
   - parameter: 'php_value upload_max_filesize'
     value: 2G
   - parameter: 'php_value post_max_size'
     value: 2G
-
 
 alternc_phpmyadmin_configurations:
   - parameter: 'php_admin_value upload_max_filesize'
@@ -231,4 +229,5 @@ alternc_phpmyadmin_configurations:
     value: 2G
 
 
-my_blowfish_secret: '-tEfgeJ6467A2J9_vhi5F-ry58PAv+JPY%btr8))y]LdjgUY48lCZxTe@!#L*L'
+# Parámetros a setear en el template  phpmyadmin.inc.php de AlternC
+alternc_phpmyadmin_blowfish_secret: '-tEfgeJ6467A2J9_vhi5F-ry58PAv+JPY%btr8))y]LdjgUY48lCZxTe@!#L*L'
