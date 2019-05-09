@@ -231,3 +231,16 @@ alternc_phpmyadmin_configurations:
 
 # Parámetros a setear en el template  phpmyadmin.inc.php de AlternC
 alternc_phpmyadmin_blowfish_secret: '-tEfgeJ6467A2J9_vhi5F-ry58PAv+JPY%btr8))y]LdjgUY48lCZxTe@!#L*L'
+
+
+alternc_proftpd_configurations:
+  - parameter: 'UseIPv6'
+    value: 'off'
+  - parameter: 'TimeoutNoTransfer'
+    value: '600'
+  - parameter: 'TimeoutStalled'
+    value: '600'
+  - parameter: 'TimeoutIdle'
+    value: '1200'
+  - parameter: 'PassivePorts'   # Rango de puertos que ProFTPd empleará para datos en modo pasivo
+    value: '50000 60000'        # En caso de contar con un firewall, estos puertos deben encontrarse abiertos en él

@@ -1,6 +1,6 @@
 ---
 
-- name: Configurando redirección de tráfico HTTP a HTTPS
+- name: Configurar redirección de tráfico HTTP a HTTPS
   template:
     dest: "/etc/apache2/sites-available/000-default.conf"
     src: etc/apache2/sites-available/000-default.conf.j2
@@ -48,5 +48,17 @@
     - restart apache2
 
 
-- name: Ejecutando alternc.install para reflejar los cambios de configuración
+- name: Configurar servidor ProFTPd
+  lineinfile:
+    path: "/etc/alternc/templates/proftpd/proftpd.conf"
+    regexp: "{{ item.parameter }}"
+    line: "{{ item.parameter }}        {{ item.value }}"
+    backup: yes
+  with_items: "{{ alternc_proftpd_configurations }}"
+  tags: proftpd
+  notify:
+    - restart proftpd
+
+
+- name: Ejecutar alternc.install para reflejar los cambios de configuración
   shell: "alternc.install"

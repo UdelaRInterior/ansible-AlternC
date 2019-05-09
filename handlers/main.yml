@@ -5,3 +5,8 @@
   service:
     name: apache2
     state: restarted
+
+- name: restart proftpd
+  service:
+    name: proftpd
+    state: restarted
