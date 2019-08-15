@@ -46,13 +46,9 @@ licenced under GPL-v3
 
 ## Author Information
 
-Oscar Ford: oscarf@ei.udelar.edu.uy - Espacio Interdisciplinario, UdelaR
-[Santiago Martínez](https://github.com/santiagomr) - CCI - UdelaR
-Cristhian Choque - Comisión Coordinadora del Interior (CCI) - UdelaR
-[Daniel Viñar](https://github.com/ulvida/) - CCI - UdelaR (ulvida)
+- Oscar Ford: oscarf@ei.udelar.edu.uy - Espacio Interdisciplinario, UdelaR
+- [Santiago Martínez](https://github.com/santiagomr) - CCI - UdelaR
+- Cristhian Choque - Comisión Coordinadora del Interior (CCI) - UdelaR
+- [Daniel Viñar](https://github.com/ulvida/) - CCI - UdelaR (ulvida)
 
-Work derived froma first playbook for a baremetal server: [oscarf/alternc35_ansible](https://git.interior.edu.uy/oscarf/alternc35_ansible).
-
-
-
-
+Work derived from a first playbook for a baremetal server: [oscarf/alternc35_ansible](https://git.interior.edu.uy/oscarf/alternc35_ansible).
