@@ -1,6 +1,6 @@
 # Role AlternC
 
-Install and configure [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container.
+Install and configure [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container).
 
 Configures AltenrC hosting panel, that allows any user thas has an account to access AltenrC web GUI, to manage
 the hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts and mailboxes.
@@ -30,7 +30,7 @@ and call it in your playbooks to run it against a freshlly installed debian stre
 ## Role Variables
 
 Variables needed are listed and documented in the `/defaults/main.yml` file. They include the debconf paramenters
-needed when installing AltenrC package and demendencies, as well as those needed to cofigure after the AltenrC panel
+needed when installing AltenrC package and dependencies, as well as those needed to cofigure after the AltenrC panel
 (hosting web GUI).
 
 Most of them need to be defined when calling the role, according to your environement.
@@ -47,9 +47,9 @@ licenced under GPL-v3
 ## Author Information
 
 Oscar Ford: oscarf@ei.udelar.edu.uy - Espacio Interdisciplinario, UdelaR
-Cristhian Choque - Comisión Coordinadora del Interior (CCI) - UdelaR
-Daniel Viñar - CCI - UdelaR (ulvida)
 [Santiago Martínez](https://github.com/santiagomr) - CCI - UdelaR
+Cristhian Choque - Comisión Coordinadora del Interior (CCI) - UdelaR
+[Daniel Viñar](https://github.com/ulvida/) - CCI - UdelaR (ulvida)
 
 Work derived froma first playbook for a baremetal server: [oscarf/alternc35_ansible](https://git.interior.edu.uy/oscarf/alternc35_ansible).
 
