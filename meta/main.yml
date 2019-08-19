@@ -12,7 +12,7 @@ galaxy_info:
   - name: Debian
     versions:
     - stretch
-  
+
   galaxy_tags:
     - debian
     - web
@@ -21,5 +21,5 @@ galaxy_info:
     - alternc
     - php
     - mysql
-    
+
 dependencies: []

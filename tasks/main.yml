@@ -7,15 +7,12 @@
 ### Publish role: Daniel Viñar - CCI - UdelaR (ulvida
 ###############################################
 
-
 - name: Verificando sistema operativo y versión.
   assert:
     that:
       - ansible_facts['distribution'] == "Debian"
       - ansible_facts['distribution_major_version'] | int >= 9
     msg: "Ejecución abortada. El sistema operativo debe ser Debian(9) Stretch."
-
-
 
 - include_tasks: packages.yml
 
@@ -27,6 +24,4 @@
 
 - include_tasks: post-install.yml
 
-
 ...
-

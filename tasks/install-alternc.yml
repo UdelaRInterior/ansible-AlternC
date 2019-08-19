@@ -40,7 +40,7 @@
   shell: "alternc.install"
   register: resultado_alternc_install
 
-- debug: msg="{{resultado_alternc_install}}"
+- debug: msg="{{ resultado_alternc_install }}"
 
 - name: Recuperando id del administrador (admin).
   shell: mysql {{ alternc_opciones_consulta }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
@@ -50,9 +50,9 @@
   script: rnd.sh
   register: rnd
 
-- debug: msg="{{user_id}}"
+- debug: msg="{{ user_id }}"
 
-- debug: msg="{{rnd}}"
+- debug: msg="{{ rnd }}"
 
 - name: Estableciendo password de acceso para el administrador AlternC.
   shell: mysql {{ alternc_opciones_consulta }} 'UPDATE membres SET pass=ENCRYPT({{ alternc_admin_pass }}, {{ rnd.stdout }} ) WHERE uid = {{ user_id.stdout }} '
@@ -98,7 +98,7 @@
   shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE variable SET value={{ alternc_new_email }} WHERE id='26''"
 
 - name: Registrando servidores externos MySql si fueron proporcionados.
-  shell: "mysql {{ alternc_opciones_consulta }} 'INSERT INTO db_servers (name, host, login, password, client) VALUES ({{ item.name }}, {{ item.host }}, {{ item.login }}, {{ item.password}}, \"%\")'"
+  shell: "mysql {{ alternc_opciones_consulta }} 'INSERT INTO db_servers (name, host, login, password, client) VALUES ({{ item.name }}, {{ item.host }}, {{ item.login }}, {{ item.password }}, \"%\")'"
   when:
     - item.name != '""'
     - item.host != '""'

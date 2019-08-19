@@ -103,8 +103,6 @@ alternc_mailman_debconf_patch_mailman: true
 
 
 
-
-
 ##### Configuraciones ##########
 
 # Opciones de consulta MySql.
@@ -210,8 +208,6 @@ alternc_db_servers:
   - { name: '""', host: '""', login: '""', password: '""'}
 #  - { name: '""', host: '""', login: '""', password: '""'}
 #  - { name: '""', host: '""', login: '""', password: '""'}
-
-
 
 
 
