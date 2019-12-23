@@ -59,6 +59,16 @@
   notify:
     - restart proftpd
 
+- name: Configurar servidor postfix
+  lineinfile:
+    path: '/etc/postfix/main.cf'
+    regexp: "{{ item.parameter }}"
+    line: "{{ item.parameter }} = {{ item.value }}"
+    backup: yes
+  with_items: "{{ alternc_postfix_main_configurations }}"
+  tags: postfix
+  notify:
+    - restart postfix
 
 - name: Ejecutar alternc.install para reflejar los cambios de configuración
   shell: "alternc.install"
