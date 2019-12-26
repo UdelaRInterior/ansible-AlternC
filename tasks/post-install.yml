@@ -62,7 +62,7 @@
 - name: Configurar servidor postfix
   lineinfile:
     path: '/etc/postfix/main.cf'
-    regexp: "{{ item.parameter }}"
+    regexp: "^{{ item.parameter }}"
     line: "{{ item.parameter }} = {{ item.value }}"
     backup: yes
   with_items: "{{ alternc_postfix_main_configurations }}"
