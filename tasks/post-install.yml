@@ -61,7 +61,18 @@
 
 - name: Configurar servidor postfix
   lineinfile:
-    path: '/etc/postfix/main.cf'
+    path: '/etc/alternc/templates/alternc/postfix/postfix.cf'
+    regexp: "^{{ item.parameter }}"
+    line: "{{ item.parameter }} = {{ item.value }}"
+    backup: yes
+  with_items: "{{ alternc_postfix_main_configurations }}"
+  tags: postfix
+  notify:
+    - restart postfix
+
+- name: Configurar servidor postfix para un alternc-slave
+  lineinfile:
+    path: '/etc/alternc/templates/alternc/postfix/postfix-slave.cf'
     regexp: "^{{ item.parameter }}"
     line: "{{ item.parameter }} = {{ item.value }}"
     backup: yes

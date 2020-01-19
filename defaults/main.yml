@@ -241,6 +241,8 @@ alternc_proftpd_configurations:
   - parameter: 'PassivePorts'   # Rango de puertos que ProFTPd empleará para datos en modo pasivo
     value: '50000 60000'        # En caso de contar con un firewall, estos puertos deben encontrarse abiertos en él
 
-alternc_postfix_main_configurations:
-  - parameter: 'mynetworks'
-    value: '127.0.0.0/8 [::1]/128'
+alternc_postfix_main_configurations: []
+## To allow local IPv6 mail delivery:
+#alternc_postfix_main_configurations:
+#  - parameter: 'mynetworks'
+#    value: '127.0.0.0/8 [::1]/128'
