@@ -1,37 +1,39 @@
 ---
 
-- name: Agregando repositorio "Koumbit" para AlternC 3.5.
+- debug: 
+    msg: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+
+- name: include the variable defining the packages for debian version 
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+
+- name: Agregando repositorio para AlternC
   template:
-    src: etc/apt/sources.list.d/alternc35.list.j2
-    dest: /etc/apt/sources.list.d/alternc35.list
+    src: etc/apt/sources.list.d/alternc.list.j2
+    dest: /etc/apt/sources.list.d/alternc.list
 
-
-- name: Agregar llave apt de repositorio "Koumbit" para AlternC 3.5.
+- name: Agregar llave apt de repositorio AlternC
   apt_key:
-    url: "{{ alternc35_repo }}/key.asc"
+    url: "{{ alternc_repo }}/{{ alternc_key }}"
     state: present
 
+- name: definir la estable como distribución preferida
+  lineinfile: 
+    path: /etc/apt/apt.conf.d/30StableRelease
+    line: 'APT::Default-Release "stable";'
+    create: yes
+    state: present
+
+- name: agregar el repositorio de Sid para phpmyadmin, en debian Buster
+  apt_repository: 
+    repo: "deb {{ url_repo_sid }} {{ url_branch_sid }}"
+    state: present
+  when: ( ansible_distribution == "Debian") and (ansible_distribution_major_version == "10")
 
 - name: Actualizando lista de paquetes.
   apt:
     update_cache: yes
 
-
 - name: Asegurando que los módulos php mas populares se encuentran actualizados e instalados # Módulos de propósito general pero que no se incluye en el instalador de AlternC
   apt:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: latest
-  loop:
-    - "php7.0-common"
-    - "php7.0-curl"
-    - "php7.0-gd"
-    - "php7.0-intl"
-    - "php7.0-json"
-    - "php7.0-mysql"
-    - "php7.0-mbstring"
-    - "php7.0-mcrypt"
-    - "php7.0-imagick"
-    - "php7.0-pgsql"
-    - "php7.0-xml"
-    - "php7.0-xmlrpc"
-    - "php7.0-zip"

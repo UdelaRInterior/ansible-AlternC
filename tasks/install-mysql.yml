@@ -7,9 +7,5 @@
 
 - name: Instalando servidor de base de datos MySql. Sírvase un café!!. Calme la ansiedad, puede tardar un poco!!.
   apt:
-    name: "{{ paquetes }}"
+    name: "{{ packages_mysql }}"
     state: latest
-  vars:
-    paquetes:
-    - mysql-server
-    - mysql-client
