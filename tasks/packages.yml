@@ -16,17 +16,18 @@
     url: "{{ alternc_repo }}/{{ alternc_key }}"
     state: present
 
-- name: definir la estable como distribución preferida
-  lineinfile: 
-    path: /etc/apt/apt.conf.d/30StableRelease
-    line: 'APT::Default-Release "stable";'
-    create: yes
-    state: present
+- block: 
+  - name: definir la estable como distribución preferida
+    lineinfile: 
+      path: /etc/apt/apt.conf.d/30StableRelease
+      line: 'APT::Default-Release "stable";'
+      create: yes
+      state: present
 
-- name: agregar el repositorio de Sid para phpmyadmin, en debian Buster
-  apt_repository: 
-    repo: "deb {{ url_repo_sid }} {{ url_branch_sid }}"
-    state: present
+  - name: agregar el repositorio de Sid para phpmyadmin, en debian Buster
+    apt_repository: 
+      repo: "deb {{ url_repo_sid }} {{ url_branch_sid }}"
+      state: present
   when: ( ansible_distribution == "Debian") and (ansible_distribution_major_version == "10")
 
 - name: Actualizando lista de paquetes.
