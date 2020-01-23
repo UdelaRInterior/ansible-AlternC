@@ -15,7 +15,9 @@
     state: latest
 
 - name: Iniciando "mailman".
-  shell: "/etc/init.d/mailman start"
+  service: 
+    name: mailman 
+    state: started
 
 - name: Instalando "awstats", estadísticas para los sitios web.
   apt:
