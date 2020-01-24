@@ -18,10 +18,6 @@
 # Password deseada para el usuario "root" de MySql.
 root_pass_mysql: 'Clave_rooT_1234'
 
-# Repositorio de AlternC 3.5.
-alternc35_repo: 'http://debian.koumbit.net/debian'
-alternc35_rama: 'alternc35 main'
-
 #####################
 #####  debconf  #####
 #####################

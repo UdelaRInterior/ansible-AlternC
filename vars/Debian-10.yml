@@ -1,0 +1,37 @@
+---
+## Variables to install AlternC on Debian buster
+
+# Repositorio de AlternC 3.5.
+alternc_repo: 'http://debian.koumbit.net/debian'
+alternc_branch: 'alternc35 main'
+alternc_key: 'key.asc'
+
+# Repositorio buster de AlternC - no funciona
+#alternc_repo: 'http://debian.alternc.org'
+#alternc_branch: 'buster main'
+#alternc_key: 'key.txt'
+
+packages:
+- "php7.3-common"
+- "php7.3-curl"
+- "php7.3-bz2"
+- "php7.3-gd"
+- "php7.3-imagick"
+- "php7.3-intl"
+- "php7.3-json"
+- "php7.3-mbstring"
+- "php7.3-mysql"
+- "php7.3-pgsql"
+- "php7.3-xml"
+- "php7.3-xmlrpc"
+- "php7.3-zip"
+
+packages_mysql:
+- default-mysql-server
+- default-mysql-client
+#- mariadb-server
+#- mariadb-client
+
+url_repo_sid: "http://ftp.debian.org/debian/"
+
+url_branch_sid: 'sid main'
