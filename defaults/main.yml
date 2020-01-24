@@ -84,6 +84,7 @@ phpmyadmin_debconf_app_password_confirm: ''
 phpmyadmin_debconf_dbconfig_reinstall: false
 #####
 
+# Si se instala mailman
 # Idiomas a soportar (mailman) (ar (Arabic), ca (Catalan), cs (Czech), da (Danish), de (German), en (English), es (Spanish), et (Estonian), eu (Basque), fi (Finnish), fr (French), hr (Croatian), hu (Hungarian), ia (Interlingua), it (Italian), ja (Japanese), ko (Korean), lt (Lithuanian), nl (Dutch), no (Norwegian), pl (Polish), pt (Portuguese), pt_BR (Brasilian Portuguese), ro (Romanian), ru (Russian), sl (Slovenian), sr (Serbian), sv (Swedish), tr (Turkish), uk (Ukrainian), vi (Vietnamese), zh_CN (Chinese - China), zh_TW (Chinese - Taiwan)).
 mailman_debconf_site_languages: 'de (German), en (English), es (Spanish), fr (French), it (Italian), pt (Portuguese), pt_BR (Brasilian Portuguese)'
 
@@ -97,6 +98,19 @@ alternc_mailman_debconf_patch_mailman: true
 #####  debconf (fin)  #####
 ###########################
 
+#############################################################
+#####  plugins de AlternC: mailman, awstat y roundcube  #####
+#############################################################
+
+
+# Instalación de mailman y alternc-mailman (a 'yes' para ser compatibles con versiones anteriores del role)
+alternc_mailman_install: yes
+
+# Instalación de awstats y alternc-awstats (a 'yes' para ser compatibles con versiones anteriores del role)
+alternc_awstats_install: yes
+
+# Instalación de roundcube y alternc-reoundcube
+alternc_roundcube_install: no
 
 
 ##### Configuraciones ##########

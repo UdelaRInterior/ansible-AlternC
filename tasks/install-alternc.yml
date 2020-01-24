@@ -9,31 +9,40 @@
     - apt-transport-https
     - alternc
 
-- name: Instalando "mailman", sistema de gestión de listas de correo.
+- block: 
+  - name: Instalando "mailman", sistema de gestión de listas de correo.
+    apt:
+      name: alternc-mailman
+      state: latest
+
+  - name: Iniciando "mailman".
+    service: 
+      name: mailman 
+      state: started
+  when: alternc_mailman_install
+
+- block: 
+  - name: Instalando "awstats", estadísticas para los sitios web.
+    apt:
+      name: alternc-awstats
+      state: latest
+
+  - name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
+    lineinfile:
+      path: /etc/awstats/awstats.conf
+      regexp: 'SiteDomain='
+      line: 'SiteDomain="{{ alternc_debconf_desktopname }}"'
+      state: present
+      backup: yes
+
+  - name: Construyendo base de datos para estadísticas (awstats).
+    shell: "perl /usr/lib/cgi-bin/awstats.pl -config={{ alternc_debconf_desktopname }} -update"
+  when: alternc_awstats_install
+
+- name: Instalar roundcube
   apt:
-    name: alternc-mailman
+    name: alternc-roundcube
     state: latest
-
-- name: Iniciando "mailman".
-  service: 
-    name: mailman 
-    state: started
-
-- name: Instalando "awstats", estadísticas para los sitios web.
-  apt:
-    name: alternc-awstats
-    state: latest
-
-- name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
-  lineinfile:
-    path: /etc/awstats/awstats.conf
-    regexp: 'SiteDomain='
-    line: 'SiteDomain="{{ alternc_debconf_desktopname }}"'
-    state: present
-    backup: yes
-
-- name: Construyendo base de datos para estadísticas (awstats).
-  shell: "perl /usr/lib/cgi-bin/awstats.pl -config={{ alternc_debconf_desktopname }} -update"
 
 - name: Configurando política de contraseñas. 10 caracteres mínimo. Mayúsculas, minúsculas y números son obligatorios.
   shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE policy SET minsize='10', classcount='3''"
