@@ -2,6 +2,7 @@
 
 - debug: 
     msg: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    verbosity: 2
 
 - name: include the variable defining the packages for debian version 
   include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
