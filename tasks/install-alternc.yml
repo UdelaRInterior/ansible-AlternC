@@ -9,6 +9,16 @@
     - apt-transport-https
     - alternc
 
+- name: Patch-- replace alternc.install with a version for debian buster
+  copy:
+    src: files/alternc.install
+    dest: /usr/share/alternc/install/alternc.install
+    owner: root
+    group: root
+    mode: 0755
+    backup: yes
+  when: alternc_replace_alternc_install
+
 - block: 
   - name: Instalando "mailman", sistema de gestión de listas de correo.
     apt:
@@ -46,6 +56,12 @@
 
 - name: Configurando política de contraseñas. 10 caracteres mínimo. Mayúsculas, minúsculas y números son obligatorios.
   shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE policy SET minsize='10', classcount='3''"
+
+- name: hook-- Alternc debian installer set wrong file ownership
+  file:
+    path: /etc/alternc/my.cnf
+    group: alterncpanel
+    state: file
 
 - name: Ejecutando alternc.install
   shell: "alternc.install"

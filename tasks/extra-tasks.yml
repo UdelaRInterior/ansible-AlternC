@@ -19,8 +19,9 @@
     host: "{{ item.host }}"
     password: "{{ item.password }}"
     priv: "{{ item.priv }}"
-    login_user: root
-    login_password: "{{ root_pass_mysql }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
+    # login_user: root
+    # login_password: "{{ root_pass_mysql }}"
     state: "{{ item.state | default ('present') }}"
   with_items: "{{ alternc_extra_mysql_users }}"
   tags: alternc:dbuser

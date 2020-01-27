@@ -1,11 +1,11 @@
 ---
 
 - debug: 
-    msg: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    msg: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
     verbosity: 2
 
 - name: include the variable defining the packages for debian version 
-  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
 
 - name: Agregando repositorio para AlternC
   template:
@@ -29,7 +29,7 @@
     apt_repository: 
       repo: "deb {{ url_repo_sid }} {{ url_branch_sid }}"
       state: present
-  when: ( ansible_distribution == "Debian") and (ansible_distribution_major_version == "10")
+  when: ( ansible_distribution == 'Debian') and (ansible_distribution_release == 'buster')
 
 - name: Actualizando lista de paquetes.
   apt:

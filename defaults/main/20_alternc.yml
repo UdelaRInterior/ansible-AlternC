@@ -68,4 +68,7 @@ phpmyadmin_debconf_app_password_confirm: ''
 phpmyadmin_debconf_dbconfig_reinstall: false
 #####
 
+## with this flac we can replace alternc.install script by our own avi_api_version
+## used for buster needs not yet in the repositories 
+ 
 ...
