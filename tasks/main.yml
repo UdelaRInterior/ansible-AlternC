@@ -24,4 +24,5 @@
 
 - include_tasks: post-install.yml
 
+- import_tasks: extra-tasks.yml
 ...
