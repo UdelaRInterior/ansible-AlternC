@@ -79,7 +79,6 @@
   notify:
   - restart apache2
 
-
 - debug: msg="{{ resultado_alternc_install }}"
   when: resultado_alternc_install is defined
 

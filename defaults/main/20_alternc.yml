@@ -70,5 +70,7 @@ phpmyadmin_debconf_dbconfig_reinstall: false
 
 ## with this flac we can replace alternc.install script by our own avi_api_version
 ## used for buster needs not yet in the repositories 
- 
+
+## A workaround to have our local copy of alternc that we modify (for this bug: https://github.com/AlternC/AlternC/pull/378)
+alternc_replace_alternc_install: no
 ...

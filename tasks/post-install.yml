@@ -90,3 +90,7 @@
 #  shell: "alternc.install"
 - name: running alternc.install and other handlers
   meta: flush_handlers
+
+- debug: 
+    msg: "{{ resultado_alternc_install }}"
+  when: resultado_alternc_install is defined
