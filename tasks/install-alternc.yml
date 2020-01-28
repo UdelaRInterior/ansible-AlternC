@@ -8,6 +8,9 @@
     paquetes:
     - apt-transport-https
     - alternc
+  notify: 
+  - run alternc.install
+  - run alternc.install 2
 
 - name: Patch-- replace alternc.install with a version for debian buster
   copy:
@@ -24,6 +27,8 @@
     apt:
       name: alternc-mailman
       state: latest
+    notify: run alternc.install
+
 
   - name: Iniciando "mailman".
     service: 
@@ -36,6 +41,7 @@
     apt:
       name: alternc-awstats
       state: latest
+    notify: run alternc.install
 
   - name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
     lineinfile:
@@ -53,21 +59,29 @@
   apt:
     name: alternc-roundcube
     state: latest
+  notify: run alternc.install
 
 - name: Configurando política de contraseñas. 10 caracteres mínimo. Mayúsculas, minúsculas y números son obligatorios.
   shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE policy SET minsize='10', classcount='3''"
 
-- name: hook-- Alternc debian installer set wrong file ownership
-  file:
-    path: /etc/alternc/my.cnf
-    group: alterncpanel
-    state: file
+#- name: hook-- Alternc debian installer set wrong file ownership
+#  file:
+#    path: /etc/alternc/my.cnf
+#    group: alterncpanel
+#    state: file
 
-- name: Ejecutando alternc.install
-  shell: "alternc.install"
-  register: resultado_alternc_install
+#- name: Ejecutando alternc.install
+#  shell: "alternc.install"
+#  register: resultado_alternc_install
+
+- name: running alternc.install
+  meta: flush_handlers
+  notify:
+  - restart apache2
+
 
 - debug: msg="{{ resultado_alternc_install }}"
+  when: resultado_alternc_install is defined
 
 - name: Recuperando id del administrador (admin).
   shell: mysql {{ alternc_opciones_consulta }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
@@ -136,5 +150,5 @@
 - name: Generando certificados ssl (certbot-letsencrypt).
   shell: "php /usr/lib/alternc/generate_certbot.php"
 
-- name: Ejecutando alternc.install
-  shell: "alternc.install"
+#- name: Ejecutando alternc.install
+#  shell: "alternc.install"

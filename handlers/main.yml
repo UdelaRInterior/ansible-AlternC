@@ -1,6 +1,14 @@
 ---
 # handlers file for ansible-AlternC
 
+- name: run alternc.install
+  shell: "alternc.install"
+  register: resultado_alternc_install
+
+- name: run alternc.install 2
+  shell: "alternc.install"
+  register: resultado_alternc_install2
+
 - name: restart apache2
   service:
     name: apache2
