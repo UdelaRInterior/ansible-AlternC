@@ -23,3 +23,8 @@
   service:
     name: postfix
     state: restarted
+
+- name: AlternC - restart mysql
+  service:
+    name: mysql
+    state: restarted
