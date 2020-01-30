@@ -10,6 +10,9 @@ root_pass_mysql: 'Clave_rooT_1234'
 # better to put it in a vault with
 # root_pass_mysql: "{{ vault_root_pass_mysql }}" 
 
+# To Make Mysql listen on public IP (open also the firewall) 
+alternc_open_mysql: no
+
 alternc_extra_mysql_users: []
 # alternc_extra_mysql_users:
 # - name: dbuser
