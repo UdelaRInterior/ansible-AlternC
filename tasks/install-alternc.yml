@@ -64,7 +64,8 @@
 - name: Configurando política de contraseñas. 10 caracteres mínimo. Mayúsculas, minúsculas y números son obligatorios.
   shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE policy SET minsize='10', classcount='3''"
 
-#- name: hook-- Alternc debian installer set wrong file ownership
+## has side effects, better to run alternc.install twice https://github.com/AlternC/AlternC/issues/403
+#- name: hook-- Alternc debian installer set wrong file ownership 
 #  file:
 #    path: /etc/alternc/my.cnf
 #    group: alterncpanel
@@ -73,6 +74,18 @@
 #- name: Ejecutando alternc.install
 #  shell: "alternc.install"
 #  register: resultado_alternc_install
+
+# Workaround of this bug
+- name: "workaround: this breaks the file manager panel webpage"
+  copy: 
+    src: files/bro_main.php
+    dest: /usr/share/alternc/panel/admin/bro_main.php
+    owner: alterncpanel
+    group: alterncpanel
+    mode: 0644
+    backup: yes
+  when: ansible_distribution_release == "buster"
+  tags: workaround
 
 - name: running alternc.install
   meta: flush_handlers

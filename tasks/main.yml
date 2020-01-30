@@ -20,7 +20,7 @@
 
 - include_tasks: debconf.yml
 
-- include_tasks: install-alternc.yml
+- import_tasks: install-alternc.yml
 
 - include_tasks: post-install.yml
 
