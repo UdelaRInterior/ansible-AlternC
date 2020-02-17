@@ -1,0 +1,76 @@
+---
+###################################################################
+####   AlternC ansible role - default variables                ####
+####   https://github.com/UdelaRInterior/ansible-alternc       ####
+####              alternc package debconf vars                 ####
+###################################################################
+
+
+# Web server package (apache2/lighttpd)
+# Servidor web que desea reconfigurar automáticamente (apache2/lighttpd).
+phpmyadmin_debconf_reconfigure_webserver: 'apache2'
+
+# Name for your web hosting service (AlternC)
+# Nombre de tu servicio de hospedaje (AlternC).
+alternc_debconf_hostingname: 'Mi nombre de hosting'
+
+# Full domain name for hosting panel
+# Nombre de dominio completo del panel de hospedaje (mipanelalternc.com).
+alternc_debconf_desktopname: 'mipanelalternc.com'
+
+# Main server's IP
+# La ip principal del servidor.
+alternc_debconf_public_ip: '200.200.200.200'
+
+# Internal server's IP (if you have NAT)
+# La dirección ip interna del servidor.
+alternc_debconf_internal_ip: '172.16.1.1'
+
+# Primary DNS server for zones installed in panel (can be the host itself)
+# DNS primario para las zonas instaladas en el panel (puede ser el mismo servidor)
+alternc_debconf_ns1: 'ns1.com'
+
+# Secondary DNS server for zones installed in this panel
+# (must have alternc-slave, and and an accunt sychronizing zones definitions)
+# Nombre de dominio del servidor DNS secundario.
+alternc_debconf_ns2: 'ns2.com'
+
+# Default MX record for zones installed in the hosting
+# El MX por omisión que se asigna a los nuevos dominios (mipanelalternc.com).
+alternc_debconf_default_mx: 'mipanelalternc.com'
+
+#
+# Se debe utilizar el servidor MySql local identificado automáticamente?
+# (No cambiar éste valor, si el servidor mysql es remoto ésta variable se configura con
+# '' y entran en juego otras no disponibles en ésta versión del playbook. La pregunta es de
+# opción si/no, pero su variable no es booleana.)
+alternc_debconf_mysql_host: '127.0.0.1'
+
+# Carpeta en que los archivos HTML de los usuarios AlternC serán almacenados (/var/www/alternc/).
+alternc_debconf_alternc_html: '/var/www/alternc/'
+
+# Carpeta en la que se almacenan los correos de los usuarios (/var/mail/alternc/).
+alternc_debconf_alternc_mail: '/var/mail/alternc/'
+
+# Carpeta en la que se almacenarán las bitácoras de AlternC (/var/log/alternc/sites/).
+alternc_debconf_alternc_logs: '/var/log/alternc/sites/'
+
+# Desea configurar la base de datos para phpmyadmin con dbconfig-common (si/no). Variable booleana.
+phpmyadmin_debconf_dbconfig_upgrade: true
+
+# Contraseña de aplicación MySql para phpmyadmin (vacío genera pass aleatoria).
+phpmyadmin_debconf_mysql_admin_pass: ''
+phpmyadmin_debconf_mysql_app_pass: ''
+phpmyadmin_debconf_app_password_confirm: ''
+
+##### La siguiente pregunta aparece cuando phpmyadmin en su instalación detecta una bd existente.
+# Desea reinstalar la base de datos phpmyadmin? (si/no). Variable booleana.
+phpmyadmin_debconf_dbconfig_reinstall: false
+#####
+
+## with this flac we can replace alternc.install script by our own avi_api_version
+## used for buster needs not yet in the repositories 
+
+## A workaround to have our local copy of alternc that we modify (for this bug: https://github.com/AlternC/AlternC/pull/378)
+alternc_replace_alternc_install: no
+...

@@ -1,0 +1,25 @@
+---
+###################################################################
+####   AlternC ansible role - default variables                ####
+####   https://github.com/UdelaRInterior/ansible-alternc       ####
+####              Mysql configuration variables                ####
+###################################################################
+
+# Password for mysql root user
+root_pass_mysql: 'Clave_rooT_1234'
+# better to put it in a vault with
+# root_pass_mysql: "{{ vault_root_pass_mysql }}" 
+
+# To Make Mysql listen on public IP (open also the firewall) 
+alternc_open_mysql: no
+
+alternc_extra_mysql_users: []
+# alternc_extra_mysql_users:
+# - name: dbuser
+#   host: host.mydomain.org
+#   password: ***********
+#   priv: "alternc.membres:SELECT(login,mail)"
+#   state: present # optional, default present
+#the above example defines a user that can access login and mail of the alternc members table
+#for instance to build a mailing list. 
+...

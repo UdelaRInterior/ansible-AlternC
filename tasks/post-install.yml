@@ -34,7 +34,8 @@
   with_items: "{{ alternc_phpmyadmin_configurations }}"
   tags: phpalternc
   notify:
-    - restart apache2
+  - restart apache2
+  - run alternc.install
 
 
 - name: Asegurar largo suficiente de blowfish_secret
@@ -45,7 +46,8 @@
     backup: yes
   tags: phpalternc
   notify:
-    - restart apache2
+  - restart apache2
+  - run alternc.install
 
 
 - name: Configurar servidor ProFTPd
@@ -57,7 +59,8 @@
   with_items: "{{ alternc_proftpd_configurations }}"
   tags: proftpd
   notify:
-    - restart proftpd
+  - restart proftpd
+  - run alternc.install
 
 - name: Configurar servidor postfix
   lineinfile:
@@ -68,7 +71,8 @@
   with_items: "{{ alternc_postfix_main_configurations }}"
   tags: postfix
   notify:
-    - restart postfix
+  - restart postfix
+  - run alternc.install
 
 - name: Configurar servidor postfix para un alternc-slave
   lineinfile:
@@ -79,7 +83,14 @@
   with_items: "{{ alternc_postfix_main_configurations }}"
   tags: postfix
   notify:
-    - restart postfix
+  - restart postfix
+  - run alternc.install
 
-- name: Ejecutar alternc.install para reflejar los cambios de configuración
-  shell: "alternc.install"
+#- name: Ejecutar alternc.install para reflejar los cambios de configuración
+#  shell: "alternc.install"
+- name: running alternc.install and other handlers
+  meta: flush_handlers
+
+- debug: 
+    msg: "{{ resultado_alternc_install }}"
+  when: resultado_alternc_install is defined

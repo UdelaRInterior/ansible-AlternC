@@ -12,7 +12,7 @@
     that:
       - ansible_facts['distribution'] == "Debian"
       - ansible_facts['distribution_major_version'] | int >= 9
-    msg: "Ejecución abortada. El sistema operativo debe ser Debian(9) Stretch."
+    msg: "Ejecución abortada. El sistema operativo debe ser Debian(9) Stretch o superior."
 
 - include_tasks: packages.yml
 
@@ -20,8 +20,9 @@
 
 - include_tasks: debconf.yml
 
-- include_tasks: install-alternc.yml
+- import_tasks: install-alternc.yml
 
 - include_tasks: post-install.yml
 
+- import_tasks: extra-tasks.yml
 ...

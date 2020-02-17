@@ -1,0 +1,37 @@
+---
+## Additional tasks not directly related to AlternC
+
+- block: 
+  - name: Make MySQL server listen on public IP
+    lineinfile:
+      path: /etc/mysql/mariadb.conf.d/50-server.cnf
+      line: '# bind-address          = 127.0.0.1'
+      regexp: 'bind-address\s*=\s*127\.0\.0\.1'
+      backup: yes
+    when: alternc_open_mysql
+    notify: AlternC - restart mysql
+
+  - name: Verify if the pymysql module is installed
+    apt:
+      name: python-pymysql
+      state: present
+    when: alternc_extra_mysql_users | length > 0
+
+  - debug:
+      var: item
+      verbosity: 2
+    with_items: "{{ alternc_extra_mysql_users }}"
+
+  - name: create extra mysql users
+    mysql_user:
+      name: "{{ item.name }}"
+      host: "{{ item.host }}"
+      password: "{{ item.password }}"
+      priv: "{{ item.priv }}"
+      login_unix_socket: /run/mysqld/mysqld.sock
+      # login_user: root
+      # login_password: "{{ root_pass_mysql }}"
+      state: "{{ item.state | default ('present') }}"
+    with_items: "{{ alternc_extra_mysql_users }}"
+  tags: alternc:dbuser
+...

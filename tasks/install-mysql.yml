@@ -1,9 +1,9 @@
 ---
-
-- name: Creando credenciales "root" para base de datos MySql.
-  template:
-    src: root/.my.cnf.j2
-    dest: /root/.my.cnf
+# Mariadb does no longer use a root password
+#- name: Creando credenciales "root" para base de datos MySql.
+#  template:
+#    src: root/.my.cnf.j2
+#    dest: /root/.my.cnf
 
 - name: Instalando servidor de base de datos MySql. Sírvase un café!!. Calme la ansiedad, puede tardar un poco!!.
   apt:

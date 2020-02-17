@@ -8,41 +8,92 @@
     paquetes:
     - apt-transport-https
     - alternc
+  notify: 
+  - run alternc.install
+  - run alternc.install 2
 
-- name: Instalando "mailman", sistema de gestión de listas de correo.
-  apt:
-    name: alternc-mailman
-    state: latest
-
-- name: Iniciando "mailman".
-  service: 
-    name: mailman 
-    state: started
-
-- name: Instalando "awstats", estadísticas para los sitios web.
-  apt:
-    name: alternc-awstats
-    state: latest
-
-- name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
-  lineinfile:
-    path: /etc/awstats/awstats.conf
-    regexp: 'SiteDomain='
-    line: 'SiteDomain="{{ alternc_debconf_desktopname }}"'
-    state: present
+- name: Patch-- replace alternc.install with a version for debian buster
+  copy:
+    src: files/alternc.install
+    dest: /usr/share/alternc/install/alternc.install
+    owner: root
+    group: root
+    mode: 0755
     backup: yes
+  when: alternc_replace_alternc_install
 
-- name: Construyendo base de datos para estadísticas (awstats).
-  shell: "perl /usr/lib/cgi-bin/awstats.pl -config={{ alternc_debconf_desktopname }} -update"
+- block: 
+  - name: Instalando "mailman", sistema de gestión de listas de correo.
+    apt:
+      name: alternc-mailman
+      state: latest
+    notify: run alternc.install
+
+
+  - name: Iniciando "mailman".
+    service: 
+      name: mailman 
+      state: started
+  when: alternc_mailman_install
+
+- block: 
+  - name: Instalando "awstats", estadísticas para los sitios web.
+    apt:
+      name: alternc-awstats
+      state: latest
+    notify: run alternc.install
+
+  - name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
+    lineinfile:
+      path: /etc/awstats/awstats.conf
+      regexp: 'SiteDomain='
+      line: 'SiteDomain="{{ alternc_debconf_desktopname }}"'
+      state: present
+      backup: yes
+
+  - name: Construyendo base de datos para estadísticas (awstats).
+    shell: "perl /usr/lib/cgi-bin/awstats.pl -config={{ alternc_debconf_desktopname }} -update"
+  when: alternc_awstats_install
+
+- name: Instalar roundcube
+  apt:
+    name: alternc-roundcube
+    state: latest
+  notify: run alternc.install
 
 - name: Configurando política de contraseñas. 10 caracteres mínimo. Mayúsculas, minúsculas y números son obligatorios.
   shell: "mysql {{ alternc_opciones_consulta }} 'UPDATE policy SET minsize='10', classcount='3''"
 
-- name: Ejecutando alternc.install
-  shell: "alternc.install"
-  register: resultado_alternc_install
+## has side effects, better to run alternc.install twice https://github.com/AlternC/AlternC/issues/403
+#- name: hook-- Alternc debian installer set wrong file ownership 
+#  file:
+#    path: /etc/alternc/my.cnf
+#    group: alterncpanel
+#    state: file
+
+#- name: Ejecutando alternc.install
+#  shell: "alternc.install"
+#  register: resultado_alternc_install
+
+# Workaround of this bug
+- name: "workaround: this breaks the file manager panel webpage"
+  copy: 
+    src: files/bro_main.php
+    dest: /usr/share/alternc/panel/admin/bro_main.php
+    owner: alterncpanel
+    group: alterncpanel
+    mode: 0644
+    backup: yes
+  when: ansible_distribution_release == "buster"
+  tags: workaround
+
+- name: running alternc.install
+  meta: flush_handlers
+  notify:
+  - restart apache2
 
 - debug: msg="{{ resultado_alternc_install }}"
+  when: resultado_alternc_install is defined
 
 - name: Recuperando id del administrador (admin).
   shell: mysql {{ alternc_opciones_consulta }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
@@ -111,5 +162,5 @@
 - name: Generando certificados ssl (certbot-letsencrypt).
   shell: "php /usr/lib/alternc/generate_certbot.php"
 
-- name: Ejecutando alternc.install
-  shell: "alternc.install"
+#- name: Ejecutando alternc.install
+#  shell: "alternc.install"
