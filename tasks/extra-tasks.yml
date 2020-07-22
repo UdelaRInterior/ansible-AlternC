@@ -34,4 +34,5 @@
       state: "{{ item.state | default ('present') }}"
     with_items: "{{ alternc_extra_mysql_users }}"
   tags: alternc:dbuser
+
 ...

@@ -148,3 +148,5 @@
     question: alternc-mailman/patch-mailman
     value: "{{ alternc_mailman_debconf_patch_mailman }}"
     vtype: boolean
+
+...

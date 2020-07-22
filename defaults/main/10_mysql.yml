@@ -22,4 +22,5 @@ alternc_extra_mysql_users: []
 #   state: present # optional, default present
 #the above example defines a user that can access login and mail of the alternc members table
 #for instance to build a mailing list. 
+
 ...

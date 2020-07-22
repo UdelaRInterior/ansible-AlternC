@@ -9,3 +9,5 @@
   apt:
     name: "{{ packages_mysql }}"
     state: latest
+
+...

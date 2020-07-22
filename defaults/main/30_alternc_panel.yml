@@ -109,5 +109,4 @@ alternc_db_servers:
 #  - { name: '""', host: '""', login: '""', password: '""'}
 #  - { name: '""', host: '""', login: '""', password: '""'}
 
-
 ...

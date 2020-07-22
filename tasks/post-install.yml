@@ -1,4 +1,5 @@
 ---
+# Post-installation tasks of AlternC Ansible role
 
 - name: Configurar redirección de tráfico HTTP a HTTPS
   template:
@@ -8,33 +9,37 @@
     group: root
     mode: "0644"
   notify:
-    - restart apache2
+    - AlternC - Restart Apache2
 
 
 - name: Configurar tamaño máximo permitido en la subida de archivos
   lineinfile:
     path: "/etc/alternc/templates/alternc/apache2.conf"
-    regexp: "{{ item.parameter }}"
+    regexp: "{{ alternc_apache_php_ini_conf.parameter }}"
     insertafter: '<Directory /usr/share/alternc/panel/admin/>'
-    line: "  {{ item.parameter }} {{ item.value }}"
-    backup: yes
-  with_items: "{{ alternc_apache_php_ini_configurations }}"
+    line: "  {{ alternc_apache_php_ini_conf.parameter }} {{ alternc_apache_php_ini_conf.value }}"
+    backup: "{{ ansible_loop.first }}"
+  loop: "{{ alternc_apache_php_ini_configurations }}"
+  loop_control:
+    loop_var: alternc_apache_php_ini_conf
+    extended: yes
   tags: phpalternc
   notify:
-    - restart apache2
+    - AlternC - Restart Apache2
 
 
 - name: Configurar tamaño máximo permitido en la subida de archivos a PHPMyAdmin
   lineinfile:
     path: "/etc/alternc/templates/alternc/apache2.conf"
-    regexp: "{{ item.parameter }}"
+    regexp: "{{ alternc_phpmyadmin_conf.parameter }}"
     insertafter: '<Directory /usr/share/phpmyadmin>'
-    line: "  {{ item.parameter }} {{ item.value }}"
-    backup: yes
-  with_items: "{{ alternc_phpmyadmin_configurations }}"
+    line: "  {{ alternc_phpmyadmin_conf.parameter }} {{ alternc_phpmyadmin_conf.value }}"
+  loop: "{{ alternc_phpmyadmin_configurations }}"
+  loop_control:
+    loop_var: alternc_phpmyadmin_conf
   tags: phpalternc
   notify:
-  - restart apache2
+  - AlternC - Restart Apache2
   - run alternc.install
 
 
@@ -46,44 +51,52 @@
     backup: yes
   tags: phpalternc
   notify:
-  - restart apache2
+  - AlternC - Restart Apache2
   - run alternc.install
-
 
 - name: Configurar servidor ProFTPd
   lineinfile:
     path: "/etc/alternc/templates/proftpd/proftpd.conf"
-    regexp: "{{ item.parameter }}"
-    line: "{{ item.parameter }}        {{ item.value }}"
-    backup: yes
-  with_items: "{{ alternc_proftpd_configurations }}"
+    regexp: "{{ proftpd_conf.parameter }}"
+    line: "{{ proftpd_conf.parameter }}        {{ proftpd_conf.value }}"
+    backup: "{{ ansible_loop.first }}"
+  loop: "{{ alternc_proftpd_configurations }}"
+  loop_control:
+    loop_var: proftpd_conf
+    extended: yes
   tags: proftpd
   notify:
-  - restart proftpd
+  - AlternC - Restart ProFTPd
   - run alternc.install
 
 - name: Configurar servidor postfix
   lineinfile:
     path: '/etc/alternc/templates/alternc/postfix/postfix.cf'
-    regexp: "^{{ item.parameter }}"
-    line: "{{ item.parameter }} = {{ item.value }}"
-    backup: yes
-  with_items: "{{ alternc_postfix_main_configurations }}"
+    regexp: "^{{ postfix_conf.parameter }}"
+    line: "{{ postfix_conf.parameter }} = {{ postfix_conf.value }}"
+    backup: "{{ ansible_loop.first }}"
+  loop: "{{ alternc_postfix_main_configurations }}"
+  loop_control:
+    loop_var: postfix_conf
+    extended: yes
   tags: postfix
   notify:
-  - restart postfix
+  - AlternC - Restart Postfix
   - run alternc.install
 
 - name: Configurar servidor postfix para un alternc-slave
   lineinfile:
     path: '/etc/alternc/templates/alternc/postfix/postfix-slave.cf'
-    regexp: "^{{ item.parameter }}"
-    line: "{{ item.parameter }} = {{ item.value }}"
-    backup: yes
+    regexp: "^{{ postfix_conf.parameter }}"
+    line: "{{ postfix_conf.parameter }} = {{ postfix_conf.value }}"
+    backup: "{{ ansible_loop.first }}"
   with_items: "{{ alternc_postfix_main_configurations }}"
+  loop_control:
+    loop_var: postfix_conf
+    extended: yes
   tags: postfix
   notify:
-  - restart postfix
+  - AlternC - Restart Postfix
   - run alternc.install
 
 #- name: Ejecutar alternc.install para reflejar los cambios de configuración
@@ -94,3 +107,5 @@
 - debug: 
     msg: "{{ resultado_alternc_install }}"
   when: resultado_alternc_install is defined
+
+...

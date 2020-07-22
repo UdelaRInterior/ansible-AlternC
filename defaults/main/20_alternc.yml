@@ -73,4 +73,5 @@ phpmyadmin_debconf_dbconfig_reinstall: false
 
 ## A workaround to have our local copy of alternc that we modify (for this bug: https://github.com/AlternC/AlternC/pull/378)
 alternc_replace_alternc_install: no
+
 ...

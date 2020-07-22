@@ -1,3 +1,5 @@
+---
+
 galaxy_info:
   role_name: alternc
   author:
@@ -27,3 +29,5 @@ galaxy_info:
     - mysql
 
 dependencies: []
+
+...

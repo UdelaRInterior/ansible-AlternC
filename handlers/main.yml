@@ -9,22 +9,24 @@
   shell: "alternc.install"
   register: resultado_alternc_install2
 
-- name: restart apache2
+- name: AlternC - Restart Apache2
   service:
     name: apache2
     state: restarted
 
-- name: restart proftpd
+- name: AlternC - Restart ProFTPd
   service:
     name: proftpd
     state: restarted
 
-- name: restart postfix
+- name: AlternC - Restart Postfix
   service:
     name: postfix
     state: restarted
 
-- name: AlternC - restart mysql
+- name: AlternC - Restart MySQL
   service:
     name: mysql
     state: restarted
+
+...

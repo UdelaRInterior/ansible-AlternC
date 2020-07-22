@@ -1,13 +1,32 @@
 ---
+- name: Instalando apt-transport-https
+  apt:
+    name: apt-transport-https
+    state: present
+    cache_valid_time: 3600
+
+- name: Instalando augeas-lenses
+  apt:
+    name: augeas-lenses
+    state: present
+    cache_valid_time: 3600
+  when: ansible_distribution_release == "buster"
+
+- name: Instalando phpmyadmin and php-twig
+  apt:
+    name: 
+    - phpmyadmin
+    - php-twig
+    default_release: sid
+    state: latest
+    cache_valid_time: 3600
+  when: ansible_distribution_release == "buster"
 
 - name: Instalando AlternC 3.5 (alternc). Tenga paciencia. Espere !!. Mientras puede atender sus redes sociales.
   apt:
-    name: "{{ paquetes }}"
+    name: alternc
+    cache_valid_time: 3600
     state: latest
-  vars:
-    paquetes:
-    - apt-transport-https
-    - alternc
   notify: 
   - run alternc.install
   - run alternc.install 2
@@ -90,7 +109,7 @@
 - name: running alternc.install
   meta: flush_handlers
   notify:
-  - restart apache2
+  - AlternC - Restart Apache2
 
 - debug: msg="{{ resultado_alternc_install }}"
   when: resultado_alternc_install is defined
@@ -162,5 +181,4 @@
 - name: Generando certificados ssl (certbot-letsencrypt).
   shell: "php /usr/lib/alternc/generate_certbot.php"
 
-#- name: Ejecutando alternc.install
-#  shell: "alternc.install"
+...
