@@ -17,6 +17,11 @@
     name: 
     - phpmyadmin
     - php-twig
+    - php-symfony-config
+    - php-symfony-dependency-injection
+    - php-symfony-expression-language
+    - php-symfony-service-contracts
+    - php-symfony-yaml
     default_release: sid
     state: latest
     cache_valid_time: 3600
