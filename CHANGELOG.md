@@ -1,5 +1,10 @@
 # Change log of [ansible role AlternC](https://github.com/UdelaRInterior/ansible-AlternC)
 
+## [v2.1.1](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v2.1.1)
+
+* Previous version succeeded to installed on a proxmox LXC debian buster container, but had performances issues. Installation failed on a KVM Debian buster because of missing sid dependencies and AppArmor bind parsing configuration
+* This version succedes to install on a Debian Buster KVM and seems to run ok.
+
 ## [v2.1.0](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v2.1.0)
 
 * plugins alternc-mailman, alternc-awstats, alternc-rouncube are installed optionnally (issue #4)
