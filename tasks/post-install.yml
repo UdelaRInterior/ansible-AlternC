@@ -124,7 +124,7 @@
   meta: flush_handlers
 
 - debug: 
-    msg: "{{ resultado_alternc_install }}"
-  when: resultado_alternc_install is defined
+    msg: "{{ alternc_install_result }}"
+  when: alternc_install_result is defined
 
 ...

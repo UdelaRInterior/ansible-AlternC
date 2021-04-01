@@ -7,7 +7,7 @@
 
 - name: Instalando servidor de base de datos MySql. Sírvase un café!!. Calme la ansiedad, puede tardar un poco!!.
   apt:
-    name: "{{ packages_mysql }}"
+    name: "{{ alternc_packages_mysql }}"
     state: latest
 
 ...

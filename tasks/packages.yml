@@ -1,4 +1,41 @@
 ---
+# Repos and packages for AltenC installation
+
+- name: Check if alternc_debconf_alternc_html's partition has ACL and grpquota active
+  include_tasks: include/html-mount.yml
+  when: mount.mount is defined
+  loop: '{{ ansible_facts.mounts }}'
+  loop_control:
+    loop_var: mount
+
+- name: Set query to check AlternC html mount options
+  set_fact:
+    alternc_html_mount_query: "[?mount=='{{ alternc_html_mount }}'].options"
+
+- name: ACL of alternc www directory mount
+  fail:
+    msg: >
+        The partition mounted where will be created the html directory for AlternC has no ACL. 
+        Such ACL is required by AlternC. Sorry, we stop the installation. Try again building 
+        first a host which has ACL activated on the partition where AlternC html files will be
+        installed (by default /var/www/alternc).
+  when: ansible_facts.mounts | json_query( alternc_html_mount_query ) | first | regex_search('noacl')
+
+- debug: 
+    msg: "{{ ansible_facts.mounts | json_query( alternc_html_mount_query ) | first }}"
+    verbosity: 2
+
+- name: Group quota on alternc www directory mount
+  pause:
+    prompt: >
+        The partition mounted where will be created the html directory for AlternC (by default 
+        /var/www/alternc) has no group quota management. You won't be able to manage AlternC users' quotas. 
+        Do you want to continue?
+  when: not ansible_facts.mounts | json_query( alternc_html_mount_query ) | first | regex_search('(grpjquota=aquota\.group|grpquota)')
+
+#  acl:
+#    path: "{{ alternc_html_mount }}"
+#  register: alternc_www_acl
 
 - debug: 
     msg: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
@@ -37,7 +74,7 @@
 
 - name: Asegurando que los módulos php mas populares se encuentran actualizados e instalados # Módulos de propósito general pero que no se incluye en el instalador de AlternC
   apt:
-    name: "{{ packages }}"
+    name: "{{ alternc_packages }}"
     state: latest
 
 ...

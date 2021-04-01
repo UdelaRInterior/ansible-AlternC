@@ -1,5 +1,16 @@
 # Change log of [ansible role AlternC](https://github.com/UdelaRInterior/ansible-AlternC)
 
+## [v3.0.0-rc1](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.0.0-rc1)
+
+* Ability to configure slave DNS accounts
+* Enhancement of AlternC configuration morover debconf, setting values in the database: 
+    * avoid using `ignore_errors:` ansible directive, delegating exception handle to better SQL queries, 
+    * Refactor of the variables API for quotas, TLDs and AlternC variables, which are now more exhaustive and don't need quoting inside quoting,
+    * options to maintain or flush the quotas profiles and TLDs
+* Starting english translation of API, comments and README
+* Some code reorganisation and refactor
+* Dynamic default values of variables, using ansible_facts. The role now installs with no additional variables defined, guessing values (as does debconf AlternC installer)
+
 ## [v2.1.1](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v2.1.1)
 
 * Previous version succeeded to installed on a proxmox LXC debian buster container, but had performances issues. Installation failed on a KVM Debian buster because of missing sid dependencies and AppArmor bind parsing configuration

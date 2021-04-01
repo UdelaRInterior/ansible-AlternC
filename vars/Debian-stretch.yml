@@ -1,26 +1,33 @@
 ---
 ## Variables to install AlternC on Debian stretch
 
-# Repositorio de AlternC 3.5.
+# Repositorio de AlternC 
+alternc_repo: "{{ stretch_alternc_repo }}"
+alternc_branch: "{{ stretch_alternc_branch }}"
+alternc_key: "{{ stretch_alternc_key }}"
+
 alternc_repo: 'http://debian.koumbit.net/debian'
 alternc_branch: 'alternc35 main'
 alternc_key: 'key.asc'
 
-packages:
-- "php7.0-common"
-- "php7.0-curl"
-- "php7.0-gd"
-- "php7.0-intl"
-- "php7.0-json"
-- "php7.0-mysql"
-- "php7.0-mbstring"
-- "php7.0-mcrypt"
-- "php7.0-imagick"
-- "php7.0-pgsql"
-- "php7.0-xml"
-- "php7.0-xmlrpc"
-- "php7.0-zip"
+alternc_packages:
+- "php{{ stretch_php_version }}-common"
+- "php{{ stretch_php_version }}-curl"
+- "php{{ stretch_php_version }}-gd"
+- "php{{ stretch_php_version }}-intl"
+- "php{{ stretch_php_version }}-json"
+- "php{{ stretch_php_version }}-mysql"
+- "php{{ stretch_php_version }}-mbstring"
+- "php{{ stretch_php_version }}-mcrypt"
+- "php{{ stretch_php_version }}-imagick"
+- "php{{ stretch_php_version }}-pgsql"
+- "php{{ stretch_php_version }}-xml"
+- "php{{ stretch_php_version }}-xmlrpc"
+- "php{{ stretch_php_version }}-zip"
+- quota
 
 packages_mysql:
 - mysql-server
 - mysql-client
+
+...

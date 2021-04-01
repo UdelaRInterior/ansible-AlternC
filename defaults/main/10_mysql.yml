@@ -6,7 +6,9 @@
 ###################################################################
 
 # Password for mysql root user
-root_pass_mysql: 'Clave_rooT_1234'
+# //!\\ This password is no longer used in debian buster. 
+# root accesses mysql without password from root linux user
+root_pass_mysql: Clave_rooT_1234
 # better to put it in a vault with
 # root_pass_mysql: "{{ vault_root_pass_mysql }}" 
 

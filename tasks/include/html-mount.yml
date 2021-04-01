@@ -1,0 +1,15 @@
+---
+# iteration tasks to fint html path mount
+
+- name: See if mount parsed is a candidate
+  set_fact:
+    alternc_html_mount_candidate: '{{ alternc_debconf_alternc_html | regex_search( "^" + mount.mount | regex_escape() ) }}'
+
+- name: See is a better candidate than current one
+  set_fact:
+    alternc_html_mount: "{{ alternc_html_mount_candidate }}"
+  when: 
+  - alternc_html_mount_candidate | length > 0
+  - alternc_html_mount is not defined or alternc_html_mount_candidate | length > alternc_html_mount | length
+  
+...

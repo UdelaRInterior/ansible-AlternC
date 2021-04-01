@@ -1,0 +1,112 @@
+---
+# Automate some configuration tasks, specially admin password
+# Recuperando id del administrador (admin).
+
+- name: Fetching AlternC administrator user id
+  shell: mysql {{ alternc_query_options }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
+  register: alternc_admin_uid
+
+# Generando semilla aleatoria de encriptación para el password.
+## Shouldn't we replace this script by a static variable in a vault?
+#- name: Generate random seed to encrypt password
+#  script: rnd.sh
+#  register: rnd
+#
+#- debug: msg="{{ alternc_admin_uid }}"
+#
+#- debug: msg="{{ rnd }}"
+#
+## Estableciendo password de acceso para el administrador AlternC.
+#- name: Set AlternC administrator's password  
+#  shell: >-
+#      mysql {{ alternc_query_options }} 
+#      "UPDATE membres SET pass=ENCRYPT('{{ alternc_admin_pass }}', '{{ rnd.stdout }}' ) WHERE uid = {{ alternc_admin_uid.stdout }}"
+
+#- name: Hashing admin password
+#  set_fact:
+#    alternc_admin_pass_hash: "{{ alternc_admin_pass | password_hash('sha512') }}"
+#
+#- debug:
+#    var: alternc_admin_pass_hash
+
+- name: Fetch salt password AlternC variable
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "SELECT value FROM variable WHERE name='salt_password_reset'"
+  register: alternc_salt
+
+- debug:
+    var: alternc_salt
+
+# Estableciendo password de acceso para el administrador AlternC.
+- name: Set AlternC administrator's password  
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "UPDATE membres SET pass=ENCRYPT( '{{ alternc_admin_pass }}', 'alternc_salt.stdout' ) WHERE uid = {{ alternc_admin_uid.stdout }}"
+
+- name: Deleting quota profiles (except 'default')
+  shell: mysql {{ alternc_query_options }} 'DELETE FROM defquotas WHERE type != "default" '
+  when: alternc_quota_profiles_ansible_exclusive | bool
+
+- name: Setting quota profiles
+  include_tasks: include/set-quotas.yml
+  loop: "{{ alternc_quota_profiles }}"
+  loop_control:
+    loop_var: quota_profile
+
+- name: Set administrators' quotas
+  block:
+
+  - name: Administrator's quota profile extract query
+    set_fact:
+      alternc_quota_profile_query: '[?name==`{{ alternc_admin_quotas.profile }}`].quotas'
+
+  - name: Set administrators' quotas 
+    shell: >-
+        mysql {{ alternc_query_options }} 
+        "UPDATE quotas SET total='{{ service_quota.value }}' WHERE uid={{ alternc_admin_uid.stdout }} AND name='{{ service_quota.key }}'"
+    loop: >-
+        {{ alternc_quota_profiles | json_query( alternc_quota_profile_query ) | first | dict2items 
+          if alternc_quota_profile_query is defined
+          else '[]'
+        }}
+      # if we don't code this ".. if .. else ..", the task fails even when role not called (??) because `alternc_quota_profile_query` undefined
+    loop_control:
+      loop_var: service_quota
+
+  when: alternc_admin_quotas.set | bool
+
+# Eliminando dominios de hospedage instalados por omisión.
+- name: Deleting default ahthorized hosting TLDs
+  shell: mysql {{ alternc_query_options }} 'DELETE FROM tld'
+  when: alternc_authorized_tld_ansible_exclusive | bool
+
+- name: Set TLDs allowed to be hosted in the AlternC server
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "INSERT INTO tld (tld, mode) VALUES ('{{ alternc_tld.domain }}', {{ alternc_tld.mode }})
+      ON DUPLICATE KEY UPDATE mode = {{ alternc_tld.mode }} "
+  loop: "{{ alternc_authorized_tld }}"
+  loop_control:
+    loop_var: alternc_tld
+
+- name: Set AlternC configuration variables in the database
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "INSERT INTO variable (name, value, comment) 
+      VALUES ('{{ alternc_variable.name }}', '{{ alternc_variable.value }}', '{{ alternc_variable.comment }}')
+      ON DUPLICATE KEY UPDATE value = '{{ alternc_variable.value }}', comment = '{{ alternc_variable.comment }}' "
+  loop: "{{ alternc_config_variables }}"
+  loop_control:
+    loop_var: alternc_variable
+
+- name: Setting external MySql servers provided
+  include_tasks: include/set-db-server.yml
+  loop: "{{ alternc_db_servers }}"
+  loop_control:
+    loop_var: alternc_db_server
+
+- name: Generando certificados ssl (certbot-letsencrypt).
+  shell: "php /usr/lib/alternc/generate_certbot.php"
+
+...

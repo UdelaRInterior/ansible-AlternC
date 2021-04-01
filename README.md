@@ -2,8 +2,8 @@
 
 Install and configure [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container).
 
-Configures AltenrC hosting panel, that allows any user thas has an account to access AltenrC web GUI, to manage
-the hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts and mailboxes.
+Configures AltenrC hosting panel, that allows any user who has an account to access AltenrC web GUI, to manage
+the hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts as well as mail addresses and mailboxes.
 
 Content of web site can be uploaded through FTP as well as through Alternc web GUI.
 
@@ -30,15 +30,23 @@ and call it in your playbooks to run it against a freshlly installed Debian Stre
 
 ## Role Variables
 
-Variables needed are listed and documented in the `/defaults/main.yml` file. They include the debconf paramenters
-needed when installing AltenrC package and dependencies, as well as those needed to cofigure after the AltenrC panel
+Variables needed are listed and documented in files in the [`/defaults/main`](defaults/main) folder:
+* [`05_packages.yml`](/defaults/main/05_packages.yml): Repositories and dependencies packages related variables, 
+* [`10_mysql.yml`](/defaults/main/10_mysql.yml): MySQL related variables, 
+* [`20_alternc.yml`](/defaults/main/20_alternc.yml): AlternC main variables, mainly given to the package installation with debconf ansible module 
+* [`30_alternc_panel.yml`](/defaults/main/30_alternc_panel.yml): Further configuration of AlternC interface, including AlternC TLDs, quota profiles and variables
+* [`40_alternc_plugins.yml`](/defaults/main/40_alternc_plugins.yml): Mailman, roundcube, awstat and piwik related variables
+* [`50_post_install.yml`](/defaults/main/50_post_install.yml): php.ini, Proftpd and other useful additional configuration
+* [`60_alternc_slavdns.yml`](/defaults/main/60_alternc_slavdns.yml): accounts configuration for alternc-slavedns secondary servers' access
+
+They include the debconf paramenters needed when installing AltenrC package and dependencies, as well as those needed to cofigure after the AltenrC panel
 (hosting web GUI).
 
-Most of them need to be defined when calling the role, according to your environement.
+Default values are close to AlternC defaults. Several values, as the IP and DNS need to be defined when calling the role, according to your environement.
 
 ## Dependencies
 
-There are no dependencies form other ansible roles, but you need to have a host with a Debian Stretch installed.
+There are no dependencies form other ansible roles, but you need to have a host with a Debian Stretch or Buster installed.
 
 ## License
 
