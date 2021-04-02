@@ -12,8 +12,9 @@ alternc_query_options: " --defaults-file=/etc/alternc/my.cnf --skip-column-names
 alternc_admin_user: admin
 
 # Administrator password  
-# Better to put it in a vault
-alternc_admin_pass: Adm1n1stradoR
+# Better to put it in a vault with a variable indirection, we suggest here the name: vault_alternc_admin_pass
+# We don't use to initiate passwords with default values, to avoid unsecure installs, but alternc.install does. Better this one.
+alternc_admin_pass: '{{ vault_alternc_admin_pass if vault_alternc_admin_pass is defined else "Adm1n1stradoR" }}'
 
 ### Quotas configuration / Configuración de cuotas ###
 
@@ -30,38 +31,11 @@ alternc_admin_pass: Adm1n1stradoR
 # You must at leas define de "detault" quota profile
 alternc_quota_profiles:
 - name: default
-  quotas:
-    aws: 2
-    cron: 0
-    dom: 1
-    ftp: 2
-    mail: 5
-    mailman: 1
-    mysql: 1
-    piwik: 0
-    web: 524288
+  quotas: { aws: 2, cron: 0, dom: 1, ftp: 2, mail: 5, mailman: 1, mysql: 1, piwik: 0, web: 524288 }
 - name: myalternc1gb
-  quotas:
-    aws: 5
-    cron: 5
-    dom: 5
-    ftp: 10
-    mail: 50
-    mailman: 10
-    mysql: 10
-    piwik: 0
-    web: 1048576
+  quotas: { aws: 5, cron: 5, dom: 5, ftp: 10, mail: 50, mailman: 10, mysql: 10, piwik: 0, web: 1048576 }
 - name: myalternc5gb
-  quotas:
-    aws: 10
-    cron: 10
-    dom: 10
-    ftp: 20
-    mail: 100
-    mailman: 20
-    mysql: 20
-    piwik: 0
-    web: 5242850
+  quotas: { aws: 10, cron: 10, dom: 10, ftp: 20, mail: 100, mailman: 20, mysql: 20, piwik: 0, web: 5242850 }
 
 # When running role, delete other authorized quota profiles than those hereabove and 'default', existing in the AlternC server
 # no: preserve existing quota profiles, inserting new from playbook variables, updating those existing. 
@@ -105,6 +79,10 @@ alternc_authorized_tld:
 # no: preserve existing TLDs, inserting new from playbook variables, updating those existing. 
 alternc_authorized_tld_ansible_exclusive: no
 
+# Preferred protocol for AlternC web panel. http or https
+# If you use altenrc-slavedns role, you would better put this variable in a group where are the master and the dns slave(s)
+alternc_desktop_protocol: https   
+
 # AlternC configuration variables (see web interface, Configuration panel -> Configure AltenrC variables )
 # For full text `comment:`, we need to double escape the single quote ' (4 ', '''', to obtains one int the database) because they are parsed in an SQL sentence. 
 # No way to make better using " around the whole text because the SQL sentence has single quotes around the hash value.
@@ -137,7 +115,7 @@ alternc_config_variables:
   value: favicon.ico
   comment: 'You can specify a favicon, for example /images/my_logo.ico'
 - name: force_https
-  value: 1
+  value: '{{ 1 if alternc_desktop_protocol == "https" else 0 }}'
   comment: 'This variable is set to 0 (default) if users can access the management desktop through HTTP, otherwise we force HTTPS'
 - name: fqdn_dovecot
   value: '{{ alternc_server_fqdn }}'

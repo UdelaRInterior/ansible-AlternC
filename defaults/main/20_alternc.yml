@@ -5,6 +5,7 @@
 ####              alternc package debconf vars                 ####
 ###################################################################
 
+# the canonical name of the AlternC server
 alternc_server_fqdn: '{{ ansible_facts.fqdn }}'
 
 # Name for your web hosting service (AlternC)
@@ -12,7 +13,8 @@ alternc_server_fqdn: '{{ ansible_facts.fqdn }}'
 alternc_debconf_hostingname: 'Mi nombre de hosting'
 
 # Full domain name for hosting panel
-# You can put h
+# This domain name deserves to be different than the canonical name of the server, reflecting hosting service
+# If you use altenrc-slavedns role, you would better put this variable in a group where are the master and the dns slave(s)
 # Nombre de dominio completo del panel de hospedaje
 alternc_debconf_desktopname: '{{ alternc_server_fqdn }}'
 

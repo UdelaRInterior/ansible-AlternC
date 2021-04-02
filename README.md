@@ -26,7 +26,7 @@ $ cd myroles
 $ ansible-galaxy install udelarinterior.alternc
 ```
 
-and call it in your playbooks to run it against a freshlly installed Debian Stretch.
+and call it in your playbooks to run it against a freshlly installed Debian stretch or buster host.  
 
 ## Role Variables
 
@@ -46,7 +46,10 @@ Default values are close to AlternC defaults. Several values, as the IP and DNS 
 
 ## Dependencies
 
-There are no dependencies form other ansible roles, but you need to have a host with a Debian Stretch or Buster installed.
+There are no required dependencies form other ansible roles, but the role provides examples of configuration parameters for PHP, suited for an AlternC installation, that can be set with the role [`udelarinterior.configure_php_ini` ](https://github.com/UdelaRInterior/ansible-role-configure-php-ini).
+
+## Playbook example
+
 
 ## License
 
