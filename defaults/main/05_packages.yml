@@ -6,17 +6,20 @@
 #alternc_branch: 'buster main'
 #alternc_key: 'key.txt'
 
-# We set indirections to variables by debian version, to be able to modify this repos.
-# AlternC 3.5 for debian buster repository
-buster_alternc_repo: 'http://debian.koumbit.net/debian'
-buster_alternc_branch: 'alternc35 main'
-buster_alternc_key: 'key.asc'
+# Custom AlternC debian repository
+# If you set this optional variables it overrrides the default repos by distribution in vars/ files
+# alternc_repo_custom: 'http://debian.koumbit.net/debian'
+# alternc_branch_custom: 'alternc35 main'
+# alternc_key_custom: 'key.asc'
+
+# Custom PHP version
+# If you set this optional variables it overrrides the default repos by distribution in vars/ files
+# alternc_php_version_custom: '7.3'
 
 # Sid repo for phpmyadmin when we install AlternC in buster 
 buster_url_repo_sid: 'http://ftp.debian.org/debian/'
-buster_url_branch_sid: 'sid main'
+alternc_url_branch_sid_custom: 'sid main'
 
-buster_php_version: '7.3'
 
 # AlternC 3.5 for debian stretch repository
 stretch_alternc_repo: 'http://debian.koumbit.net/debian'

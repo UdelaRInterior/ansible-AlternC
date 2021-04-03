@@ -6,29 +6,6 @@
   shell: mysql {{ alternc_query_options }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
   register: alternc_admin_uid
 
-# Generando semilla aleatoria de encriptación para el password.
-## Shouldn't we replace this script by a static variable in a vault?
-#- name: Generate random seed to encrypt password
-#  script: rnd.sh
-#  register: rnd
-#
-#- debug: msg="{{ alternc_admin_uid }}"
-#
-#- debug: msg="{{ rnd }}"
-#
-## Estableciendo password de acceso para el administrador AlternC.
-#- name: Set AlternC administrator's password  
-#  shell: >-
-#      mysql {{ alternc_query_options }} 
-#      "UPDATE membres SET pass=ENCRYPT('{{ alternc_admin_pass }}', '{{ rnd.stdout }}' ) WHERE uid = {{ alternc_admin_uid.stdout }}"
-
-#- name: Hashing admin password
-#  set_fact:
-#    alternc_admin_pass_hash: "{{ alternc_admin_pass | password_hash('sha512') }}"
-#
-#- debug:
-#    var: alternc_admin_pass_hash
-
 - name: Fetch salt password AlternC variable
   shell: >-
       mysql {{ alternc_query_options }} 
@@ -106,7 +83,7 @@
   loop_control:
     loop_var: alternc_db_server
 
-- name: Generando certificados ssl (certbot-letsencrypt).
+- name: Generante ssl certificates (certbot-letsencrypt).
   shell: "php /usr/lib/alternc/generate_certbot.php"
 
 ...
