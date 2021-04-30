@@ -19,7 +19,7 @@ alternc_phpmyadmin_configurations:
     value: 100M
 
 
-# Parámetros a setear en el template  phpmyadmin.inc.php de AlternC
+# Parámetros a setear en el template phpmyadmin.inc.php de AlternC
 alternc_phpmyadmin_blowfish_secret: '-tEfgeJ6467A2J9_vhi5F-ry58PAv+JPY%btr8))y]LdjgUY48lCZxTe@!#L*L'
 
 alternc_proftpd_configurations:

@@ -7,7 +7,7 @@ alternc_repo: '{{ alternc_repo_custom if alternc_repo_custom is defined else "ht
 alternc_branch: '{{ alternc_branch_custom if alternc_branch_custom is defined else "alternc35 main" }}'
 alternc_key: "{{ alternc_key_custom if alternc_key_custom is defined else 'key.asc' }}"
 
-alternc_php_version: '{{ alternc_php_version_custom alternc_php_version_custom is defined else "7.3" }}'
+alternc_php_version: '{{ alternc_php_version_custom if alternc_php_version_custom is defined else "7.3" }}'
 
 alternc_packages:
 - "php{{ alternc_php_version }}-cli"
@@ -31,9 +31,5 @@ alternc_packages_mysql:
 - default-mysql-client
 #- mariadb-server
 #- mariadb-client
-
-alternc_repo_sid: '{{ alternc_repo_sid_custom if alternc_repo_sid_custom is defiend else "http://ftp.debian.org/debian/" }}'
-
-alternc_branch_sid: '{{ alternc_branch_sid_custom if alternc_branch_sid is defined else "sid main" }}'
 
 ...

@@ -9,6 +9,9 @@ alternc_slavedns_bind_ips: []
 # - ip: 111.222.2.235
 #   mask: 32
 
+# If yes, we first erase all existing allowed IPs
+alternc_slavedns_bind_ips_ansible_exclusive: no
+
 # AlternC account for slave dns servers (package alternc-slavedns)
 # If you use altenrc-slavedns role, you would better put this variable in a group where are the master and the dns slave(s)
 alternc_slavedns_credentials: []
@@ -18,6 +21,9 @@ alternc_slavedns_credentials: []
 # - hostname: slavedns2.mydomain.org
 #   login: slavedns2
 #   password: '{{ vault_password2 }}'
+
+# If yes, we first erase all existing accounts
+alternc_slavedns_credentials_ansible_exclusive: no
 
 # the field "hostname:" is not needed for master AlternC, but we define it here to have
 # a single set of variables for the whole AlternC "cluster" (see alternc_slavedns role) 

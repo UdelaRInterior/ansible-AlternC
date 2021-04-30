@@ -17,11 +17,11 @@
 - debug: 
     var: ansible_facts
 
-- include_tasks: packages.yml
-
-- include_tasks: install-mysql.yml
+- include_tasks: checks_repos.yml
 
 - include_tasks: debconf.yml
+
+- include_tasks: packages.yml
 
 - import_tasks: install-alternc.yml
 

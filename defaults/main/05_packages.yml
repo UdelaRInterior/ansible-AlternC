@@ -2,30 +2,23 @@
 # Variables related to packages from the role AlternC
 
 # buster de AlternC repository - doesn't work
-#alternc_repo: 'http://debian.alternc.org'
-#alternc_branch: 'buster main'
-#alternc_key: 'key.txt'
+# alternc_repo: 'http://debian.alternc.org'
+# alternc_branch: 'buster main'
+# alternc_key: 'key.txt'
 
 # Custom AlternC debian repository
-# If you set this optional variables it overrrides the default repos by distribution in vars/ files
+# If these optional variables are set, they overrride the default repos variables by distribution in vars/ files
 # alternc_repo_custom: 'http://debian.koumbit.net/debian'
 # alternc_branch_custom: 'alternc35 main'
 # alternc_key_custom: 'key.asc'
 
 # Custom PHP version
-# If you set this optional variables it overrrides the default repos by distribution in vars/ files
+# If this optional variable is set, it overrrides the default php version by distribution in vars/ files
 # alternc_php_version_custom: '7.3'
 
-# Sid repo for phpmyadmin when we install AlternC in buster 
-buster_url_repo_sid: 'http://ftp.debian.org/debian/'
-alternc_url_branch_sid_custom: 'sid main'
-
-
-# AlternC 3.5 for debian stretch repository
-stretch_alternc_repo: 'http://debian.koumbit.net/debian'
-stretch_alternc_branch: 'alternc35 main'
-stretch_alternc_key: 'key.asc'
-
-stretch_php_version: '7.0'
+# Custom debian sid repo for phpmyadmin when we install AlternC in buster 
+# If these optional variables are set, they overrride the default sid repos variables by distribution in vars/ files
+alternc_debian_sid_repo: http://ftp.debian.org/debian/
+alternc_debian_sid_branch: sid main
 
 ...

@@ -54,7 +54,7 @@
   when: alternc_admin_quotas.set | bool
 
 # Eliminando dominios de hospedage instalados por omisión.
-- name: Deleting default ahthorized hosting TLDs
+- name: Deleting default authorized hosting TLDs
   shell: mysql {{ alternc_query_options }} 'DELETE FROM tld'
   when: alternc_authorized_tld_ansible_exclusive | bool
 

@@ -1,82 +1,18 @@
 ---
-# Repos and packages for AltenC installation
-
-- name: Check if alternc_debconf_alternc_html's partition has ACL and grpquota active
-  include_tasks: include/html-mount.yml
-  when: mount.mount is defined
-  loop: '{{ ansible_facts.mounts }}'
-  loop_control:
-    loop_var: mount
-
-- name: Set query to check AlternC html mount options
-  set_fact:
-    alternc_html_mount_query: "[?mount=='{{ alternc_html_mount }}'].options"
-
-- name: ACL of alternc www directory mount
-  fail:
-    msg: >
-        The partition mounted where will be created the html directory for AlternC has no ACL. 
-        Such ACL is required by AlternC. Sorry, we stop the installation. Try again building 
-        first a host which has ACL activated on the partition where AlternC html files will be
-        installed (by default /var/www/alternc).
-  when: ansible_facts.mounts | json_query( alternc_html_mount_query ) | first | regex_search('noacl')
-
-- debug: 
-    msg: "{{ ansible_facts.mounts | json_query( alternc_html_mount_query ) | first }}"
-    verbosity: 2
-
-- name: Group quota on alternc www directory mount
-  pause:
-    prompt: >
-        The partition mounted where will be created the html directory for AlternC (by default 
-        /var/www/alternc) has no group quota management. You won't be able to manage AlternC users' quotas. 
-        Do you want to continue?
-  when: not ansible_facts.mounts | json_query( alternc_html_mount_query ) | first | regex_search('(grpjquota=aquota\.group|grpquota)')
-
-- debug: 
-    msg: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
-    verbosity: 2
-
-- name: include the variable defining the packages for debian version 
-  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
-
-- name: Adding AlternC repository
-  apt_repository: 
-    repo: "deb {{ alternc_repo }} {{ alternc_branch }}"
-    filename: alternc
-    state: present
-  register: alternc_repo_add
-
-- name: Adding AlternC repository key
-  apt_key:
-    url: "{{ alternc_repo }}/{{ alternc_key }}"
-    state: present
-
-- block: 
-  - name: Define stable as preferred debian distribution
-    lineinfile: 
-      path: /etc/apt/apt.conf.d/30StableRelease
-      line: 'APT::Default-Release "stable";'
-      create: yes
-      state: present
-
-  - name: If distribution is buster, add Sid repository for phpmyadmin
-    apt_repository: 
-      repo: "deb {{ alternc_repo_sid }} {{ alternc_branch_sid }}"
-      state: present
-  when: ( ansible_distribution == 'Debian') and (ansible_distribution_release == 'buster')
-  register: alternc_repo_sid_add
-
-- name: Update packages
-  apt:
-    update_cache: yes
-  when: alternc_repo_add is changed or alternc_repo_sid_add is changed
+# Packages installation required for AltenC 
 
 # Módulos PHP de propósito general pero que no se incluye en el instalador de AlternC
-- name: Install or update most popular PHP modules not included in alternC install
+- name: Install or update most popular PHP modules not included in AlternC dependencies
   apt:
     name: "{{ alternc_packages }}"
     state: latest
+
+- name: Install MySql database server (may be long, take a coffee!! )
+  apt:
+    name: "{{ alternc_packages_mysql }}"
+    state: latest
+    default_release: stable  # redundant
+    cache_valid_time: 3600
 
 - name: Install or update apt-transport-https
   apt:

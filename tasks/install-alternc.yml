@@ -1,6 +1,6 @@
 ---
 
-- name: Instalando AlternC 3.5 (alternc). Tenga paciencia. Espere !!. Mientras puede atender sus redes sociales.
+- name: Install AlternC 3.5 (alternc). Be patient... you can check your social networks!
   apt:
     name: alternc
     cache_valid_time: 3600
@@ -20,7 +20,7 @@
   when: alternc_replace_alternc_install
 
 - block: 
-  - name: Instalando "mailman", sistema de gestión de listas de correo.
+  - name: Install "mailman", mailing lists managment system
     apt:
       name: alternc-mailman
       state: latest
@@ -34,13 +34,13 @@
   when: alternc_mailman_install
 
 - block: 
-  - name: Instalando "awstats", estadísticas para los sitios web.
+  - name: Install "awstats", websites statistics
     apt:
       name: alternc-awstats
       state: latest
     notify: run alternc.install
 
-  - name: Verificando dominio "{{ alternc_debconf_desktopname }}" en configuración de "awstats".
+  - name: Checking "{{ alternc_debconf_desktopname }}" domain in "awstats" configuration
     lineinfile:
       path: /etc/awstats/awstats.conf
       regexp: 'SiteDomain='
@@ -48,32 +48,21 @@
       state: present
       backup: yes
 
-  - name: Construyendo base de datos para estadísticas (awstats).
+  - name: Building statistics database (awstats).
     shell: "perl /usr/lib/cgi-bin/awstats.pl -config={{ alternc_debconf_desktopname }} -update"
   when: alternc_awstats_install
 
-- name: Instalar roundcube
+- name: Install Roundcube, webmail interface
   apt:
     name: alternc-roundcube
     state: latest
   notify: run alternc.install
 
-- name: Configurando política de contraseñas. 10 caracteres mínimo. Mayúsculas, minúsculas y números son obligatorios.
+- name: Configuring passwords policy. 10 characters mínimum. Upper case letter, lower case letters and numbers are required
   shell: "mysql {{ alternc_query_options }} 'UPDATE policy SET minsize='10', classcount='3''"
 
-## has side effects, better to run alternc.install twice https://github.com/AlternC/AlternC/issues/403
-#- name: hook-- Alternc debian installer set wrong file ownership 
-#  file:
-#    path: /etc/alternc/my.cnf
-#    group: alterncpanel
-#    state: file
-
-#- name: Ejecutando alternc.install
-#  shell: "alternc.install"
-#  register: alternc_install_result
-
 # Workaround of this bug
-- name: "workaround: this breaks the file manager panel webpage"
+- name: "workaround: this breaks the file manager panel webpage (still valid??)"
   copy: 
     src: files/bro_main.php
     dest: /usr/share/alternc/panel/admin/bro_main.php
@@ -84,7 +73,7 @@
   when: ansible_distribution_release == "buster"
   tags: workaround
 
-- name: running alternc.install
+- name: Trigger handler to restart Apache2
   meta: flush_handlers
   notify:
   - AlternC - Restart Apache2
