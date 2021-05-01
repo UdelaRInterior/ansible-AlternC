@@ -13,7 +13,7 @@ alternc_slavedns_bind_ips: []
 alternc_slavedns_bind_ips_ansible_exclusive: no
 
 # AlternC account for slave dns servers (package alternc-slavedns)
-# If you use altenrc-slavedns role, you would better put this variable in a group where are the master and the dns slave(s)
+# If you use altenrc-slavedns role, you would better set only once this hash variable for a group where are the master and the dns slave(s)
 alternc_slavedns_credentials: []
 # - hostname: slavedns1.mydomain.org
 #   login: slavedns1

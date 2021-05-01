@@ -1,0 +1,29 @@
+---
+# Customization of AlternC
+
+## Set these AlternC variables and related files:
+# alternc_config_variables:
+# (...)
+# - name: favicon
+#   value: favicon.ico
+#   comment: 'You can specify a favicon, for example /images/my_logo.ico'
+# (...)
+# - name: logo_login
+#   value: 
+#   comment: 'You can specify a logo for the login page, example /images/my_logo.png .'
+# - name: logo_menu
+#   value: 
+#   comment: 'You can specify a logo for the menu, example /images/my_logo.png .'
+# (...)
+
+
+- name: Build, upload and configure AlteC panel's logos
+  include_tasks: include/alternc-logos.yml
+  when: alternc_logo.name | length > 0
+  loop: '{{ alternc_logos }}'
+  loop_control:
+    loop_var: alternc_logo
+
+
+
+...

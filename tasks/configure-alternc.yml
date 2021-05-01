@@ -76,6 +76,7 @@
   loop: "{{ alternc_config_variables }}"
   loop_control:
     loop_var: alternc_variable
+  when: alternc_config_variables is defined
 
 - name: Setting external MySql servers provided
   include_tasks: include/set-db-server.yml

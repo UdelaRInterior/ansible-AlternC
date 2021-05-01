@@ -35,6 +35,64 @@
         Do you want to continue?
   when: not ansible_facts.mounts | json_query( alternc_html_mount_query ) | first | regex_search('(grpjquota=aquota\.group|grpquota)')
 
+
+- name: When we want to set a favicon.ico, check if icoutils is installed
+  block: 
+
+  - name: Gather the list of local packages
+    local_action: package_facts
+    become: no
+    register: local_packages
+
+  - set_fact:
+      # alternc_icoutils: "{{ local_packages | json_query('ansible_facts.packages.icoutils') }}"
+      # alternc_icoutils: '{{ local_packages | json_query("ansible_facts.packages[*][?name==`icoutils`]") }}'
+      alternc_icoutils: '{{ local_packages | json_query("ansible_facts.packages.icoutils") }}'
+      
+  - debug: 
+      msg: "Ok: alternc_icoutils is defined"
+    when: alternc_icoutils is defined
+  
+  - debug:
+      msg: '{{ alternc_icoutils | type_debug }}'
+
+  - name: icoutils package information
+    debug: 
+      var: alternc_icoutils
+      # msg: "{{ local_packages | json_query('ansible_facts.packages.icoutils') | string }}"
+      # verbosity: 2
+
+  #- pause: 
+
+  - name: If icoutils not installed
+    block: 
+
+    - name: Stop if icoutils is not installed
+      pause:
+        prompt: Yo want to set a custom favicon.ico and icoutils is not installed on your local controller. Do you want to install it? (Abort if no)
+
+    - name: Ask for "ansible_become_password"
+      pause:
+        prompt: "Please enter your password for sudo"
+        echo: no
+      register: ansible_become_pass_input
+
+    - name: Set ansible_become_pass
+      set_fact:
+        ansible_become_password: '{{ ansible_become_pass_input.user_input }}'
+
+    - name: Install icoutils in local controller
+      apt:
+        name: icoutils
+        state: present
+      delegate_to: localhost
+
+#    when: local_packages | json_query("ansible_facts.packages[*].[? name==`icoutils`]") is empty
+    when: local_packages | json_query("ansible_facts.packages.icoutils") | type_debug == 'AnsibleUnsafeText'
+#    when: local_packages | json_query("ansible_facts.packages.icoutils") == ""
+
+  when: alternc_favicon is string and alternc_favicon != '' 
+
 - debug: 
     msg: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
     verbosity: 2

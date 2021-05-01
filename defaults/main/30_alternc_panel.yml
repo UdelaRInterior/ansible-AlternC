@@ -84,114 +84,114 @@ alternc_authorized_tld_ansible_exclusive: no
 alternc_desktop_protocol: https   
 
 # AlternC configuration variables (see web interface, Configuration panel -> Configure AltenrC variables )
-# For full text `comment:`, we need to double escape the single quote ' (4 ', '''', to obtains one int the database) because they are parsed in an SQL sentence. 
-# No way to make better using " around the whole text because the SQL sentence has single quotes around the hash value.
-alternc_config_variables:
-- name: archive_del_data
-  value: 
-  comment: 'If folder specified html folder of deleted user is archived, else it is deleted.'
-- name: auth_ip_ftp_default_yes
-  value: 1
-  comment: 'This variable sets if you want to allow all IP address to access FTP by default. If the user start to define some IP or subnet in the allow list, only those he defined will be allowed.'
-- name: debug_panel
-  value: 1
-  comment: 'Set it to 1 to enable panel debug in /var/log/alternc/bureau.log'
-- name: default_certificate_fqdn
-  value: alternc.interior.edu.uy
-  comment: 'FQDN of the certificate we will use as a default one before getting a proper one through any provider. If unsure, keep the default'
-- name: default_dmarc_value
-  value: 'p=none;pct=100;rua=%%ADMINMAIL%%;aspf=r;adkim=r'
-  comment: 'This variable (if set) tells the DMARC/TXT DNS field that will be published as a DMARC entry, telling which policy you apply to this domain name. You can still change it later in the advanced DNS entries for ONE domain, this entry is only set once for new domains (or when you change it here). You can use %%ADMINMAIL%% or %%USERMAIL%% to substitute to admin-account or alternc user-account email address.'
-- name: default_spf_value
-  value: 'a mx ?all'
-  comment: 'This variable (if set) tells the SPF/TXT DNS field that will be published as a SPF entry, telling which server(s) are allowed to send email for this one. You can still change it later in the advanced DNS entries for ONE domain, this entry is only set once for new domains (or when you change it here).'
-- name: disk_quota_enable
-  value: 1
-  comment: 'Are disk quota enabled for this server'
-- name: disk_quota_not_blocking
-  value: 1
-  comment: '0 - Block data when quota are exceeded (you need a working quota system) | 1 - Just show quota but don''''t block anything'
-- name: favicon
-  value: favicon.ico
-  comment: 'You can specify a favicon, for example /images/my_logo.ico'
-- name: force_https
-  value: '{{ 1 if alternc_desktop_protocol == "https" else 0 }}'
-  comment: 'This variable is set to 0 (default) if users can access the management desktop through HTTP, otherwise we force HTTPS'
-- name: fqdn_dovecot
-  value: '{{ alternc_server_fqdn }}'
-  comment: 'FQDN name for humans for pop/imap services. If you change it, launch reload-certs'
-- name: fqdn_postfix
-  value: '{{ alternc_server_fqdn }}'
-  comment: 'FQDN name for humans for smtp services. If you change it, launch reload-certs'
-- name: fqdn_proftpd
-  value: '{{ alternc_server_fqdn }}'
-  comment: 'Human name for FTP server. If you change it, launch reload-certs'
-- name: hosting_tld
-  value: 
-  comment: 'This is a FQDN that designates the main hostname of the service. For example, hosting_tld determines in what TLD the "free" user domain is created. If this is set to "example.com", a checkbox will appear in the user creation dialog requesting the creator if he wants to create the domain "username.example.com".'
-- name: https_warning
-  value: 1
-  comment: 'warn users to switch to HTTPS'
-- name: last_certificate_id
-  value: 1545
-  comment: 'Latest certificate ID parsed by update_domains. Do not change this unless you know what you are doing'
-- name: logo_login
-  value: 
-  comment: 'You can specify a logo for the login page, example /images/my_logo.png .'
-- name: logo_menu
-  value: 
-  comment: 'You can specify a logo for the menu, example /images/my_logo.png .'
-- name: lxc_ip
-  value: 
-  comment: 'IP address of the Alternc''''s LXC server. If empty, no LXC server.'
-- name: lxc_key
-  value: 
-  comment: 'Shared key with the Alternc''''s LXC server'
-- name: lxc_maxtime
-  value: 4
-  comment: 'How many hours do we allow to have a server before shutting it down'
-- name: lxc_port
-  value: 6504
-  comment: 'Port of the Alternc''''s LXC server'
-- name: mailman_url
-  value: 0
-  comment: 'This is the domaine name that will be use to construct mailman''''s interface links. Set this to 0 or a "false" string to ignore and keep the default behavior (hosted domain in the URL).'
-- name: mailname_bounce
-  value: '{{ alternc_server_fqdn }}'
-  comment: 'FQDN of the mail server, used to create vhost virtual mail_adress.'
-- name: new_email
-  value: 0
-  comment: 'An email will be sent to this address when new accounts are created if set.'
-- name: password_reset_expiration
-  value: 86499
-  comment: 'The number of seconds for which a password reset link is valid'
-- name: piwik_admin_token
-  value: 
-  comment: 'Remote Piwik super-admin token'
-- name: piwik_server_uri
-  value: 
-  comment: 'Remote Piwik server uri'
-- name: rss_feed
-  value: 
-  comment: 'This is an RSS feed that will be displayed on the users homepages when they log in.'
-#- name: salt_password_reset
-#  value: DJ3pN1MSP/qg48J0FeH9H75riruaCQ15jmOU3cHbQvGEjxxCeX1ewiwwNi/yHW4roe8OiVCTLOls70jmCBcee3k7wx+9N2XYtaAPUVPRPpmSH2GZa06BrW3A22nKIT6lKz0FCKKeBeE0Lr2otWr5aYJizuaF4E4IqRusmSaK5qw=
-#  comment: 'The salt used when hasing password resets - change to invalidate all existing reset tokens'
-- name: sql_allow_users_backups
-  value: 1
-  comment: 'Set 1 to allow users to configure backup of their databases, 0 if you want do disable this feature. Warning: it will not stop configured backup made by sqlbackup.sh'
-- name: sql_max_database_length
-  value: 64
-  comment: 'Maximum length allowed for SQL database names by your SQL server (do not modify unless you know what you do)'
-- name: sql_max_username_length
-  value: 80
-  comment: 'Maximum length allowed for SQL usernames by your SQL server (do not modify unless you know what you do)'
-- name: subadmin_restriction
-  value: 0
-  comment: 'This variable sets the way the account list works for accounts other than ''''admin'''' (2000). 0 (default) = admin other than admin/2000 can see their own account, but not the other one 1 = admin other than admin/2000 can see any account by clicking the ''''show all accounts'''' link.'
-- name: tld_no_check_at_all
-  value: 0
-  comment: 'Disable ALL check on the TLD (users will be able to add any domain)'
+# (For full text `comment:`, we need to double escape the single quote ' (4 ', '''', to obtains one in the database) because they are parsed in an SQL sentence.)
+# (No way to make better using " around the whole text because the SQL sentence in this role has single quotes around the hash value.                           )
+## alternc_config_variables:
+## - name: archive_del_data
+##   value: 
+##   comment: 'If folder specified html folder of deleted user is archived, else it is deleted.'
+## - name: auth_ip_ftp_default_yes
+##   value: 1
+##   comment: 'This variable sets if you want to allow all IP address to access FTP by default. If the user start to define some IP or subnet in the allow list, only those he defined will be allowed.'
+## - name: debug_panel
+##   value: 1
+##   comment: 'Set it to 1 to enable panel debug in /var/log/alternc/bureau.log'
+## - name: default_certificate_fqdn
+##   value: '{{ alternc_debconf_desktopname }}'
+##   comment: 'FQDN of the certificate we will use as a default one before getting a proper one through any provider. If unsure, keep the default'
+## - name: default_dmarc_value
+##   value: 'p=none;pct=100;rua=%%ADMINMAIL%%;aspf=r;adkim=r'
+##   comment: 'This variable (if set) tells the DMARC/TXT DNS field that will be published as a DMARC entry, telling which policy you apply to this domain name. You can still change it later in the advanced DNS entries for ONE domain, this entry is only set once for new domains (or when you change it here). You can use %%ADMINMAIL%% or %%USERMAIL%% to substitute to admin-account or alternc user-account email address.'
+## - name: default_spf_value
+##   value: 'a mx ?all'
+##   comment: 'This variable (if set) tells the SPF/TXT DNS field that will be published as a SPF entry, telling which server(s) are allowed to send email for this one. You can still change it later in the advanced DNS entries for ONE domain, this entry is only set once for new domains (or when you change it here).'
+## - name: disk_quota_enable
+##   value: 1
+##   comment: 'Are disk quota enabled for this server'
+## - name: disk_quota_not_blocking
+##   value: 1
+##   comment: '0 - Block data when quota are exceeded (you need a working quota system) | 1 - Just show quota but don''''t block anything'
+## - name: favicon
+##   value: favicon.ico
+##   comment: 'You can specify a favicon, for example /images/my_logo.ico'
+## - name: force_https
+##   value: '{{ 1 if alternc_desktop_protocol == "https" else 0 }}'
+##   comment: 'This variable is set to 0 (default) if users can access the management desktop through HTTP, otherwise we force HTTPS'
+## - name: fqdn_dovecot
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'FQDN name for humans for pop/imap services. If you change it, launch reload-certs'
+## - name: fqdn_postfix
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'FQDN name for humans for smtp services. If you change it, launch reload-certs'
+## - name: fqdn_proftpd
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'Human name for FTP server. If you change it, launch reload-certs'
+## - name: hosting_tld
+##   value: 
+##   comment: 'This is a FQDN that designates the main hostname of the service. For example, hosting_tld determines in what TLD the "free" user domain is created. If this is set to "example.com", a checkbox will appear in the user creation dialog requesting the creator if he wants to create the domain "username.example.com".'
+## - name: https_warning
+##   value: 1
+##   comment: 'warn users to switch to HTTPS'
+## - name: last_certificate_id
+##   value: 1545
+##   comment: 'Latest certificate ID parsed by update_domains. Do not change this unless you know what you are doing'
+## - name: logo_login
+##   value: 
+##   comment: 'You can specify a logo for the login page, example /images/my_logo.png .'
+## - name: logo_menu
+##   value: 
+##   comment: 'You can specify a logo for the menu, example /images/my_logo.png .'
+## - name: lxc_ip
+##   value: 
+##   comment: 'IP address of the Alternc''''s LXC server. If empty, no LXC server.'
+## - name: lxc_key
+##   value: 
+##   comment: 'Shared key with the Alternc''''s LXC server'
+## - name: lxc_maxtime
+##   value: 4
+##   comment: 'How many hours do we allow to have a server before shutting it down'
+## - name: lxc_port
+##   value: 6504
+##   comment: 'Port of the Alternc''''s LXC server'
+## - name: mailman_url
+##   value: 0
+##   comment: 'This is the domain name that will be used to build mailman''''s interface links. Set this to 0 or a "false" string to ignore and keep the default behavior (hosted domain in the URL).'
+## - name: mailname_bounce
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'FQDN of the mail server, used to create vhost virtual mail_adress.'
+## - name: new_email
+##   value: 0
+##   comment: 'An email will be sent to this address when new accounts are created if set.'
+## - name: password_reset_expiration
+##   value: 86499
+##   comment: 'The number of seconds for which a password reset link is valid'
+## - name: piwik_admin_token
+##   value: 
+##   comment: 'Remote Piwik super-admin token'
+## - name: piwik_server_uri
+##   value: 
+##   comment: 'Remote Piwik server uri'
+## - name: rss_feed
+##   value: 
+##   comment: 'This is an RSS feed that will be displayed on the users homepages when they log in.'
+## #- name: salt_password_reset
+## #  value: DJ3pN1MSP/qg48J0FeH9H75riruaCQ15jmOU3cHbQvGEjxxCeX1ewiwwNi/yHW4roe8OiVCTLOls70jmCBcee3k7wx+9N2XYtaAPUVPRPpmSH2GZa06BrW3A22nKIT6lKz0FCKKeBeE0Lr2otWr5aYJizuaF4E4IqRusmSaK5qw=
+## #  comment: 'The salt used when hasing password resets - change to invalidate all existing reset tokens'
+## - name: sql_allow_users_backups
+##   value: 1
+##   comment: 'Set 1 to allow users to configure backup of their databases, 0 if you want do disable this feature. Warning: it will not stop configured backup made by sqlbackup.sh'
+## - name: sql_max_database_length
+##   value: 64
+##   comment: 'Maximum length allowed for SQL database names by your SQL server (do not modify unless you know what you do)'
+## - name: sql_max_username_length
+##   value: 80
+##   comment: 'Maximum length allowed for SQL usernames by your SQL server (do not modify unless you know what you do)'
+## - name: subadmin_restriction
+##   value: 0
+##   comment: 'This variable sets the way the account list works for accounts other than ''''admin'''' (2000). 0 (default) = admin other than admin/2000 can see their own account, but not the other one 1 = admin other than admin/2000 can see any account by clicking the ''''show all accounts'''' link.'
+## - name: tld_no_check_at_all
+##   value: 0
+##   comment: 'Disable ALL check on the TLD (users will be able to add any domain)'
 
 ## MySQL external servers. When creating an alternc user, her databases can be in another server than localhost. 
 #  Here we define such servers, the MySQL user must have users and dbs creation privileges. 

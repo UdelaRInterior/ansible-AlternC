@@ -16,8 +16,9 @@
 
 - debug: 
     var: ansible_facts
+    verbosity: 3
 
-- include_tasks: checks_repos.yml
+- include_tasks: checks-repos.yml
 
 - include_tasks: debconf.yml
 
@@ -30,6 +31,8 @@
 - include_tasks: post-install.yml
 
 - import_tasks: extra-tasks.yml
+
+- import_tasks: alternc-custom.yml
 
 - import_tasks: alternc-slavedns.yml
   # tags: alternc_slavedns
