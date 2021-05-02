@@ -1,5 +1,9 @@
 ---
-## Customization of AlternC
+###################################################################
+####   AlternC ansible role - default variables                ####
+####   https://github.com/UdelaRInterior/ansible-alternc       ####
+####  Customization of AlternC (presently customizable logos)  ####
+###################################################################
 
 ## The following parameters set the following AlternC variables and related files:
 # alternc_config_variables:
@@ -18,14 +22,17 @@
 # NB: setting the following variables override AlternC variables population with 
 #     alternc_config_variables structure, defined in /defaults/main/30_alternc_opan
 
-# The logo for the authentcation page of AlternC panel
+## The logo for the authentcation page of AlternC panel
+## Should be horizontal, rectangle.
 # alternc_logo_login: my_logo.png   ## file to set in 
 
 # The logo in the top of the menu of AlternC panel
+# Should be a square image
 alternc_logo_menu: '{{ alternc_logo_login | default( "" ) }}' 
 
 # The favicon of the panel's pages
-alternc_favicon: '{{ alternc_logo_login | default( "" ) }}'
+# Should be a square image
+alternc_favicon: '{{ alternc_logo_menu | default( "" ) }}'
 
 ## variables to build and manage AlternC logos
 
@@ -42,7 +49,7 @@ alternc_logos:
 - name: logo_menu
   local_file: '{{ alternc_logo_menu | default( "" ) }}'
   remote_file: 'logo_menu_{{ alternc_logo_menu | default( "" ) }}'
-  resize: 150x150
+  resize: 45x45
 
 - name: favicon
   local_file: '{{ alternc_favicon | default( "" ) }}' 
@@ -52,6 +59,5 @@ alternc_logos:
   - 32x32
   - 64x64
   - 128x128
-
 
 ...

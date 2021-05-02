@@ -9,6 +9,4 @@
   loop: "{{ quota_profile.quotas | dict2items }}"
   loop_control:
     loop_var: service_quota
-  tags: prueba
-
 ...

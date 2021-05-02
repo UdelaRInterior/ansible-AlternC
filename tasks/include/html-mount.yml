@@ -1,5 +1,5 @@
 ---
-# iteration tasks to fint html path mount
+# iteration tasks to find AlternC html files' mount path 
 
 - name: See if mount parsed is a candidate
   set_fact:

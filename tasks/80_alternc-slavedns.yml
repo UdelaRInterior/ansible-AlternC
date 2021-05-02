@@ -13,7 +13,7 @@
   loop_control:
     loop_var: slave_ip
 
-- name: Deleting existing alternc slavedns accounts
+- name: Deleting existing AlternC slavedns accounts
   shell: mysql {{ alternc_query_options }} 'DELETE FROM slaveaccount'
   when: alternc_slavedns_credentials_ansible_exclusive | bool
 

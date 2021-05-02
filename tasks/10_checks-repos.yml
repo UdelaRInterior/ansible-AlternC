@@ -43,43 +43,27 @@
     local_action: package_facts
     become: no
     register: local_packages
-
-  - set_fact:
-      # alternc_icoutils: "{{ local_packages | json_query('ansible_facts.packages.icoutils') }}"
-      # alternc_icoutils: '{{ local_packages | json_query("ansible_facts.packages[*][?name==`icoutils`]") }}'
-      alternc_icoutils: '{{ local_packages | json_query("ansible_facts.packages.icoutils") }}'
-      
-  - debug: 
-      msg: "Ok: alternc_icoutils is defined"
-    when: alternc_icoutils is defined
   
-  - debug:
-      msg: '{{ alternc_icoutils | type_debug }}'
-
-  - name: icoutils package information
-    debug: 
-      var: alternc_icoutils
-      # msg: "{{ local_packages | json_query('ansible_facts.packages.icoutils') | string }}"
-      # verbosity: 2
-
-  #- pause: 
+  - debug: 
+      msg: '{{ local_packages | json_query("ansible_facts.packages.icoutils") }}'
+      verbosity: 2
 
   - name: If icoutils not installed
     block: 
 
     - name: Stop if icoutils is not installed
       pause:
-        prompt: Yo want to set a custom favicon.ico and icoutils is not installed on your local controller. Do you want to install it? (Abort if no)
+        prompt: |
+          You want to set a custom favicon.ico and icoutils is not installed on your local controller. 
+          Do you want to install it? 
+          Abort if no, and run the present playbook with -K (--ask-become-pass) option, to provide your sudo password.
 
-    - name: Ask for "ansible_become_password"
-      pause:
-        prompt: "Please enter your password for sudo"
-        echo: no
-      register: ansible_become_pass_input
-
-    - name: Set ansible_become_pass
-      set_fact:
-        ansible_become_password: '{{ ansible_become_pass_input.user_input }}'
+## I couldn't sort out to ask the sudo password only when the local package is absent: 
+#    - name: Ask for "ansible_become_password"
+#      pause:
+#        prompt: "Please enter your password for sudo"
+#        echo: no
+#      register: ansible_become_pass_input
 
     - name: Install icoutils in local controller
       apt:
@@ -87,9 +71,7 @@
         state: present
       delegate_to: localhost
 
-#    when: local_packages | json_query("ansible_facts.packages[*].[? name==`icoutils`]") is empty
-    when: local_packages | json_query("ansible_facts.packages.icoutils") | type_debug == 'AnsibleUnsafeText'
-#    when: local_packages | json_query("ansible_facts.packages.icoutils") == ""
+    when: local_packages | json_query("ansible_facts.packages.icoutils") | type_debug != "list"
 
   when: alternc_favicon is string and alternc_favicon != '' 
 
@@ -127,7 +109,6 @@
     register: debian_repo_sid_add
   when: ( ansible_distribution == 'Debian') and (ansible_distribution_release == 'buster')
   
-
 - name: Update packages
   apt:
     update_cache: yes

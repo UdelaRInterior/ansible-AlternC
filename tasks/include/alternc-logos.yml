@@ -49,7 +49,7 @@
 - name: Set logo AlternC's variable in the database
   shell: >-
       mysql {{ alternc_query_options }} 
-      "UPDATE variable SET value = ' {{ alternc_image_url_path }}/{{ alternc_logo.remote_file }}'
+      "UPDATE variable SET value = '{{ alternc_image_url_path }}/{{ alternc_logo.remote_file }}'
       WHERE name='{{ alternc_logo.name }}' "
 
 ...

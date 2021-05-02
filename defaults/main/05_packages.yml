@@ -1,5 +1,9 @@
 ---
-# Variables related to packages from the role AlternC
+###################################################################
+####   AlternC ansible role - default variables                ####
+####   https://github.com/UdelaRInterior/ansible-alternc       ####
+####  Variables related to packages from the role AlternC      ####
+###################################################################
 
 # buster de AlternC repository - doesn't work
 # alternc_repo: 'http://debian.alternc.org'

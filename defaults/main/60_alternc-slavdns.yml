@@ -1,4 +1,10 @@
 ---
+###################################################################
+####   AlternC ansible role - default variables                ####
+####   https://github.com/UdelaRInterior/ansible-alternc       ####
+####   Variables to define alternc-slavedns servers            ####
+###################################################################
+
 # Variables to define alternc-slavedns servers' credentials in main server 
 # These variables are set through the AlternC web interface: 
 #   Administrator panel -> Manage slave DNS

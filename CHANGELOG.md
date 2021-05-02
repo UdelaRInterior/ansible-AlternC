@@ -1,5 +1,9 @@
 # Change log of [ansible role AlternC](https://github.com/UdelaRInterior/ansible-AlternC)
 
+## [v3.1.0](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.1.0)
+
+* Management of customizable logos: login page, panel menu and favicon.
+
 ## [v3.0.0-rc1](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.0.0-rc1)
 
 * Ability to configure slave DNS accounts

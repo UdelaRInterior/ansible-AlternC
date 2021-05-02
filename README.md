@@ -1,11 +1,10 @@
 # Role AlternC
 
-Install and configure [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container).
+Installs and configures [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container - but this last has still some problems with letsencrypt certidicates).
 
-Configures AltenrC hosting panel, that allows any user who has an account to access AltenrC web GUI, to manage
-the hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts as well as mail addresses and mailboxes.
+Configures AltenrC hosting panel, that allows any user who has an account to access AltenrC web GUI, to manage her hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts as well as mail addresses and mailboxes. Content of web site can be uploaded through FTP as well as through Alternc web GUI.
 
-Content of web site can be uploaded through FTP as well as through Alternc web GUI.
+The role also manages the mailman, awstat and roundcube plugins. It handles also the logos that can be custommized 
 
 ## Requirements
 
@@ -34,15 +33,16 @@ Variables needed are listed and documented in files in the [`/defaults/main`](de
 * [`05_packages.yml`](/defaults/main/05_packages.yml): Repositories and dependencies packages related variables, 
 * [`10_mysql.yml`](/defaults/main/10_mysql.yml): MySQL related variables, 
 * [`20_alternc.yml`](/defaults/main/20_alternc.yml): AlternC main variables, mainly given to the package installation with debconf ansible module 
-* [`30_alternc_panel.yml`](/defaults/main/30_alternc_panel.yml): Further configuration of AlternC interface, including AlternC TLDs, quota profiles and variables
-* [`40_alternc_plugins.yml`](/defaults/main/40_alternc_plugins.yml): Mailman, roundcube, awstat and piwik related variables
-* [`50_post_install.yml`](/defaults/main/50_post_install.yml): php.ini, Proftpd and other useful additional configuration
-* [`60_alternc_slavdns.yml`](/defaults/main/60_alternc_slavdns.yml): accounts configuration for alternc-slavedns secondary servers' access
+* [`30_alternc-panel.yml`](/defaults/main/30_alternc-panel.yml): Further configuration of AlternC interface, including AlternC TLDs, quota profiles and variables
+* [`40_alternc-plugins.yml`](/defaults/main/40_alternc-plugins.yml): Mailman, roundcube, awstat and piwik related variables
+* [`50_post-install.yml`](/defaults/main/50_post-install.yml): php.ini, Proftpd and other useful additional configuration
+* [`60_alternc-slavdns.yml`](/defaults/main/60_alternc-slavdns.yml): accounts configuration for alternc-slavedns secondary servers' access
+* [`60_alternc-custom.yml`](/defaults/main/60_alternc-custom.yml): customization of alternc (Login page logo, panel menu logo and favicon customization )
 
 They include the debconf paramenters needed when installing AltenrC package and dependencies, as well as those needed to cofigure after the AltenrC panel
 (hosting web GUI).
 
-Default values are close to AlternC defaults. Several values, as the IP and DNS need to be defined when calling the role, according to your environement.
+Almost all default values are those already provided by AlternC. Several default values are defined from ansible facts so you need to define only your specific values (like the desktop DNS if you want to define if different than the fqdn of the host). Tho role now allows to set and maintain almost all the parameters of AlternC. 
 
 ## Dependencies
 
@@ -50,6 +50,26 @@ There are no required dependencies form other ansible roles, but the role provid
 
 ## Playbook example
 
+With: 
+* the role insalled in your local controller, 
+* a debian buster installed in `myserver.mydomain.org`
+* DNS configured with, for instance, a CNAME record for `panel.mydomain.org` returning `myserver.mydomain.org`
+
+You can installa AlternC with all its plugins with the following playbook:
+
+```YAML
+- name: configuración y provisión de hosts (nodos, contenedores y virtuales)
+  hosts: myserver.mydomain.org
+  remote_user: deploy
+  become: yes
+
+  vars:
+    alternc_debconf_desktopname: panel.mydomain.org
+
+  roles:
+  - udelarinterior.alternc
+
+```
 
 ## License
 

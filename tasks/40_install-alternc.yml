@@ -9,7 +9,7 @@
   - run alternc.install
   - run alternc.install 2
 
-- name: Patch-- replace alternc.install with a version for debian buster
+- name: Patch-- replace alternc.install with a version for debian buster (still valid???)
   copy:
     src: files/alternc.install
     dest: /usr/share/alternc/install/alternc.install

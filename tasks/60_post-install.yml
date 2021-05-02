@@ -90,7 +90,7 @@
     regexp: "^{{ postfix_conf.parameter }}"
     line: "{{ postfix_conf.parameter }} = {{ postfix_conf.value }}"
     backup: "{{ ansible_loop.first }}"
-  with_items: "{{ alternc_postfix_main_configurations }}"
+  loop: "{{ alternc_postfix_main_configurations }}"
   loop_control:
     loop_var: postfix_conf
     extended: yes
