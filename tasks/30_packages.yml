@@ -20,7 +20,7 @@
     state: present
     cache_valid_time: 3600
 
-- name: Instalando augeas-lenses
+- name: Install augeas-lenses
   apt:
     name: augeas-lenses
     state: present

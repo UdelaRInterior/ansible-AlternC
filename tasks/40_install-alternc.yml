@@ -27,7 +27,7 @@
     notify: run alternc.install
 
 
-  - name: Iniciando "mailman".
+  - name: Starting "mailman".
     service: 
       name: mailman 
       state: started

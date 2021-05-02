@@ -1,7 +1,7 @@
 ---
 # Post-installation tasks of AlternC Ansible role
 
-- name: Configurar redirección de tráfico HTTP a HTTPS
+- name: Configure HTTP traffic redirection to HTTPS
   template:
     dest: "/etc/apache2/sites-available/000-default.conf"
     src: etc/apache2/sites-available/000-default.conf.j2
@@ -12,7 +12,7 @@
     - AlternC - Restart Apache2
 
 
-- name: Configurar tamaño máximo permitido en la subida de archivos
+- name: Configure AlternC maximum file size upload
   lineinfile:
     path: "/etc/alternc/templates/alternc/apache2.conf"
     regexp: "{{ alternc_apache_php_ini_conf.parameter }}"
@@ -28,7 +28,7 @@
     - AlternC - Restart Apache2
 
 
-- name: Configurar tamaño máximo permitido en la subida de archivos a PHPMyAdmin
+- name: Configure PHPMyAdmin maximum file size upload
   lineinfile:
     path: "/etc/alternc/templates/alternc/apache2.conf"
     regexp: "{{ alternc_phpmyadmin_conf.parameter }}"
@@ -43,18 +43,19 @@
   - run alternc.install
 
 
-- name: Asegurar largo suficiente de blowfish_secret
+- name: Ensure a greater length of blowfish_secret
   lineinfile:
     path: "/etc/alternc/templates/alternc/phpmyadmin.inc.php"
     regexp: \$cfg\[\'blowfish_secret\'\]
     line: "$cfg['blowfish_secret'] = '{{ alternc_phpmyadmin_blowfish_secret }}';"
     backup: yes
   tags: phpalternc
+  when: alternc_phpmyadmin_blowfish_secret is defined
   notify:
   - AlternC - Restart Apache2
   - run alternc.install
 
-- name: Configurar servidor ProFTPd
+- name: Configure ProFTPd server
   lineinfile:
     path: "/etc/alternc/templates/proftpd/proftpd.conf"
     regexp: "{{ proftpd_conf.parameter }}"
@@ -69,7 +70,7 @@
   - AlternC - Restart ProFTPd
   - run alternc.install
 
-- name: Configurar servidor postfix
+- name: Configure Postfix server
   lineinfile:
     path: '/etc/alternc/templates/alternc/postfix/postfix.cf'
     regexp: "^{{ postfix_conf.parameter }}"
@@ -84,7 +85,7 @@
   - AlternC - Restart Postfix
   - run alternc.install
 
-- name: Configurar servidor postfix para un alternc-slave
+- name: Configure Postfix server for an alternc-slave
   lineinfile:
     path: '/etc/alternc/templates/alternc/postfix/postfix-slave.cf'
     regexp: "^{{ postfix_conf.parameter }}"
@@ -117,9 +118,6 @@
 
   when: ansible_facts.services["bind9"].state == 'stopped' or ansible_facts.services["bind9"].state == 'inactive'
   
-
-#- name: Ejecutar alternc.install para reflejar los cambios de configuración
-#  shell: "alternc.install"
 - name: running alternc.install and other handlers
   meta: flush_handlers
 

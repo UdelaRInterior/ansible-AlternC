@@ -24,7 +24,7 @@
     loop_control:
       loop_var: alternc_mysql_user
 
-  - name: create extra mysql users
+  - name: Create extra mysql users
     mysql_user:
       name: "{{ alternc_mysql_user.name }}"
       host: "{{ alternc_mysql_user.host }}"
