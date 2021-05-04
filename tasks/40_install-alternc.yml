@@ -7,8 +7,13 @@
     state: latest
   notify: 
   - run alternc.install
+## Do we still need to run twice?
+## Yes we do: https://github.com/AlternC/AlternC/issues/458
   - run alternc.install 2
 
+###### is it nstill needed? 
+## It is yet: ->  https://github.com/AlternC/AlternC/issues/457
+## As far as alternc koumbit version 3.5.0~rc1+0~20201103184407.66~1.gbp1b3d3f, the bug persists 
 - name: Patch-- replace alternc.install with a version for debian buster (still valid???)
   copy:
     src: files/alternc.install
@@ -61,19 +66,22 @@
 - name: Configuring passwords policy. 10 characters mínimum. Upper case letter, lower case letters and numbers are required
   shell: "mysql {{ alternc_query_options }} 'UPDATE policy SET minsize='10', classcount='3''"
 
-# Workaround of this bug
-- name: "workaround: this breaks the file manager panel webpage (still valid??)"
-  copy: 
-    src: files/bro_main.php
-    dest: /usr/share/alternc/panel/admin/bro_main.php
-    owner: alterncpanel
-    group: alterncpanel
-    mode: 0644
-    backup: yes
-  when: ansible_distribution_release == "buster"
-  tags: workaround
+### 
+## Workaround of this bug
+#- name: "workaround: this breaks the file manager panel webpage (still valid??)"
+## This one was fixed! --> https://github.com/AlternC/AlternC/issues/402
+## (remove these comments somewhere in next versions)
+#  copy: 
+#    src: files/bro_main.php
+#    dest: /usr/share/alternc/panel/admin/bro_main.php
+#    owner: alterncpanel
+#    group: alterncpanel
+#    mode: 0644
+#    backup: yes
+#  when: ansible_distribution_release == "buster"
+#  tags: workaround
 
-- name: Trigger handler to restart Apache2
+- name: Trigger handlers to install AlternC and notify restart Apache2
   meta: flush_handlers
   notify:
   - AlternC - Restart Apache2

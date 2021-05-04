@@ -84,7 +84,9 @@
   loop_control:
     loop_var: alternc_db_server
 
-- name: Generante ssl certificates (certbot-letsencrypt).
-  shell: "php /usr/lib/alternc/generate_certbot.php"
+# This should happend with alternc.install
+## remove these comments in a future version
+#- name: Generante ssl certificates (certbot-letsencrypt).
+#   shell: "php /usr/lib/alternc/generate_certbot.php"
 
 ...

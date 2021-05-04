@@ -58,7 +58,6 @@
     state: absent
   become: no
   delegate_to: localhost
-  when: alternc_logo.resize is string
 
 - name: Delete resize images for favicon
   file:

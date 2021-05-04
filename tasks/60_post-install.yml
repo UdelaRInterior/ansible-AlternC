@@ -1,15 +1,16 @@
 ---
 # Post-installation tasks of AlternC Ansible role
 
-- name: Configure HTTP traffic redirection to HTTPS
-  template:
-    dest: "/etc/apache2/sites-available/000-default.conf"
-    src: etc/apache2/sites-available/000-default.conf.j2
-    owner: root
-    group: root
-    mode: "0644"
-  notify:
-    - AlternC - Restart Apache2
+# AlternC 
+#- name: Configure HTTP traffic redirection to HTTPS
+#  template:
+#    dest: "/etc/apache2/sites-available/000-default.conf"
+#    src: etc/apache2/sites-available/000-default.conf.j2
+#    owner: root
+#    group: root
+#    mode: "0644"
+#  notify:
+#    - AlternC - Restart Apache2
 
 
 - name: Configure AlternC maximum file size upload
@@ -102,15 +103,14 @@
 
 - name: Extract bind9 service state
   service_facts:
-#  tags: explore
 
+## AlternC installation bug reported here: https://github.com/AlternC/AlternC/issues/460
 - name: AppArmor configuration hook
   block:
 
   - name: Parse apparmor config if bind9 is stopped
     command: apparmor_parser -r /etc/apparmor.d/usr.sbin.named
-  #  tags: explore
-
+  
   - name: Restart bind9
     service:
       name: bind9

@@ -1,5 +1,10 @@
 # Change log of [ansible role AlternC](https://github.com/UdelaRInterior/ansible-AlternC)
 
+## [v3.1.1](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.1.1)
+
+* Simplify reducing unneeded dependencies or packages
+* remove from the role hooks and workaround already fixed in AlternC
+
 ## [v3.1.0](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.1.0)
 
 * Management of customizable logos: login page, panel menu and favicon.
