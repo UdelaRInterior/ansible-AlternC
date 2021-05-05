@@ -4,8 +4,9 @@
 
 * Simplify reducing unneeded dependencies or packages
 * remove from the role hooks and workaround already fixed in AlternC
+* minor interface change in v3.0.0-rc1 API: `alternc_php_version` instead of `alternc_php_version_custom`
 
-## [v3.1.0](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.1.0)
+## v3.1.0 (this intermediate version wasn't tagged)
 
 * Management of customizable logos: login page, panel menu and favicon.
 
@@ -41,4 +42,4 @@
 ## [v1.0.0](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v1.0.0)
 
 * first running version of the role, for a debian stretch, using Koumbit AlternC 3.5-rc1 packages
-* not very idempotent, because of a systematic call to `alternc.install`
+* not very idempotent, because of a systematic call to `alternc.install`    

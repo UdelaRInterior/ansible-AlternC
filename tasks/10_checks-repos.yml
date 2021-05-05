@@ -79,7 +79,7 @@
     msg: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
     verbosity: 2
 
-- name: include the variable defining the packages for debian version 
+- name: Include variables dependind on debian version 
   include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
 
 - name: Adding AlternC repository key

@@ -18,7 +18,7 @@
 
 # Custom PHP version
 # If this optional variable is set, it overrrides the default php version by distribution in vars/ files
-# alternc_php_version_custom: '7.3'
+# alternc_php_version: '7.3'
 
 # Custom debian sid repo for phpmyadmin when we install AlternC in buster 
 # If these optional variables are set, they overrride the default sid repos variables by distribution in vars/ files

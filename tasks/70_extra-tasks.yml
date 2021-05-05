@@ -28,7 +28,7 @@
     mysql_user:
       name: "{{ alternc_mysql_user.name }}"
       host: "{{ alternc_mysql_user.host }}"
-      password: "{{ alternc_mysql_useritem.password }}"
+      password: "{{ alternc_mysql_user.password }}"
       priv: "{{ alternc_mysql_user.priv }}"
       login_unix_socket: /run/mysqld/mysqld.sock
       # login_user: root

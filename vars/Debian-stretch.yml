@@ -7,22 +7,22 @@ alternc_repo: '{{ alternc_repo_custom if alternc_repo_custom is defined else "ht
 alternc_branch: '{{ alternc_branch_custom if alternc_branch_custom is defined else "alternc35 main" }}'
 alternc_key: "{{ alternc_key_custom if alternc_key_custom is defined else 'key.asc' }}"
 
-alternc_php_version: '{{ alternc_php_version_custom alternc_php_version_custom is defined else "7.0" }}'
+alternc_php_version_dist: '{{ alternc_php_version alternc_php_version is defined else "7.0" }}'
 
 alternc_packages:
-- "php{{ alternc_php_version }}-common"
-- "php{{ alternc_php_version }}-curl"
-- "php{{ alternc_php_version }}-gd"
-- "php{{ alternc_php_version }}-intl"
-- "php{{ alternc_php_version }}-json"
-- "php{{ alternc_php_version }}-mysql"
-- "php{{ alternc_php_version }}-mbstring"
-- "php{{ alternc_php_version }}-mcrypt"
-- "php{{ alternc_php_version }}-imagick"
-- "php{{ alternc_php_version }}-pgsql"
-- "php{{ alternc_php_version }}-xml"
-- "php{{ alternc_php_version }}-xmlrpc"
-- "php{{ alternc_php_version }}-zip"
+- "php{{ alternc_php_version_dist }}-common"
+- "php{{ alternc_php_version_dist }}-curl"
+- "php{{ alternc_php_version_dist }}-gd"
+- "php{{ alternc_php_version_dist }}-intl"
+- "php{{ alternc_php_version_dist }}-json"
+- "php{{ alternc_php_version_dist }}-mysql"
+- "php{{ alternc_php_version_dist }}-mbstring"
+- "php{{ alternc_php_version_dist }}-mcrypt"
+- "php{{ alternc_php_version_dist }}-imagick"
+- "php{{ alternc_php_version_dist }}-pgsql"
+- "php{{ alternc_php_version_dist }}-xml"
+- "php{{ alternc_php_version_dist }}-xmlrpc"
+- "php{{ alternc_php_version_dist }}-zip"
 - quota
 
 packages_mysql:
