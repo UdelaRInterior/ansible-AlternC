@@ -42,12 +42,7 @@
     shell: >-
         mysql {{ alternc_query_options }} 
         "UPDATE quotas SET total='{{ service_quota.value }}' WHERE uid={{ alternc_admin_uid.stdout }} AND name='{{ service_quota.key }}'"
-    loop: >-
-        {{ alternc_quota_profiles | json_query( alternc_quota_profile_query ) | first | dict2items 
-          if alternc_quota_profile_query is defined
-          else '[]'
-        }}
-      # if we don't code this ".. if .. else ..", the task fails even when role not called (??) because `alternc_quota_profile_query` undefined
+    loop: '{{ alternc_quota_profiles | json_query( alternc_quota_profile_query ) | first | dict2items }}'
     loop_control:
       loop_var: service_quota
 

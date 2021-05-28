@@ -19,7 +19,7 @@
 
 - name: Build, upload and configure AlternC panel's logos
   include_tasks: include/alternc-logos.yml
-  when: alternc_logo.name | length > 0
+  when: alternc_logo.local_file | length > 0
   loop: '{{ alternc_logos }}'
   loop_control:
     loop_var: alternc_logo

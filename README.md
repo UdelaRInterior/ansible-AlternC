@@ -37,7 +37,7 @@ Variables needed are listed and documented in files in the [`/defaults/main`](de
 * [`40_alternc-plugins.yml`](/defaults/main/40_alternc-plugins.yml): Mailman, roundcube, awstat and piwik related variables
 * [`50_post-install.yml`](/defaults/main/50_post-install.yml): php.ini, Proftpd and other useful additional configuration
 * [`60_alternc-slavdns.yml`](/defaults/main/60_alternc-slavdns.yml): accounts configuration for alternc-slavedns secondary servers' access
-* [`60_alternc-custom.yml`](/defaults/main/60_alternc-custom.yml): customization of alternc (Login page logo, panel menu logo and favicon customization )
+* [`70_alternc-custom.yml`](/defaults/main/70_alternc-custom.yml): customization of alternc (Login page logo, panel menu logo and favicon customization )
 
 They include the debconf paramenters needed when installing AltenrC package and dependencies, as well as those needed to cofigure after the AltenrC panel
 (hosting web GUI).
