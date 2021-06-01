@@ -40,6 +40,9 @@ alternc_image_file_path: /usr/share/alternc/panel/admin/images
 alternc_image_url_path: /images
 alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
 
+# Name of package that provide `icotools` command on ansible controller
+alternc_icoutils_pkg: "icoutils"
+
 alternc_logos:
 - name: logo_login
   local_file: '{{ alternc_logo_login | default( "" ) }}'

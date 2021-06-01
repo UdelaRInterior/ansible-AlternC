@@ -66,8 +66,8 @@
 #      register: ansible_become_pass_input
 
     - name: Install icoutils in local controller
-      apt:
-        name: icoutils
+      ansible.builtin.package:
+        name: "{{ alternc_icoutils_pkg }}"
         state: present
       delegate_to: localhost
 
