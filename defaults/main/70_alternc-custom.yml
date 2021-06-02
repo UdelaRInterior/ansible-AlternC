@@ -40,4 +40,11 @@ alternc_image_file_path: /usr/share/alternc/panel/admin/images
 alternc_image_url_path: /images
 alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
 
+## Name of package that provide `icotools` command on ansible controller
+# Remark: default value is at least for common Debian-like distributions. If your local distro has another 
+# name for this package, there is no much sense to store it in a git repo. As it is needed only once for
+# package install it makes more sense to set it in the command line: 
+#  ansible-playbook alternc-playbook.yml --extra-vars '{"alternc_icoutils_pkg":"icoutils-custom"}'  
+alternc_icoutils_pkg: "icoutils"
+
 ...
