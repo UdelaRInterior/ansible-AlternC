@@ -31,7 +31,7 @@
 alternc_logo_menu: '{{ alternc_logo_login | default( "" ) }}' 
 
 # The favicon of the panel's pages
-# Should be a square image
+# Should be a square image. Can be the .ico file itself, or a .png from which the role builds it. 
 alternc_favicon: '{{ alternc_logo_menu | default( "" ) }}'
 
 ## variables to build and manage AlternC logos
@@ -39,25 +39,5 @@ alternc_favicon: '{{ alternc_logo_menu | default( "" ) }}'
 alternc_image_file_path: /usr/share/alternc/panel/admin/images
 alternc_image_url_path: /images
 alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
-
-alternc_logos:
-- name: logo_login
-  local_file: '{{ alternc_logo_login | default( "" ) }}'
-  remote_file: 'logo_login_{{ alternc_logo_login | default( "" ) }}'
-  resize: 400x400
-
-- name: logo_menu
-  local_file: '{{ alternc_logo_menu | default( "" ) }}'
-  remote_file: 'logo_menu_{{ alternc_logo_menu | default( "" ) }}'
-  resize: 45x45
-
-- name: favicon
-  local_file: '{{ alternc_favicon | default( "" ) }}' 
-  remote_file: 'favicon_{{ alternc_favicon | default( "" ) | splitext | first }}.ico'
-  resize: 
-  - 16x16
-  - 32x32
-  - 64x64
-  - 128x128
 
 ...

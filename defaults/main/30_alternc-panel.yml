@@ -41,6 +41,7 @@ alternc_quota_profiles:
 # no: preserve existing quota profiles, inserting new from playbook variables, updating those existing. 
 alternc_quota_profiles_ansible_exclusive: no
 
+# Optionally choose a quota profile for existing `admin` user
 alternc_admin_quotas:
   set: yes # do we set admin quotas when running the role
   profile: default

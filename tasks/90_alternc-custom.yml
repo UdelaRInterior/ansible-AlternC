@@ -23,5 +23,26 @@
   loop: '{{ alternc_logos }}'
   loop_control:
     loop_var: alternc_logo
+  vars:
+    alternc_logos:
+    - name: logo_login
+      local_file: '{{ alternc_logo_login | default( "" ) }}'
+      remote_file: 'logo_login_{{ alternc_logo_login | default( "" ) }}'
+      resize: 400x400
+
+    - name: logo_menu
+      local_file: '{{ alternc_logo_menu | default( "" ) }}'
+      remote_file: 'logo_menu_{{ alternc_logo_menu | default( "" ) }}'
+      resize: 45x45
+
+    - name: favicon
+      local_file: '{{ alternc_favicon | default( "" ) }}' 
+      remote_file: 'favicon_{{ alternc_favicon | default( "" ) | splitext | first }}.ico'
+      resize: 
+      - 16x16
+      - 32x32
+      - 64x64
+      - 128x128
+
 
 ...

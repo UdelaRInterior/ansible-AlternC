@@ -1,7 +1,7 @@
 ---
 # Automate some configuration tasks, specially admin password
-# Recuperando id del administrador (admin).
 
+# Recuperando id del administrador (admin).
 - name: Fetching AlternC administrator user id
   shell: mysql {{ alternc_query_options }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
   register: alternc_admin_uid
@@ -31,21 +31,15 @@
   loop_control:
     loop_var: quota_profile
 
-- name: Set administrators' quotas
-  block:
-
-  - name: Administrator's quota profile extract query
-    set_fact:
-      alternc_quota_profile_query: '[?name==`{{ alternc_admin_quotas.profile }}`].quotas'
-
-  - name: Set administrators' quotas 
-    shell: >-
-        mysql {{ alternc_query_options }} 
-        "UPDATE quotas SET total='{{ service_quota.value }}' WHERE uid={{ alternc_admin_uid.stdout }} AND name='{{ service_quota.key }}'"
-    loop: '{{ alternc_quota_profiles | json_query( alternc_quota_profile_query ) | first | dict2items }}'
-    loop_control:
-      loop_var: service_quota
-
+- name: Set administrators' quotas 
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "UPDATE quotas SET total='{{ service_quota.value }}' WHERE uid={{ alternc_admin_uid.stdout }} AND name='{{ service_quota.key }}'"
+  loop: "{{ alternc_quota_profiles | json_query( alternc_quota_profile_query ) | first | dict2items }}"
+  loop_control:
+    loop_var: service_quota
+  vars:
+    alternc_quota_profile_query: '[?name==`{{ alternc_admin_quotas.profile }}`].quotas'
   when: alternc_admin_quotas.set | bool
 
 # Eliminando dominios de hospedage instalados por omisión.
@@ -78,10 +72,5 @@
   loop: "{{ alternc_db_servers }}"
   loop_control:
     loop_var: alternc_db_server
-
-# This should happend with alternc.install
-## remove these comments in a future version
-#- name: Generante ssl certificates (certbot-letsencrypt).
-#   shell: "php /usr/lib/alternc/generate_certbot.php"
 
 ...
