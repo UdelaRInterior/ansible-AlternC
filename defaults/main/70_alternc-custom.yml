@@ -22,9 +22,20 @@
 # NB: setting the following variables override AlternC variables population with 
 #     alternc_config_variables structure, defined in /defaults/main/30_alternc_opan
 
+## Variables to build and manage AlternC logos
+
+# The folder of AlternC panel images an logos (should not be changed)
+alternc_image_file_path: /usr/share/alternc/panel/admin/images
+
+# The URL path binded to previous folder (should not be changed)
+alternc_image_url_path: /images
+
+# Local folder where logos images files are stored
+alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
+
 ## The logo for the authentcation page of AlternC panel
-## Should be horizontal, rectangle.
-# alternc_logo_login: my_logo.png   ## file to set in 
+## Should be horizontal, rectangle. When unefined or empty string, no custom logo is set
+# alternc_logo_login: my_logo.png 
 
 # The logo in the top of the menu of AlternC panel
 # Should be a square image
@@ -34,17 +45,35 @@ alternc_logo_menu: '{{ alternc_logo_login | default( "" ) }}'
 # Should be a square image. Can be the .ico file itself, or a .png from which the role builds it. 
 alternc_favicon: '{{ alternc_logo_menu | default( "" ) }}'
 
-## variables to build and manage AlternC logos
+# Alternativley to previous three variables, you can directly populate the following structure
+# for more customization. Do not put the same `local_file` and `remote_file` and be carefull 
+# with sizes: AlternC panel has its constraints.
+alternc_logos:
+- name: logo_login
+  local_file: '{{ alternc_logo_login | default( "" ) }}'
+  remote_file: 'logo_login_{{ alternc_logo_login | default( "" ) }}'
+  resize: 400x400
 
-alternc_image_file_path: /usr/share/alternc/panel/admin/images
-alternc_image_url_path: /images
-alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
+- name: logo_menu
+  local_file: '{{ alternc_logo_menu | default( "" ) }}'
+  remote_file: 'logo_menu_{{ alternc_logo_menu | default( "" ) }}'
+  resize: 45x45
 
-## Name of package that provide `icotools` command on ansible controller
+- name: favicon
+  local_file: '{{ alternc_favicon | default( "" ) }}' 
+  remote_file: 'favicon_{{ alternc_favicon | default( "" ) | splitext | first }}.ico'
+  resize: 
+  - 16x16
+  - 32x32
+  - 64x64
+  - 128x128
+
+## Name of package that provide `icotools` command on ansible controller, needed if the role builds the .ico file,
 # Remark: default value is at least for common Debian-like distributions. If your local distro has another 
-# name for this package, there is no much sense to store it in a git repo. As it is needed only once for
-# package install it makes more sense to set it in the command line: 
+# name for this package, there is no much sense to store this value in a git repo. As it's needed only once for
+# package install, it makes more sense to set it in the command line: 
 #  ansible-playbook alternc-playbook.yml --extra-vars '{"alternc_icoutils_pkg":"icoutils-custom"}'  
+# You can also install manually any package providing `icotool` command line before running the role
 alternc_icoutils_pkg: "icoutils"
 
 ...

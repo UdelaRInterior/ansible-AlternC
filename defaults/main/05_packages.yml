@@ -21,7 +21,6 @@
 # alternc_php_version: '7.3'
 
 # Custom debian sid repo for phpmyadmin when we install AlternC in buster 
-# If these optional variables are set, they overrride the default sid repos variables by distribution in vars/ files
 alternc_debian_sid_repo: http://ftp.debian.org/debian/
 alternc_debian_sid_branch: sid main
 

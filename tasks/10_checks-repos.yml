@@ -67,11 +67,13 @@
 
     - name: Install icoutils in local controller
       ansible.builtin.package:
-        name: "{{ alternc_icoutils_pkg }}"
+        name: '{{ alternc_icoutils_pkg }}'
         state: present
       delegate_to: localhost
 
-    when: local_packages | json_query("ansible_facts.packages.icoutils") | type_debug != "list"
+    when: local_packages | json_query( alternc_check_icoutils_pckg ) | type_debug != 'list'
+    vars: 
+      alternc_check_icoutils_pckg: 'ansible_facts.packages.{{ alternc_icoutils_pkg }}'
 
   when: alternc_favicon is string and alternc_favicon != '' 
 

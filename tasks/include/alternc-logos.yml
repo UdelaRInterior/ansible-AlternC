@@ -16,27 +16,40 @@
 - name: Resize logo (not .ico)
   local_action: >
     command convert {{ alternc_local_file_path }}/{{ alternc_logo.local_file }} 
-    -resize {{ alternc_logo.resize }}
+    -resize {{ alternc_logo.resize }} 
     {{ alternc_local_file_path }}/{{ alternc_logo.remote_file }}
   become: no
   when: alternc_logo.resize is string
 
-- name: Resize the several dimensions images for the favicon
-  local_action: >
-    command convert {{ alternc_local_file_path }}/{{ alternc_logo.local_file }} 
-    -resize  {{ logo_resize }}
-    {{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png
-  become: no
-  loop: '{{ alternc_logo.resize if alternc_logo.resize | type_debug == "list"  else "[]" }}'
-  loop_control:
-    loop_var: logo_resize
+- name: Resize logo and build favicon file
+  block:
 
-- name: Build favicon file
-  local_action: >
-    command icotool -c -o  {{ alternc_local_file_path }}/{{ alternc_logo.remote_file }} 
-    {% for logo_resize in alternc_logo.resize %}{{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png {% endfor %}
-  when: alternc_logo.resize | type_debug == "list"
+  - name: Resize the several dimensions images for the favicon
+    local_action: >
+      command convert {{ alternc_local_file_path }}/{{ alternc_logo.local_file }} 
+      -resize  {{ logo_resize }} 
+      {{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png
+    loop: '{{ alternc_logo.resize if alternc_logo.resize | type_debug == "list"  else "[]" }}'
+    loop_control:
+      loop_var: logo_resize
+
+  - name: Build favicon file
+    local_action: >
+      command icotool -c -o  {{ alternc_local_file_path }}/{{ alternc_logo.remote_file }} 
+      {% for logo_resize in alternc_logo.resize %}{{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png {% endfor %}
+
+  when: 
+  - alternc_logo.resize | type_debug == "list"
+  - alternc_logo.local_file | splitext | last == ".png"
   become: no
+
+- name: Local copy of favicon file, if directly provided
+  copy:
+    src: '{{ alternc_local_file_path }}/{{ alternc_logo.local_file }}'
+    dest: '{{ alternc_local_file_path }}/{{ alternc_logo.remote_file }}' 
+  become: no
+  delegate_to: localhost
+  when: alternc_logo.local_file | splitext | last == ".ico"
 
 - name: Upload logo
   copy:
@@ -59,7 +72,7 @@
   become: no
   delegate_to: localhost
 
-- name: Delete resize images for favicon
+- name: Delete resized images for favicon
   file:
     path: '{{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png'
     state: absent
