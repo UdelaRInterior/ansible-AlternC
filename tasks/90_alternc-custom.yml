@@ -18,7 +18,7 @@
 
 ## As empirically detected in https://github.com/UdelaRInterior/ansible-AlternC/issues/12
 ## AlternC needs a first admin login into panel for the AlternC variables set to be efective. 
-- name: admin web access to AlternC panel just installed
+- name: "Hook: admin web access to AlternC panel just installed"
   uri:
     url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/login.php'
     method: POST
@@ -79,7 +79,7 @@
       Cookie: "{{ alternc_panel_login_invalid_certs.set_cookie }}"
   register: alternc_panel_logout_invalid_certs
   when: 
-  - alternc_panel_login_invalid_certs is defined
+  - alternc_panel_login_invalid_certs is not skipped
   - alternc_panel_login_invalid_certs is succeeded
 
 
