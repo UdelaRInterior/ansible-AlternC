@@ -34,15 +34,18 @@ alternc_image_url_path: /images
 alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
 
 ## The logo for the authentcation page of AlternC panel
-## Should be horizontal, rectangle. When unefined or empty string, no custom logo is set
+# Should be an horizontal, rectangle image. The filename must not include any subfolder. 
+# When unefined or empty string, no custom logo is set
 # alternc_logo_login: my_logo.png 
 
-# The logo in the top of the menu of AlternC panel
-# Should be a square image
+## The filename of the logo in the top of the menu of AlternC panel
+# Should be a square image and the filename must not include any subfolder. 
+# When unefined or empty string, no custom logo is set
 alternc_logo_menu: '{{ alternc_logo_login | default( "" ) }}' 
 
-# The favicon of the panel's pages
+## The favicon of the panel's pages
 # Should be a square image. Can be the .ico file itself, or a .png from which the role builds it. 
+# The filename must not include any subfolder. When unefined or empty string, no custom favicon is set
 alternc_favicon: '{{ alternc_logo_menu | default( "" ) }}'
 
 # Alternativley to previous three variables, you can directly populate the following structure
