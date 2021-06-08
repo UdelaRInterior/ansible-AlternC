@@ -4,13 +4,11 @@
 
 - name: Install "debconf" and "debconf-utils"
   apt:
-    name: "{{ alternc_debconf_pacakages }}"
-    cache_valid_time: 3600
-    state: latest
-  vars:
-    alternc_debconf_pacakages:
+    name:
     - debconf
     - debconf-utils
+    cache_valid_time: 3600
+    state: latest
 
 - name: Fix debconf options for alternc and phpmyadmin
   debconf:
