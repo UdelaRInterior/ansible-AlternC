@@ -5,6 +5,7 @@
 - name: Install or update most popular PHP modules not included in AlternC dependencies
   apt:
     name: "{{ alternc_packages }}"
+    cache_valid_time: 3600
     state: latest
 
 - name: Install MySql database server (may be long, take a coffee!! )
