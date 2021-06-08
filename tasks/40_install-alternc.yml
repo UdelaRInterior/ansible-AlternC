@@ -28,6 +28,7 @@
   - name: Install "mailman", mailing lists managment system
     apt:
       name: alternc-mailman
+      cache_valid_time: 3600
       state: latest
     notify: run alternc.install
 
@@ -42,6 +43,7 @@
   - name: Install "awstats", websites statistics
     apt:
       name: alternc-awstats
+      cache_valid_time: 3600
       state: latest
     notify: run alternc.install
 
@@ -60,6 +62,7 @@
 - name: Install Roundcube, webmail interface
   apt:
     name: alternc-roundcube
+    cache_valid_time: 3600
     state: latest
   notify: run alternc.install
 

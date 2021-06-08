@@ -14,6 +14,7 @@
   - name: Verify if the pymysql module is installed
     apt:
       name: python-pymysql
+      cache_valid_time: 3600
       state: present
     when: alternc_extra_mysql_users | length > 0
 
