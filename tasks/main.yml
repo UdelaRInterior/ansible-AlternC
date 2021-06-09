@@ -35,5 +35,6 @@
 - import_tasks: 80_alternc-slavedns.yml
 
 - import_tasks: 90_alternc-custom.yml
+  tags: alternc_custom
 
 ...
