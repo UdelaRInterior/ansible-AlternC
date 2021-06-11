@@ -84,7 +84,15 @@ alternc_authorized_tld_ansible_exclusive: no
 # If you use altenrc-slavedns role, you would better put this variable in a group where are the master and the dns slave(s)
 alternc_desktop_protocol: https   
 
-# AlternC configuration variables (see web interface, Configuration panel -> Configure AltenrC variables )
+alternc_config_variables:
+- name: force_https
+  value: '{{ 1 if alternc_desktop_protocol == "https" else 0 }}'
+  comment: 'This variable is set to 0 (default) if users can access the management desktop through HTTP, otherwise we force HTTPS'
+
+
+## AlternC configuration variables (see web interface, Configuration panel -> Configure AltenrC variables )
+# You can add custom values, but you have to include the previous `force_https` definition if yo want to 
+# preserve the use of `alternc_desktop_protocol` ansible variable. 
 # (For full text `comment:`, we need to double escape the single quote ' (4 ', '''', to obtains one in the database) because they are parsed in an SQL sentence.)
 # (No way to make better using " around the whole text because the SQL sentence in this role has single quotes around the hash value.                           )
 ## alternc_config_variables:

@@ -11,7 +11,7 @@
 ## Yes we do: https://github.com/AlternC/AlternC/issues/458
   - run alternc.install 2
 
-###### is it nstill needed? 
+###### is it still needed? 
 ## It is yet: ->  https://github.com/AlternC/AlternC/issues/457
 ## As far as alternc koumbit version 3.5.0~rc1+0~20201103184407.66~1.gbp1b3d3f, the bug persists 
 - name: Patch-- replace alternc.install with a version for debian buster (still valid???)

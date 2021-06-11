@@ -16,6 +16,74 @@
 #   comment: 'You can specify a logo for the menu, example /images/my_logo.png .'
 # (...)
 
+## As empirically detected in https://github.com/UdelaRInterior/ansible-AlternC/issues/12
+## AlternC needs a first admin login into panel for the AlternC variables set to be efective. 
+- name: "Hook: admin web access to AlternC panel just installed"
+  uri:
+    url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/login.php'
+    method: POST
+    follow_redirects: all
+    body_format: form-urlencoded
+    body: 
+      username: admin
+      password: '{{ alternc_admin_pass }}'
+  register: alternc_panel_login
+  become: no
+  delegate_to: localhost
+  ignore_errors: yes
+
+- name: Optional stop if invalid certificates
+  pause:
+    prompt: >
+      LetsEncrypt certificate of AlternC panel were not (yet?) generated. It may happend after, but on
+      some plateforms (such as a Proxmox LXC container with buster) SSL certificate auto-provision is broken.
+  when:
+  - alternc_panel_login is failed
+  - alternc_panel_login.msg | regex_search( 'CERTIFICATE_VERIFY_FAILED')  
+
+- name: Logout form AlternC panel when succeed
+  uri:
+    url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/mem_logout.php'
+    method: GET
+    follow_redirects: all
+    headers:
+      Cookie: "{{ alternc_panel_login.set_cookie }}"
+  register: alternc_panel_logout
+  become: no
+  delegate_to: localhost
+  when: alternc_panel_login is succeeded
+
+- name: admin web access to AlternC panel just installed, accepting invalid certs
+  uri:
+    url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/login.php'
+    method: POST
+    validate_certs: no
+    body_format: form-urlencoded
+    body: 
+      username: admin
+      password: '{{ alternc_admin_pass }}'
+  register: alternc_panel_login_invalid_certs
+  become: no
+  delegate_to: localhost
+  when: alternc_panel_login is failed
+
+- debug:
+    var: alternc_panel_login_invalid_certs
+    verbosity: 2
+
+- name: Logout form AlternC panel when succeed with invalid certs
+  uri:
+    url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/mem_logout.php'
+    method: GET
+    follow_redirects: all
+    validate_certs: no
+    headers:
+      Cookie: "{{ alternc_panel_login_invalid_certs.set_cookie }}"
+  register: alternc_panel_logout_invalid_certs
+  when: 
+  - alternc_panel_login_invalid_certs is not skipped
+  - alternc_panel_login_invalid_certs is succeeded
+
 
 - name: Build, upload and configure AlternC panel's logos
   include_tasks: include/alternc-logos.yml
