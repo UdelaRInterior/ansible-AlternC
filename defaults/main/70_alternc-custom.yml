@@ -37,9 +37,9 @@ alternc_image_url_path: /images
 # Local folder where logos images files are stored
 alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
 
-## The logo for the authentcation page of AlternC panel
+## The filename of the logo for the authentication page of AlternC panel
 # Should be an horizontal, rectangle image. The filename must not include any subfolder. 
-# When unefined or empty string, no custom logo is set
+# When undefined or empty string, no custom logo is set
 # alternc_logo_login: my_logo.png 
 
 ## The filename of the logo in the top of the menu of AlternC panel
@@ -52,7 +52,7 @@ alternc_logo_menu: '{{ alternc_logo_login | default( "" ) }}'
 # The filename must not include any subfolder. When unefined or empty string, no custom favicon is set
 alternc_favicon: '{{ alternc_logo_menu | default( "" ) }}'
 
-# Alternativley to previous three variables, you can directly populate the following structure
+# Alternatively to previous three variables, you can directly populate the following structure
 # for more customization. Do not put the same `local_file` and `remote_file` and be carefull 
 # with sizes: AlternC panel has its constraints.
 alternc_logos:

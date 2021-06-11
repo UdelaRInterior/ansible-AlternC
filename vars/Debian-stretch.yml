@@ -3,6 +3,11 @@
 
 # Repositorio de AlternC
 
+# buster de AlternC official repository - PRESENTLY: BROKEN, DOESN'T WORK
+# alternc_repo: 'http://debian.alternc.org'
+# alternc_branch: 'buster main'
+# alternc_key: 'key.txt'
+
 alternc_repo: '{{ alternc_repo_custom if alternc_repo_custom is defined else "http://debian.koumbit.net/debian" }}'
 alternc_branch: '{{ alternc_branch_custom if alternc_branch_custom is defined else "alternc35 main" }}'
 alternc_key: "{{ alternc_key_custom if alternc_key_custom is defined else 'key.asc' }}"

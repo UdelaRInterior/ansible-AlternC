@@ -1,10 +1,10 @@
 # Role AlternC
 
-Installs and configures [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container - but this last has still some problems with letsencrypt certidicates).
+Installs and configures [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container - but this last has still some problems with Let's Encrypt certificates).
 
 Configures AltenrC hosting panel, that allows any user who has an account to access AltenrC web GUI, to manage her hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts as well as mail addresses and mailboxes. Content of web site can be uploaded through FTP as well as through Alternc web GUI.
 
-The role also manages the mailman, awstat and roundcube plugins. It handles also the logos that can be custommized 
+The role also manages the mailman, awstat and roundcube plugins. It handles also the logos that can be customized 
 
 ## Requirements
 
@@ -39,14 +39,13 @@ Variables needed are listed and documented in files in the [`/defaults/main`](de
 * [`60_alternc-slavdns.yml`](/defaults/main/60_alternc-slavdns.yml): accounts configuration for alternc-slavedns secondary servers' access
 * [`70_alternc-custom.yml`](/defaults/main/70_alternc-custom.yml): customization of alternc (Login page logo, panel menu logo and favicon customization )
 
-They include the debconf paramenters needed when installing AltenrC package and dependencies, as well as those needed to cofigure after the AltenrC panel
-(hosting web GUI).
+They include the debconf paramenters needed when installing AltenrC package and dependencies, as well as those needed to configure after the AltenrC panel (hosting web GUI).
 
-Almost all default values are those already provided by AlternC. Several default values are defined from ansible facts so you need to define only your specific values (like the desktop DNS if you want to define if different than the fqdn of the host). Tho role now allows to set and maintain almost all the parameters of AlternC. 
+Almost all default values are those already provided by AlternC. Several default values are defined from ansible facts so you need to define only your specific values (like the desktop DNS if you want to define it different than the fqdn of the host). The role now allows to set and maintain almost all the parameters of AlternC. 
 
 ## Dependencies
 
-There are no required dependencies form other ansible roles, but the role provides examples of configuration parameters for PHP, suited for an AlternC installation, that can be set with the role [`udelarinterior.configure_php_ini` ](https://github.com/UdelaRInterior/ansible-role-configure-php-ini).
+There are no required dependencies from other ansible roles, but the role provides examples of configuration parameters for PHP, suited for an AlternC installation, that can be set with the role [`udelarinterior.configure_php_ini` ](https://github.com/UdelaRInterior/ansible-role-configure-php-ini).
 
 ## Playbook example
 
@@ -55,10 +54,10 @@ With:
 * a debian buster installed in `myserver.mydomain.org`
 * DNS configured with, for instance, a CNAME record for `panel.mydomain.org` returning `myserver.mydomain.org`
 
-You can installa AlternC with all its plugins with the following playbook:
+You can install AlternC with all its plugins with a playbook such as:
 
 ```YAML
-- name: configuración y provisión de hosts (nodos, contenedores y virtuales)
+- name: Configure AlternC on an already deployed OS Linux Debian 
   hosts: myserver.mydomain.org
   remote_user: deploy
   become: yes

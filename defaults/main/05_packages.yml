@@ -5,11 +5,6 @@
 ####  Variables related to packages from the role AlternC      ####
 ###################################################################
 
-# buster de AlternC repository - doesn't work
-# alternc_repo: 'http://debian.alternc.org'
-# alternc_branch: 'buster main'
-# alternc_key: 'key.txt'
-
 # Custom AlternC debian repository
 # If these optional variables are set, they overrride the default repos variables by distribution in vars/ files
 # alternc_repo_custom: 'http://debian.koumbit.net/debian'
