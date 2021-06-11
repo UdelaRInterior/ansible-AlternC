@@ -23,6 +23,10 @@
 #     alternc_config_variables structure, defined in /defaults/main/30_alternc_opan
 
 ## Variables to build and manage AlternC logos
+# Bewere of this issue: https://github.com/UdelaRInterior/ansible-AlternC/issues/12
+# for some buggy reason that our hook [here](tasaks/90_alternc-custom.yml#L21) didn't solve, the logoss tasks
+# have to be ran twice. you can do it with `alternc_custom` tag:
+#  ansible-playbook alternc-playbook.yml --tags alternc_custom
 
 # The folder of AlternC panel images an logos (should not be changed)
 alternc_image_file_path: /usr/share/alternc/panel/admin/images
@@ -34,15 +38,18 @@ alternc_image_url_path: /images
 alternc_local_file_path: '{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/files'
 
 ## The logo for the authentcation page of AlternC panel
-## Should be horizontal, rectangle. When unefined or empty string, no custom logo is set
+# Should be an horizontal, rectangle image. The filename must not include any subfolder. 
+# When unefined or empty string, no custom logo is set
 # alternc_logo_login: my_logo.png 
 
-# The logo in the top of the menu of AlternC panel
-# Should be a square image
+## The filename of the logo in the top of the menu of AlternC panel
+# Should be a square image and the filename must not include any subfolder. 
+# When unefined or empty string, no custom logo is set
 alternc_logo_menu: '{{ alternc_logo_login | default( "" ) }}' 
 
-# The favicon of the panel's pages
+## The favicon of the panel's pages
 # Should be a square image. Can be the .ico file itself, or a .png from which the role builds it. 
+# The filename must not include any subfolder. When unefined or empty string, no custom favicon is set
 alternc_favicon: '{{ alternc_logo_menu | default( "" ) }}'
 
 # Alternativley to previous three variables, you can directly populate the following structure
@@ -68,12 +75,14 @@ alternc_logos:
   - 64x64
   - 128x128
 
-## Name of package that provide `icotools` command on ansible controller, needed if the role builds the .ico file,
-# Remark: default value is at least for common Debian-like distributions. If your local distro has another 
+## Name of package that provides `icotools` command on ansible controller, needed if the role builds the .ico file,
+# Remark: default value is at least ok for common Debian-like distributions. If your local distro has another 
 # name for this package, there is no much sense to store this value in a git repo. As it's needed only once for
 # package install, it makes more sense to set it in the command line: 
 #  ansible-playbook alternc-playbook.yml --extra-vars '{"alternc_icoutils_pkg":"icoutils-custom"}'  
-# You can also install manually any package providing `icotool` command line before running the role
+# You can also install manually any package providing `icotool` command line before running the role 
+# and skip `icoutils` tag: 
+#  ansible-playbook alternc-playbook.yml --skip-tags icoutils
 alternc_icoutils_pkg: "icoutils"
 
 ...

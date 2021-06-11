@@ -75,7 +75,8 @@
     vars: 
       alternc_check_icoutils_pckg: 'ansible_facts.packages.{{ alternc_icoutils_pkg }}'
 
-  when: alternc_favicon is string and alternc_favicon != '' 
+  when: alternc_favicon is string and alternc_favicon != ''
+  tags: icoutils
 
 - debug: 
     msg: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
