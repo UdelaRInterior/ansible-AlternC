@@ -35,9 +35,8 @@
   apt:
     name: 
     - libjs-sphinxdoc
-    # - phpmyadmin
-    # - php-twig # I don't know how arrived this package... 
-    ## remove these comments in a future version
+    # See: https://github.com/UdelaRInterior/ansible-AlternC/issues/16
+    - php-twig 
     - php-symfony-config
     - php-symfony-dependency-injection
     - php-symfony-expression-language
