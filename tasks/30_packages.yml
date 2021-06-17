@@ -31,6 +31,15 @@
 #    cache_valid_time: 3600
 #  when: ansible_distribution_release == "buster"
 
+- name: Install or update phpmyadmin backports dist dependencies 
+  apt:
+    name: 
+    - php-twig 
+    state: latest
+    default_release: buster-backports
+    cache_valid_time: 3600
+  when: ansible_distribution_release == "buster" and alternc_debian_backport
+
 - name: Install or update phpmyadmin Sid dist dependencies 
   apt:
     name: 
@@ -45,7 +54,7 @@
     default_release: sid
     state: latest
     cache_valid_time: 3600
-  when: ansible_distribution_release == "buster"
+  when: ansible_distribution_release == "buster" and not alternc_debian_backport
 
 ### These packages are ok by dependencies in stable. 
 ## remove these comments in a future version

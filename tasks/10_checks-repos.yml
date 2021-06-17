@@ -98,18 +98,31 @@
   register: alternc_repo_add
 
 - block: 
-  - name: Define stable as preferred debian distribution
-    lineinfile: 
-      path: /etc/apt/apt.conf.d/30StableRelease
-      line: 'APT::Default-Release "stable";'
-      create: yes
-      state: present
 
-  - name: If distribution is buster, add Sid repository for phpmyadmin
+  - name: If distribution is buster and alternc_debian_backport, add backports repository for phpmyadmin
     apt_repository: 
-      repo: "deb {{ alternc_debian_sid_repo }} {{ alternc_debian_sid_branch }}"
+      repo: "deb {{ alternc_debian_backport_repo }} {{ alternc_debian_backport_branch }}"
       state: present
-    register: debian_repo_sid_add
+    register: debian_repo_backport_add
+    when: alternc_debian_backport
+
+  - block: 
+
+    - name: Define stable as preferred debian distribution
+      lineinfile: 
+        path: /etc/apt/apt.conf.d/30StableRelease
+        line: 'APT::Default-Release "stable";'
+        create: yes
+        state: present
+
+    - name: If distribution is buster and not alternc_debian_backport, add Sid repository for phpmyadmin
+      apt_repository: 
+        repo: "deb {{ alternc_debian_sid_repo }} {{ alternc_debian_sid_branch }}"
+        state: present
+      register: debian_repo_sid_add
+    
+    when: not alternc_debian_backport
+
   when: ( ansible_distribution == 'Debian') and (ansible_distribution_release == 'buster')
   
 - name: Update packages indexes
@@ -118,6 +131,7 @@
     cache_valid_time: 0
   when: > 
       alternc_repo_add is changed or 
+      ( debian_repo_backport_add is defined and debian_repo_backport_add is changed ) or 
       ( alternc_debian_repo_sid_add is defined and alternc_debian_repo_sid_add is changed )
 
 ...
