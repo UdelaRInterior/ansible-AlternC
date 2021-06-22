@@ -57,6 +57,7 @@
   uri:
     url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/login.php'
     method: POST
+    follow_redirects: all
     validate_certs: no
     body_format: form-urlencoded
     body: 

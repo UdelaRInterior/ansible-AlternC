@@ -5,7 +5,7 @@
 ####              alternc panel configuration                  ####
 ###################################################################
 
-# MySql query options / Opciones de consulta MySql.
+# MySql query options / Opciones de consulta MySql. Move this variable to defaults/10_mysql.yml?
 alternc_query_options: " --defaults-file=/etc/alternc/my.cnf --skip-column-names alternc -B -e "
 
 # AlternC panel default administrador
