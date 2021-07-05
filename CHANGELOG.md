@@ -1,5 +1,14 @@
 # Change log of [ansible role AlternC](https://github.com/UdelaRInterior/ansible-AlternC)
 
+## [v3.2.0-rc1](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.2.0-rc1)
+
+* Solves issue #15 (but `https_force` variable has no effet on AlternC panel, which is always in https)
+* parially solves #12, and gives a workaround running playbook a second time with tag `alternc_custom`
+* solves wssie 19 with a workaround: a flag to set or not DNS allowed slave IPs, to solve idempotency
+* a [branch `web_api`](https://github.com/UdelaRInterior/ansible-AlternC/tree/web_api) is let to explore
+  further the scrapping of AlternC web interface, wich may solve better previous issues, but we let them there, because they are minor.
+* this version should be considered as completed for AlternC installation in buster, along with alternc-slavedns instances, at least up to AlternC 3.5 release.  
+
 ## [v3.1.1](https://github.com/UdelaRInterior/ansible-AlternC/releases/tag/v3.1.1)
 
 * Simplify reducing unneeded dependencies or packages
