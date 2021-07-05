@@ -18,6 +18,9 @@
 
 ## As empirically detected in https://github.com/UdelaRInterior/ansible-AlternC/issues/12
 ## AlternC needs a first admin login into panel for the AlternC variables set to be efective. 
+# The following is not enough to log into AlternC panel. We should first pick in 
+# https://{{ alternc_debconf_desktopname }}/index.php a challange to post into the form.
+# WIP in branch: https://github.com/UdelaRInterior/ansible-AlternC/tree/web_api
 - name: "Hook: admin web access to AlternC panel just installed"
   uri:
     url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/login.php'
