@@ -1,22 +1,50 @@
 ---
 # Set alternc-slavedns servers configurations in master AlternC server
 
-- name: Deleting existing AlternC slavedns allowed IPs
-  shell: mysql {{ alternc_query_options }} 'DELETE FROM slaveip'
+- name: Flushing AlternC slavedns allowed IPs
+  block:
+
+  - name: Deleting existing AlternC slavedns allowed IPs
+    shell: mysql {{ alternc_query_options }} 'DELETE FROM slaveip'
+
+  - name: Trigger DNS slave authorized IPs configuration
+    file:
+      dest: /run/alternc/refresh_slave
+      state: touch
+
   when: alternc_slavedns_bind_ips_ansible_exclusive | bool
 
 - name: Configuring slave DNS authorized IPs in master server
-  shell: >
-      mysql {{ alternc_query_options }} 
-      "INSERT IGNORE INTO slaveip (ip, class) VALUES ('{{ slave_ip.ip }}', '{{ slave_ip.mask }}')"
+  uri:
+    url: '{{ alternc_desktop_protocol }}://{{ alternc_debconf_desktopname }}/adm_slavedns.php'
+    method: POST
+    follow_redirects: all
+    validate_certs: '{{ alternc_panel_login_invalid_certs is skipped }}'
+    headers:
+      Cookie: "{{ alternc_panel_login_invalid_certs.set_cookie }}"
+    body_format: form-urlencoded
+    body:
+      newip: '{{ slave_ip.ip }}'
+      newclass: '{{ slave_ip.mask }}'
+    return_content: yes
   loop: "{{ alternc_slavedns_bind_ips }}"
   loop_control:
     loop_var: slave_ip
-  register: alternc_slaveip
+  register: alternc_set_slaveip
+  become: no
+  delegate_to: localhost
 
 - debug:
-    var: alternc_slaveip
-  
+    var: alternc_set_slaveip
+
+## It's not enough to populate the database
+#  shell: >
+#      mysql {{ alternc_query_options }} 
+#      "INSERT IGNORE INTO slaveip (ip, class) VALUES ('{{ slave_ip.ip }}', '{{ slave_ip.mask }}')"
+#  loop: "{{ alternc_slavedns_bind_ips }}"
+#  loop_control:
+#    loop_var: slave_ip
+
 - name: Force slaveip config generation
   file:
     dest: /run/alternc/refresh_slave
