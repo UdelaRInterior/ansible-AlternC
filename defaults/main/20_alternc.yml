@@ -85,6 +85,9 @@ phpmyadmin_debconf_dbconfig_reinstall: false
 ## used for buster needs not yet in the repositories 
 
 ## A workaround to have our local copy of alternc that we modify (for this bug: https://github.com/AlternC/AlternC/pull/378)
-alternc_replace_alternc_install: no
+alternc_replace_alternc_install: yes
 
+## A workaround to fix opendkim template, see: https://github.com/AlternC/AlternC/issues/404
+# alternc_fix_opendkim_template: yes
+  
 ...

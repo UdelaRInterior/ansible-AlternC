@@ -11,18 +11,21 @@
 ## Yes we do: https://github.com/AlternC/AlternC/issues/458
   - run alternc.install 2
 
-###### is it still needed? 
-## It is yet: ->  https://github.com/AlternC/AlternC/issues/457
-## As far as alternc koumbit version 3.5.0~rc1+0~20201103184407.66~1.gbp1b3d3f, the bug persists 
-- name: Patch-- replace alternc.install with a version for debian buster (still valid???)
+###### Workaround, replacing alternc.install. Check for new alternc package releases!
+## Up to alternc koumbit version 3.5.0~rc1+0~20201103184407.66~1.gbp1b3d3f, alternc.instal was replaced
+## for buster because of a bad check of php version: https://github.com/AlternC/AlternC/issues/459
+## Fixed in PR: https://github.com/AlternC/AlternC/pull/461 and packaged in alternc_3.5.0~rc1+0~20210517184411.71~1.gbp3007b6
+## Now we have to replace alternc.instal to properly configure opendkim in buster and upper.
+## till merge and packaging of PR:  https://github.com/AlternC/AlternC/pull/474
+- name: Patch-- replace alternc.install with a fixed version for debian buster
   copy:
-    src: files/alternc.install
+    src: files/alternc.install-PR474
     dest: /usr/share/alternc/install/alternc.install
     owner: root
     group: root
     mode: 0755
     backup: yes
-  when: alternc_replace_alternc_install
+  when: alternc_replace_alternc_install | bool
 
 - block: 
   - name: Install "mailman", mailing lists managment system
@@ -83,6 +86,17 @@
 #    backup: yes
 #  when: ansible_distribution_release == "buster"
 #  tags: workaround
+
+#### 
+### Workaround of this bug: https://github.com/AlternC/AlternC/issues/404
+#- name: Fix opendkim alternc template
+#  lineinfile:
+#    path: /etc/alternc/templates/opendkim.conf
+#    line: PidFile            /run/opendkim/opendkim.pid
+#    regexp: ^PidFile
+#    backup: yes
+#    state: present
+#  when: alternc_fix_opendkim_template | bool
 
 - name: Trigger handlers to install AlternC and notify restart Apache2
   meta: flush_handlers
