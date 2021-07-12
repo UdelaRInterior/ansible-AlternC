@@ -12,7 +12,7 @@
 # DNS slave bind IPs configuration by this role is not idempotent, so when you
 # want to configure or change them set the following flag to `yes`, run your playbook calling 
 # the role, and then set it again to `no`. If you let yes, the role will re-build bind config
-# each tome you run it, changing files' modification dates, even in no change done. 
+# each time you run it, changing files' modification timestamp, even in no change done. 
 alternc_slavedns_bind_ips_configure: no
 
 alternc_slavedns_bind_ips: []
