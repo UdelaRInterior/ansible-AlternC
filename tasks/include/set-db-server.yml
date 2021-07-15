@@ -1,0 +1,20 @@
+---
+# Tasks for the loop configurirng the external DB servers
+
+- name: Setting external MySql servidores provided
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      'SELECT * FROM db_servers WHERE name = "{{ alternc_db_server.name }}"'
+  register: db_server_query
+
+- debug: 
+    var: db_server_query
+
+- name: Setting external MySql servidores provided
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      'INSERT INTO db_servers (name, host, login, password, client) 
+      VALUES ("{{ alternc_db_server.name }}", "{{ alternc_db_server.host }}", "{{ alternc_db_server.login }}", "{{ alternc_db_server.password }}", \"%\")'
+  when: db_server_query
+
+...

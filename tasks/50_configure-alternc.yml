@@ -1,0 +1,76 @@
+---
+# Automate some configuration tasks, specially admin password
+
+# Recuperando id del administrador (admin).
+- name: Fetching AlternC administrator user id
+  shell: mysql {{ alternc_query_options }} 'SELECT uid FROM membres WHERE login="{{ alternc_admin_user }}"'
+  register: alternc_admin_uid
+
+- name: Fetch salt password AlternC variable
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "SELECT value FROM variable WHERE name='salt_password_reset'"
+  register: alternc_salt
+
+- debug:
+    var: alternc_salt
+
+# Estableciendo password de acceso para el administrador AlternC.
+- name: Set AlternC administrator's password  
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "UPDATE membres SET pass=ENCRYPT( '{{ alternc_admin_pass }}', 'alternc_salt.stdout' ) WHERE uid = {{ alternc_admin_uid.stdout }}"
+
+- name: Deleting quota profiles (except 'default')
+  shell: mysql {{ alternc_query_options }} 'DELETE FROM defquotas WHERE type != "default" '
+  when: alternc_quota_profiles_ansible_exclusive | bool
+
+- name: Setting quota profiles
+  include_tasks: include/set-quotas.yml
+  loop: "{{ alternc_quota_profiles }}"
+  loop_control:
+    loop_var: quota_profile
+
+- name: Set administrators' quotas 
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "UPDATE quotas SET total='{{ service_quota.value }}' WHERE uid={{ alternc_admin_uid.stdout }} AND name='{{ service_quota.key }}'"
+  loop: "{{ alternc_quota_profiles | json_query( alternc_quota_profile_query ) | first | dict2items }}"
+  loop_control:
+    loop_var: service_quota
+  vars:
+    alternc_quota_profile_query: '[?name==`{{ alternc_admin_quotas.profile }}`].quotas'
+  when: alternc_admin_quotas.set | bool
+
+# Eliminando dominios de hospedage instalados por omisión.
+- name: Deleting default authorized hosting TLDs
+  shell: mysql {{ alternc_query_options }} 'DELETE FROM tld'
+  when: alternc_authorized_tld_ansible_exclusive | bool
+
+- name: Set TLDs allowed to be hosted in the AlternC server
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "INSERT INTO tld (tld, mode) VALUES ('{{ alternc_tld.domain }}', {{ alternc_tld.mode }})
+      ON DUPLICATE KEY UPDATE mode = {{ alternc_tld.mode }} "
+  loop: "{{ alternc_authorized_tld }}"
+  loop_control:
+    loop_var: alternc_tld
+
+- name: Set AlternC configuration variables in the database
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "INSERT INTO variable (name, value, comment) 
+      VALUES ('{{ alternc_variable.name }}', '{{ alternc_variable.value }}', '{{ alternc_variable.comment }}')
+      ON DUPLICATE KEY UPDATE value = '{{ alternc_variable.value }}', comment = '{{ alternc_variable.comment }}' "
+  loop: "{{ alternc_config_variables }}"
+  loop_control:
+    loop_var: alternc_variable
+  when: alternc_config_variables is defined
+
+- name: Setting external MySql servers provided
+  include_tasks: include/set-db-server.yml
+  loop: "{{ alternc_db_servers }}"
+  loop_control:
+    loop_var: alternc_db_server
+
+...

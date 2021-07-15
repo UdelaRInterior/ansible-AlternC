@@ -1,0 +1,30 @@
+---
+###################################################################
+####   AlternC ansible role - default variables                ####
+####   https://github.com/UdelaRInterior/ansible-alternc       ####
+####  Variables related to packages from the role AlternC      ####
+###################################################################
+
+# Custom AlternC debian repository
+# If these optional variables are set, they overrride the default repos variables by distribution in vars/ files
+# alternc_repo_custom: 'http://debian.koumbit.net/debian'
+# alternc_branch_custom: 'alternc35 main'
+# alternc_key_custom: 'key.asc'
+
+# Custom PHP version
+# If this optional variable is set, it overrrides the default php version by distribution in vars/ files
+# alternc_php_version: '7.3'
+
+## Flag defining for buster if we take phpmyadmin from backports or form Sid
+# For buster, if `alternc_phpmyadmin_backport` we install backports phpmyadmin, if not from Sid
+alternc_debian_backport: yes
+
+# Custom debian buster backports repositories
+alternc_debian_backport_repo: http://ftp.debian.org/debian/
+alternc_debian_backport_branch: buster-backports main contrib
+
+# Custom debian sid repo for phpmyadmin when we install AlternC in buster 
+alternc_debian_sid_repo: '{{ alternc_debian_backport_repo }}'
+alternc_debian_sid_branch: sid main
+
+...

@@ -1,26 +1,37 @@
 ---
 ## Variables to install AlternC on Debian stretch
 
-# Repositorio de AlternC 3.5.
-alternc_repo: 'http://debian.koumbit.net/debian'
-alternc_branch: 'alternc35 main'
-alternc_key: 'key.asc'
+# Repositorio de AlternC
 
-packages:
-- "php7.0-common"
-- "php7.0-curl"
-- "php7.0-gd"
-- "php7.0-intl"
-- "php7.0-json"
-- "php7.0-mysql"
-- "php7.0-mbstring"
-- "php7.0-mcrypt"
-- "php7.0-imagick"
-- "php7.0-pgsql"
-- "php7.0-xml"
-- "php7.0-xmlrpc"
-- "php7.0-zip"
+# buster de AlternC official repository - PRESENTLY: BROKEN, DOESN'T WORK
+# alternc_repo: 'http://debian.alternc.org'
+# alternc_branch: 'buster main'
+# alternc_key: 'key.txt'
+
+alternc_repo: '{{ alternc_repo_custom if alternc_repo_custom is defined else "http://debian.koumbit.net/debian" }}'
+alternc_branch: '{{ alternc_branch_custom if alternc_branch_custom is defined else "alternc35 main" }}'
+alternc_key: "{{ alternc_key_custom if alternc_key_custom is defined else 'key.asc' }}"
+
+alternc_php_version_dist: '{{ alternc_php_version alternc_php_version is defined else "7.0" }}'
+
+alternc_packages:
+- "php{{ alternc_php_version_dist }}-common"
+- "php{{ alternc_php_version_dist }}-curl"
+- "php{{ alternc_php_version_dist }}-gd"
+- "php{{ alternc_php_version_dist }}-intl"
+- "php{{ alternc_php_version_dist }}-json"
+- "php{{ alternc_php_version_dist }}-mysql"
+- "php{{ alternc_php_version_dist }}-mbstring"
+- "php{{ alternc_php_version_dist }}-mcrypt"
+- "php{{ alternc_php_version_dist }}-imagick"
+- "php{{ alternc_php_version_dist }}-pgsql"
+- "php{{ alternc_php_version_dist }}-xml"
+- "php{{ alternc_php_version_dist }}-xmlrpc"
+- "php{{ alternc_php_version_dist }}-zip"
+- quota
 
 packages_mysql:
 - mysql-server
 - mysql-client
+
+...

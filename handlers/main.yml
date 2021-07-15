@@ -3,11 +3,11 @@
 
 - name: run alternc.install
   shell: "alternc.install"
-  register: resultado_alternc_install
+  register: alternc_install_result
 
 - name: run alternc.install 2
   shell: "alternc.install"
-  register: resultado_alternc_install2
+  register: alternc_install_result2
 
 - name: AlternC - Restart Apache2
   service:

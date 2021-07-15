@@ -5,6 +5,7 @@ galaxy_info:
   author:
     - Oscar Ford
     - Santiago Martínez (@santiagomr)
+    - Daniel Viñar Ulriksen (@ulvida)
   description: Ansible role to install web panel AlternC
   company: Red Unidades Informáticas UdelaR Interior (@UdelaRInterior)
 

@@ -1,0 +1,74 @@
+---
+# Packages installation required for AltenC 
+
+# Módulos PHP de propósito general pero que no se incluye en el instalador de AlternC
+- name: Install or update most popular PHP modules not included in AlternC dependencies
+  apt:
+    name: "{{ alternc_packages }}"
+    cache_valid_time: 3600
+    state: latest
+
+- name: Install MySql database server (may be long, take a coffee!! )
+  apt:
+    name: "{{ alternc_packages_mysql }}"
+    state: latest
+    default_release: stable  # redundant
+    cache_valid_time: 3600
+
+### I don't know how arrived this package... 
+## remove these comments in a future version
+#- name: Install or update apt-transport-https
+#  apt:
+#    name: apt-transport-https
+#    state: present
+#    cache_valid_time: 3600
+
+### Do we need this package???
+#- name: Install augeas-lenses
+#  apt:
+#    name: augeas-lenses
+#    state: present
+#    cache_valid_time: 3600
+#  when: ansible_distribution_release == "buster"
+
+- name: Install or update phpmyadmin backports dist dependencies 
+  apt:
+    name: 
+    - php-twig 
+    state: latest
+    default_release: buster-backports
+    cache_valid_time: 3600
+  when: ansible_distribution_release == "buster" and alternc_debian_backport
+
+- name: Install or update phpmyadmin Sid dist dependencies 
+  apt:
+    name: 
+    - libjs-sphinxdoc
+    # See: https://github.com/UdelaRInterior/ansible-AlternC/issues/16
+    - php-twig 
+    - php-symfony-config
+    - php-symfony-dependency-injection
+    - php-symfony-expression-language
+    - php-symfony-service-contracts
+    - php-symfony-yaml
+    default_release: sid
+    state: latest
+    cache_valid_time: 3600
+  when: ansible_distribution_release == "buster" and not alternc_debian_backport
+
+### These packages are ok by dependencies in stable. 
+## remove these comments in a future version
+#- name: Install or update dependencies of alternc-certificate-provider-letsencrypt
+#  apt:
+#    name: 
+#    # - python3-cffi-backend  #alternc installs it
+#    # - python3-distutils
+#    # - python3-lib2to3
+#    # - python3-zope.hookable
+#    # - python3-zope.interface
+#    default_release: sid
+#    state: latest
+#    cache_valid_time: 3600
+#  when: ansible_distribution_release == "buster"
+
+...

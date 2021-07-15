@@ -1,11 +1,10 @@
 # Role AlternC
 
-Install and configure [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container).
+Installs and configures [AlternC](https://alternc.com/Home-en) in a server (baremetal, virtual or container - but this last has still some problems with Let's Encrypt certificates).
 
-Configures AltenrC hosting panel, that allows any user thas has an account to access AltenrC web GUI, to manage
-the hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts and mailboxes.
+Configures AltenrC hosting panel, that allows any user who has an account to access AltenrC web GUI, to manage her hosting zones, configure its DNS, web virtual hosts in sub-domains, mysql databases, ftp accounts as well as mail addresses and mailboxes. Content of web site can be uploaded through FTP as well as through Alternc web GUI.
 
-Content of web site can be uploaded through FTP as well as through Alternc web GUI.
+The role also manages the mailman, awstat and roundcube plugins. It handles also the logos that can be customized 
 
 ## Requirements
 
@@ -26,19 +25,50 @@ $ cd myroles
 $ ansible-galaxy install udelarinterior.alternc
 ```
 
-and call it in your playbooks to run it against a freshlly installed Debian Stretch.
+and call it in your playbooks to run it against a freshlly installed Debian stretch or buster host.  
 
 ## Role Variables
 
-Variables needed are listed and documented in the `/defaults/main.yml` file. They include the debconf paramenters
-needed when installing AltenrC package and dependencies, as well as those needed to cofigure after the AltenrC panel
-(hosting web GUI).
+Variables needed are listed and documented in files in the [`/defaults/main`](defaults/main) folder:
+* [`05_packages.yml`](/defaults/main/05_packages.yml): Repositories and dependencies packages related variables, 
+* [`10_mysql.yml`](/defaults/main/10_mysql.yml): MySQL related variables, 
+* [`20_alternc.yml`](/defaults/main/20_alternc.yml): AlternC main variables, mainly given to the package installation with debconf ansible module 
+* [`30_alternc-panel.yml`](/defaults/main/30_alternc-panel.yml): Further configuration of AlternC interface, including AlternC TLDs, quota profiles and variables
+* [`40_alternc-plugins.yml`](/defaults/main/40_alternc-plugins.yml): Mailman, roundcube, awstat and piwik related variables
+* [`50_post-install.yml`](/defaults/main/50_post-install.yml): php.ini, Proftpd and other useful additional configuration
+* [`60_alternc-slavdns.yml`](/defaults/main/60_alternc-slavdns.yml): accounts configuration for alternc-slavedns secondary servers' access
+* [`70_alternc-custom.yml`](/defaults/main/70_alternc-custom.yml): customization of alternc (Login page logo, panel menu logo and favicon customization )
 
-Most of them need to be defined when calling the role, according to your environement.
+They include the debconf paramenters needed when installing AltenrC package and dependencies, as well as those needed to configure after the AltenrC panel (hosting web GUI).
+
+Almost all default values are those already provided by AlternC. Several default values are defined from ansible facts so you need to define only your specific values (like the desktop DNS if you want to define it different than the fqdn of the host). The role now allows to set and maintain almost all the parameters of AlternC. 
 
 ## Dependencies
 
-There are no dependencies form other ansible roles, but you need to have a host with a Debian Stretch installed.
+There are no required dependencies from other ansible roles, but the role provides examples of configuration parameters for PHP, suited for an AlternC installation, that can be set with the role [`udelarinterior.configure_php_ini` ](https://github.com/UdelaRInterior/ansible-role-configure-php-ini).
+
+## Playbook example
+
+With: 
+* the role insalled in your local controller, 
+* a debian buster installed in `myserver.mydomain.org`
+* DNS configured with, for instance, a CNAME record for `panel.mydomain.org` returning `myserver.mydomain.org`
+
+You can install AlternC with all its plugins with a playbook such as:
+
+```YAML
+- name: Configure AlternC on an already deployed OS Linux Debian 
+  hosts: myserver.mydomain.org
+  remote_user: deploy
+  become: yes
+
+  vars:
+    alternc_debconf_desktopname: panel.mydomain.org
+
+  roles:
+  - udelarinterior.alternc
+
+```
 
 ## License
 

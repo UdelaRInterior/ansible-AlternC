@@ -1,0 +1,142 @@
+---
+# file debconf.yml of ALternC role
+# set up of debconf parameters according to variables
+
+- name: Install "debconf" and "debconf-utils"
+  apt:
+    name:
+    - debconf
+    - debconf-utils
+    cache_valid_time: 3600
+    state: latest
+
+- name: Fix debconf options for alternc and phpmyadmin
+  debconf:
+    name: '{{ alternc_debconf_option.name }}'
+    question: '{{ alternc_debconf_option.question }}'
+    value: '{{ alternc_debconf_option.value }}'
+    vtype: '{{ alternc_debconf_option.vtype }}'
+  loop_control:
+    loop_var: alternc_debconf_option
+  loop:
+  # phpmyadmin webserver (apahe2 or httpd)
+  - name: phpmyadmin
+    question: phpmyadmin/reconfigure-webserver
+    value: "{{ phpmyadmin_debconf_reconfigure_webserver }}"
+    vtype: multiselect
+
+  # Nombre de tu servicio de hospedaje.
+  - name: alternc
+    question: alternc/hostingname
+    value: "{{ alternc_debconf_hostingname }}"
+    vtype: string
+
+  # Nombre de dominio completo del panel de hospedaje
+  - name: alternc
+    question: alternc/desktopname
+    value: "{{ alternc_debconf_desktopname }}"
+    vtype: string
+
+  # La ip principal del servidor
+  - name: alternc
+    question: alternc/public_ip
+    value: "{{ alternc_debconf_public_ip }}"
+    vtype: string
+
+  # La dirección ip interna del servidor
+  - name: alternc
+    question: alternc/internal_ip
+    value: "{{ alternc_debconf_internal_ip }}"
+    vtype: string
+
+  # Nombre de dominio del servidor DNS primario
+  - name: alternc
+    question: alternc/ns1
+    value: "{{ alternc_debconf_ns1 }}"
+    vtype: string
+
+  # Nombre de dominio del servidor DNS secundario
+  - name: alternc
+    question: alternc/ns2
+    value: "{{ alternc_debconf_ns2 }}"
+    vtype: string
+
+  # El MX por omisión que se asigna a los nuevos dominios
+  - name: alternc
+    question: alternc/default_mx
+    value: "{{ alternc_debconf_default_mx }}"
+    vtype: string
+
+  # Se debe utilizar el servidor MySql local identificado automáticamente?
+  - name: alternc
+    question: alternc/mysql/host
+    value: "{{ alternc_debconf_mysql_host }}"
+    vtype: string
+
+  # Carpeta en que los archivos HTML de los usuarios AlternC serán almacenados
+  - name: alternc
+    question: alternc/alternc_html
+    value: "{{ alternc_debconf_alternc_html }}"
+    vtype: string
+
+  # Carpeta en la que se almacenan los correos de los usuarios
+  - name: alternc
+    question: alternc/alternc_mail
+    value: "{{ alternc_debconf_alternc_mail }}"
+    vtype: string
+
+  # Carpeta en la que se almacenarán las bitácoras de AlternC
+  - name: alternc
+    question: alternc/alternc_logs
+    value: "{{ alternc_debconf_alternc_logs }}"
+    vtype: string
+
+  # Desea configurar la base de datos para phpmyadmin con dbconfig-common
+  - name: phpmyadmin
+    question: phpmyadmin/dbconfig-upgrade
+    value: "{{ phpmyadmin_debconf_dbconfig_upgrade }}"
+    vtype: boolean
+
+  # Contraseña de aplicación MySql para phpmyadmin (1)
+  - name: phpmyadmin
+    question: phpmyadmin/mysql/admin-pass
+    value: "{{ phpmyadmin_debconf_mysql_admin_pass }}"
+    vtype: password
+
+  # Contraseña de aplicación MySql para phpmyadmin (2)
+  - name: phpmyadmin
+    question: phpmyadmin/mysql/app-pass
+    value: "{{ phpmyadmin_debconf_mysql_app_pass }}"
+    vtype: password
+
+  # Contraseña de aplicación MySql para phpmyadmin (3)
+  - name: phpmyadmin
+    question: phpmyadmin/app-password-confirm
+    value: "{{ phpmyadmin_debconf_app_password_confirm }}"
+    vtype: password
+
+  # Desea reinstalar la base de datos phpmyadmin?
+  - name: phpmyadmin
+    question: phpmyadmin/dbconfig-reinstall
+    value: "{{ phpmyadmin_debconf_dbconfig_reinstall }}"
+    vtype: boolean
+
+  # Idiomas a soportar (mailman)
+  - name: mailman
+    question: mailman/site_languages
+    value: "{{ mailman_debconf_site_languages }}"
+    vtype: multiselect
+
+  # Idioma por omisión para "mailman").
+  - name: mailman
+    question: mailman/default_server_language
+    value: "{{ mailman_debconf_default_server_language }}"
+    vtype: select
+
+  # Patch mailman proporcionado por "koumbit.org" para el soporte de listas virtuales
+  - name: alternc-mailman
+    question: alternc-mailman/patch-mailman
+    value: "{{ alternc_mailman_debconf_patch_mailman }}"
+    vtype: boolean
+
+...

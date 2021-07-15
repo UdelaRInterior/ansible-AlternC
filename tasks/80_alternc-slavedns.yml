@@ -1,0 +1,39 @@
+---
+# Set alternc-slavedns servers configurations in master AlternC server
+
+- name: Configurig AlternC slavedns allowed IPs
+  block:
+
+  - name: Deleting existing AlternC slavedns allowed IPs
+    shell: mysql {{ alternc_query_options }} 'DELETE FROM slaveip'
+    when: alternc_slavedns_bind_ips_ansible_exclusive | bool
+
+  - name: Configuring slave DNS authorized IPs in master server
+    shell: >
+        mysql {{ alternc_query_options }} 
+        "INSERT IGNORE INTO slaveip (ip, class) VALUES ('{{ slave_ip.ip }}', '{{ slave_ip.mask }}')"
+    loop: "{{ alternc_slavedns_bind_ips }}"
+    loop_control:
+      loop_var: slave_ip
+
+  - name: Force slaveip config generation
+    file:
+      dest: /run/alternc/refresh_slave
+      state: touch
+
+  when: alternc_slavedns_bind_ips_configure | bool
+
+- name: Deleting existing AlternC slavedns accounts
+  shell: mysql {{ alternc_query_options }} 'DELETE FROM slaveaccount'
+  when: alternc_slavedns_credentials_ansible_exclusive | bool
+
+- name: Configuring slave DNS accounts in master server
+  shell: > 
+      mysql {{ alternc_query_options }} 
+      "INSERT INTO slaveaccount (login, pass) VALUES ('{{ slave_account.login }}', '{{ slave_account.password }}') 
+      ON DUPLICATE KEY UPDATE pass = '{{ slave_account.password }}'"
+  loop: "{{ alternc_slavedns_credentials }}"
+  loop_control:
+    loop_var: slave_account
+
+...

@@ -1,0 +1,222 @@
+---
+###################################################################
+####   AlternC ansible role - default variables                ####
+####   https://github.com/UdelaRInterior/ansible-alternc       ####
+####              alternc panel configuration                  ####
+###################################################################
+
+# MySql query options / Opciones de consulta MySql. Move this variable to defaults/10_mysql.yml?
+alternc_query_options: " --defaults-file=/etc/alternc/my.cnf --skip-column-names alternc -B -e "
+
+# AlternC panel default administrador
+alternc_admin_user: admin
+
+# Administrator password  
+# Better to put it in a vault with a variable indirection, we suggest here the name: vault_alternc_admin_pass
+# We don't use to initiate passwords with default values, to avoid unsecure installs, but alternc.install does. Better this one.
+alternc_admin_pass: '{{ vault_alternc_admin_pass if vault_alternc_admin_pass is defined else "Adm1n1stradoR" }}'
+
+### Quotas configuration / Configuración de cuotas ###
+
+  # aws: Awstats - Statistics / Estadísticas.
+  # cron: Planned tasks / Tareas planificadas.
+  # dom: Domain names / Dominios.
+  # ftp: ftp accounts / Cuentas ftp.
+  # mail: Email accounts / Cuentas de correo.
+  # mailman: Mailing lists / Listas de correo.
+  # mysql: Databases / Bases de datos.
+  # piwiki: Statistics with piwiki (not managed) / Estadisticas a través de piwiki (no habilitado).
+  # web: Space for web files / Espacio de almacenamiento (1Gb=10448576).
+
+# You must at leas define de "detault" quota profile
+alternc_quota_profiles:
+- name: default
+  quotas: { aws: 2, cron: 0, dom: 1, ftp: 2, mail: 5, mailman: 1, mysql: 1, piwik: 0, web: 524288 }
+- name: myalternc1gb
+  quotas: { aws: 5, cron: 5, dom: 5, ftp: 10, mail: 50, mailman: 10, mysql: 10, piwik: 0, web: 1048576 }
+- name: myalternc5gb
+  quotas: { aws: 10, cron: 10, dom: 10, ftp: 20, mail: 100, mailman: 20, mysql: 20, piwik: 0, web: 5242850 }
+
+# When running role, delete other authorized quota profiles than those hereabove and 'default', existing in the AlternC server
+# no: preserve existing quota profiles, inserting new from playbook variables, updating those existing. 
+alternc_quota_profiles_ansible_exclusive: no
+
+# Optionally choose a quota profile for existing `admin` user
+alternc_admin_quotas:
+  set: yes # do we set admin quotas when running the role
+  profile: default
+
+# Top Level Domains (TLDs) authorized to be hosted in the AlternC 
+alternc_authorized_tld:
+- { domain: asia, mode: 1 }
+- { domain: asso.fr, mode: 4 }
+- { domain: be, mode: 1 }
+- { domain: biz, mode: 1 }
+- { domain: ca, mode: 1 }
+- { domain: cjb.net, mode: 4 }
+- { domain: com, mode: 1 }
+- { domain: coop, mode: 1 }
+- { domain: eu, mode: 1 }
+- { domain: eu.org, mode: 4 }
+- { domain: fr, mode: 4 }
+- { domain: info, mode: 1 }
+- { domain: it, mode: 1 }
+- { domain: name, mode: 1 }
+- { domain: net, mode: 1 }
+- { domain: org, mode: 1 }
+- { domain: ws , mode: 1 }
+
+# The 'mode' parameter in the previous structure specifies the checks and rules to host a domain:  
+#   0 => _("This TLD is forbidden"),
+#   1 => _("primary DNS is checked in WHOIS db"),
+#   2 => _("primary & secondary DNS are checked in WHOIS db"),
+#   3 => _("Domain must exist, but don't do any DNS check"),
+#   4 => _("Domain can be installed, no check at all"),
+#   5 => _("Domain can be installed, force NO DNS hosting"),
+# 
+# See: https://github.com/AlternC/AlternC/blob/3.5.rc2/bureau/class/m_admin.php#L56
+
+# When running role, delete other authorized TLDs existing in the AlternC server, than those hereabove
+# no: preserve existing TLDs, inserting new from playbook variables, updating those existing. 
+alternc_authorized_tld_ansible_exclusive: no
+
+# Preferred protocol for AlternC web panel. http or https
+# If you use altenrc-slavedns role, you would better put this variable in a group where are the master and the dns slave(s)
+alternc_desktop_protocol: https   
+
+alternc_config_variables:
+- name: force_https
+  value: '{{ 1 if alternc_desktop_protocol == "https" else 0 }}'
+  comment: 'This variable is set to 0 (default) if users can access the management desktop through HTTP, otherwise we force HTTPS'
+
+
+## AlternC configuration variables (see web interface, Configuration panel -> Configure AltenrC variables )
+# You can add custom values, but you have to include the previous `force_https` definition if yo want to 
+# preserve the use of `alternc_desktop_protocol` ansible variable. 
+# (For full text `comment:`, we need to double escape the single quote ' (4 ', '''', to obtains one in the database) because they are parsed in an SQL sentence.)
+# (No way to make better using " around the whole text because the SQL sentence in this role has single quotes around the hash value.                           )
+## alternc_config_variables:
+## - name: archive_del_data
+##   value: 
+##   comment: 'If folder specified html folder of deleted user is archived, else it is deleted.'
+## - name: auth_ip_ftp_default_yes
+##   value: 1
+##   comment: 'This variable sets if you want to allow all IP address to access FTP by default. If the user start to define some IP or subnet in the allow list, only those he defined will be allowed.'
+## - name: debug_panel
+##   value: 1
+##   comment: 'Set it to 1 to enable panel debug in /var/log/alternc/bureau.log'
+## - name: default_certificate_fqdn
+##   value: '{{ alternc_debconf_desktopname }}'
+##   comment: 'FQDN of the certificate we will use as a default one before getting a proper one through any provider. If unsure, keep the default'
+## - name: default_dmarc_value
+##   value: 'p=none;pct=100;rua=%%ADMINMAIL%%;aspf=r;adkim=r'
+##   comment: 'This variable (if set) tells the DMARC/TXT DNS field that will be published as a DMARC entry, telling which policy you apply to this domain name. You can still change it later in the advanced DNS entries for ONE domain, this entry is only set once for new domains (or when you change it here). You can use %%ADMINMAIL%% or %%USERMAIL%% to substitute to admin-account or alternc user-account email address.'
+## - name: default_spf_value
+##   value: 'a mx ?all'
+##   comment: 'This variable (if set) tells the SPF/TXT DNS field that will be published as a SPF entry, telling which server(s) are allowed to send email for this one. You can still change it later in the advanced DNS entries for ONE domain, this entry is only set once for new domains (or when you change it here).'
+## - name: disk_quota_enable
+##   value: 1
+##   comment: 'Are disk quota enabled for this server'
+## - name: disk_quota_not_blocking
+##   value: 1
+##   comment: '0 - Block data when quota are exceeded (you need a working quota system) | 1 - Just show quota but don''''t block anything'
+## - name: favicon
+##   value: favicon.ico
+##   comment: 'You can specify a favicon, for example /images/my_logo.ico'
+## - name: force_https
+##   value: '{{ 1 if alternc_desktop_protocol == "https" else 0 }}'
+##   comment: 'This variable is set to 0 (default) if users can access the management desktop through HTTP, otherwise we force HTTPS'
+## - name: fqdn_dovecot
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'FQDN name for humans for pop/imap services. If you change it, launch reload-certs'
+## - name: fqdn_postfix
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'FQDN name for humans for smtp services. If you change it, launch reload-certs'
+## - name: fqdn_proftpd
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'Human name for FTP server. If you change it, launch reload-certs'
+## - name: hosting_tld
+##   value: 
+##   comment: 'This is a FQDN that designates the main hostname of the service. For example, hosting_tld determines in what TLD the "free" user domain is created. If this is set to "example.com", a checkbox will appear in the user creation dialog requesting the creator if he wants to create the domain "username.example.com".'
+## - name: https_warning
+##   value: 1
+##   comment: 'warn users to switch to HTTPS'
+## - name: last_certificate_id
+##   value: 1545
+##   comment: 'Latest certificate ID parsed by update_domains. Do not change this unless you know what you are doing'
+## - name: logo_login
+##   value: 
+##   comment: 'You can specify a logo for the login page, example /images/my_logo.png .'
+## - name: logo_menu
+##   value: 
+##   comment: 'You can specify a logo for the menu, example /images/my_logo.png .'
+## - name: lxc_ip
+##   value: 
+##   comment: 'IP address of the Alternc''''s LXC server. If empty, no LXC server.'
+## - name: lxc_key
+##   value: 
+##   comment: 'Shared key with the Alternc''''s LXC server'
+## - name: lxc_maxtime
+##   value: 4
+##   comment: 'How many hours do we allow to have a server before shutting it down'
+## - name: lxc_port
+##   value: 6504
+##   comment: 'Port of the Alternc''''s LXC server'
+## - name: mailman_url
+##   value: 0
+##   comment: 'This is the domain name that will be used to build mailman''''s interface links. Set this to 0 or a "false" string to ignore and keep the default behavior (hosted domain in the URL).'
+## - name: mailname_bounce
+##   value: '{{ alternc_server_fqdn }}'
+##   comment: 'FQDN of the mail server, used to create vhost virtual mail_adress.'
+## - name: new_email
+##   value: 0
+##   comment: 'An email will be sent to this address when new accounts are created if set.'
+## - name: password_reset_expiration
+##   value: 86499
+##   comment: 'The number of seconds for which a password reset link is valid'
+## - name: piwik_admin_token
+##   value: 
+##   comment: 'Remote Piwik super-admin token'
+## - name: piwik_server_uri
+##   value: 
+##   comment: 'Remote Piwik server uri'
+## - name: rss_feed
+##   value: 
+##   comment: 'This is an RSS feed that will be displayed on the users homepages when they log in.'
+## #- name: salt_password_reset
+## #  value: DJ3pN1MSP/qg48J0FeH9H75riruaCQ15jmOU3cHbQvGEjxxCeX1ewiwwNi/yHW4roe8OiVCTLOls70jmCBcee3k7wx+9N2XYtaAPUVPRPpmSH2GZa06BrW3A22nKIT6lKz0FCKKeBeE0Lr2otWr5aYJizuaF4E4IqRusmSaK5qw=
+## #  comment: 'The salt used when hasing password resets - change to invalidate all existing reset tokens'
+## - name: sql_allow_users_backups
+##   value: 1
+##   comment: 'Set 1 to allow users to configure backup of their databases, 0 if you want do disable this feature. Warning: it will not stop configured backup made by sqlbackup.sh'
+## - name: sql_max_database_length
+##   value: 64
+##   comment: 'Maximum length allowed for SQL database names by your SQL server (do not modify unless you know what you do)'
+## - name: sql_max_username_length
+##   value: 80
+##   comment: 'Maximum length allowed for SQL usernames by your SQL server (do not modify unless you know what you do)'
+## - name: subadmin_restriction
+##   value: 0
+##   comment: 'This variable sets the way the account list works for accounts other than ''''admin'''' (2000). 0 (default) = admin other than admin/2000 can see their own account, but not the other one 1 = admin other than admin/2000 can see any account by clicking the ''''show all accounts'''' link.'
+## - name: tld_no_check_at_all
+##   value: 0
+##   comment: 'Disable ALL check on the TLD (users will be able to add any domain)'
+
+## MySQL external servers. When creating an alternc user, her databases can be in another server than localhost. 
+#  Here we define such servers, the MySQL user must have users and dbs creation privileges. 
+# 
+# Servidores de bases de datos MySql externos. Al crear un nuevo usuario AlternC se le puede asignar 
+# servidores de bd distintos del localhost. Aquí se definen estos servidores; el login proporcionado debe tener
+# permisos para crear bd y usuarios.
+
+alternc_db_servers: []
+# - name: server2
+#   host: server2.mydomain.org
+#   login: alternc
+#   password: *******
+# - name: server3
+#   host: server3.mydomain.org
+#   login: alternc
+#   password: *******
+
+...

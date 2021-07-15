@@ -5,12 +5,7 @@
 ####              Mysql configuration variables                ####
 ###################################################################
 
-# Password for mysql root user
-root_pass_mysql: 'Clave_rooT_1234'
-# better to put it in a vault with
-# root_pass_mysql: "{{ vault_root_pass_mysql }}" 
-
-# To Make Mysql listen on public IP (open also the firewall) 
+# To Make Mysql listen on public IP (open also the firewall, but the minimum!) 
 alternc_open_mysql: no
 
 alternc_extra_mysql_users: []

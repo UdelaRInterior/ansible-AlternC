@@ -8,31 +8,31 @@
 # Parámetros a setear en el template apache2.conf de AlternC
 alternc_apache_php_ini_configurations:
   - parameter: 'php_value upload_max_filesize'
-    value: 2G
+    value: 100M
   - parameter: 'php_value post_max_size'
-    value: 2G
+    value: 100M
 
 alternc_phpmyadmin_configurations:
   - parameter: 'php_admin_value upload_max_filesize'
-    value: 2G
+    value: 100M
   - parameter: 'php_admin_value post_max_size'
-    value: 2G
+    value: 100M
 
 
-# Parámetros a setear en el template  phpmyadmin.inc.php de AlternC
-alternc_phpmyadmin_blowfish_secret: '-tEfgeJ6467A2J9_vhi5F-ry58PAv+JPY%btr8))y]LdjgUY48lCZxTe@!#L*L'
-
+# Parámetros a setear en el template phpmyadmin.inc.php de AlternC
+# You can define in a vault this secret hash with a good length 
+# alternc_phpmyadmin_blowfish_secret: '-tEfgeJ6467A2J9_vhi5F-ry58PAv+JPY%btr8))y]LdjgUY48lCZxTe@!#L*L'
 
 alternc_proftpd_configurations:
-  - parameter: 'UseIPv6'
+  - parameter: UseIPv6
     value: 'off'
-  - parameter: 'TimeoutNoTransfer'
-    value: '600'
-  - parameter: 'TimeoutStalled'
-    value: '600'
-  - parameter: 'TimeoutIdle'
-    value: '1200'
-  - parameter: 'PassivePorts'   # Rango de puertos que ProFTPd empleará para datos en modo pasivo
+  - parameter: TimeoutNoTransfer
+    value: 600
+  - parameter: TimeoutStalled
+    value: 600
+  - parameter: TimeoutIdle
+    value: 1200
+  - parameter: PassivePorts     # Rango de puertos que ProFTPd empleará para datos en modo pasivo
     value: '50000 60000'        # En caso de contar con un firewall, estos puertos deben encontrarse abiertos en él
 
 alternc_postfix_main_configurations: []

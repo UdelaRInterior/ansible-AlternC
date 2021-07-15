@@ -1,0 +1,12 @@
+---
+# Loop to define the services' quotas of a profile
+
+- name: Define services' quotas of a profile
+  shell: >
+      mysql {{ alternc_query_options }} 
+      "INSERT INTO defquotas (quota, value, type) VALUES ('{{ service_quota.key }}', '{{ service_quota.value }}', '{{ quota_profile.name }}') 
+      ON DUPLICATE KEY UPDATE value = {{ service_quota.value }} "
+  loop: "{{ quota_profile.quotas | dict2items }}"
+  loop_control:
+    loop_var: service_quota
+...

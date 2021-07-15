@@ -1,0 +1,85 @@
+---
+## AlternC logos and favicon customization
+
+- debug: 
+    msg: '{{ alternc_logo.local_file | splitext }}'
+    verbosity: 3
+
+- debug: 
+    msg: '{{ alternc_logo.local_file | splitext | first }}'
+    verbosity: 3
+
+- debug: 
+    msg: '{{ alternc_logo.local_file | splitext | last }}'
+    verbosity: 3
+
+- name: Resize logo (not .ico)
+  local_action: >
+    command convert {{ alternc_local_file_path }}/{{ alternc_logo.local_file }} 
+    -resize {{ alternc_logo.resize }} 
+    {{ alternc_local_file_path }}/{{ alternc_logo.remote_file }}
+  become: no
+  when: alternc_logo.resize is string
+
+- name: Resize logo and build favicon file
+  block:
+
+  - name: Resize the several dimensions images for the favicon
+    local_action: >
+      command convert {{ alternc_local_file_path }}/{{ alternc_logo.local_file }} 
+      -resize  {{ logo_resize }} 
+      {{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png
+    loop: '{{ alternc_logo.resize if alternc_logo.resize | type_debug == "list"  else "[]" }}'
+    loop_control:
+      loop_var: logo_resize
+
+  - name: Build favicon file
+    local_action: >
+      command icotool -c -o  {{ alternc_local_file_path }}/{{ alternc_logo.remote_file }} 
+      {% for logo_resize in alternc_logo.resize %}{{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png {% endfor %}
+
+  when: 
+  - alternc_logo.resize | type_debug == "list"
+  - alternc_logo.local_file | splitext | last == ".png"
+  become: no
+
+- name: Local copy of favicon file, if directly provided
+  copy:
+    src: '{{ alternc_local_file_path }}/{{ alternc_logo.local_file }}'
+    dest: '{{ alternc_local_file_path }}/{{ alternc_logo.remote_file }}' 
+  become: no
+  delegate_to: localhost
+  when: alternc_logo.local_file | splitext | last == ".ico"
+
+- name: Upload logo
+  copy:
+    src: '{{ alternc_local_file_path }}/{{ alternc_logo.remote_file }}'
+    dest: '{{ alternc_image_file_path }}/{{ alternc_logo.remote_file }}'
+    owner: alterncpanel
+    group: alterncpanel
+    mode: '0644'
+
+- name: Set logo AlternC's variable in the database
+  shell: >-
+      mysql {{ alternc_query_options }} 
+      "UPDATE variable SET value = '{{ alternc_image_url_path }}/{{ alternc_logo.remote_file }}'
+      WHERE name='{{ alternc_logo.name }}' "
+
+- name: Delete resized logo (not .ico)
+  file:
+    path: '{{ alternc_local_file_path }}/{{ alternc_logo.remote_file }}'
+    state: absent
+  become: no
+  delegate_to: localhost
+
+- name: Delete resized images for favicon
+  file:
+    path: '{{ alternc_local_file_path }}/{{ alternc_logo.remote_file | splitext | first }}-{{ logo_resize }}.png'
+    state: absent
+  become: no
+  delegate_to: localhost
+  loop: '{{ alternc_logo.resize if alternc_logo.resize | type_debug == "list"  else "[]" }}'
+  loop_control:
+    loop_var: logo_resize
+
+...
