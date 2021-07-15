@@ -75,14 +75,15 @@ alternc_logos:
   - 64x64
   - 128x128
 
-## Name of package that provides `icotools` command on ansible controller, needed if the role builds the .ico file,
-# Remark: default value is at least ok for common Debian-like distributions. If your local distro has another 
+## Name of package that provides `icotools` command on ansible controller, needed if the role if it builds the .ico file
+# Note 1: the role tries to be agnostic in regard to the controller's OS, but it needs to be "ansible manageable", 
+# particularly with the package `python-apt` for Debian-like distributions. If not, you can also install manually any
+# package providing `icotool` command line before running the role and skip `icoutils` tag: 
+#  ansible-playbook alternc-playbook.yml --skip-tags icoutils
+# Note 2: default value is at least ok for common Debian-like distributions. If your local distro has another 
 # name for this package, there is no much sense to store this value in a git repo. As it's needed only once for
 # package install, it makes more sense to set it in the command line: 
 #  ansible-playbook alternc-playbook.yml --extra-vars '{"alternc_icoutils_pkg":"icoutils-custom"}'  
-# You can also install manually any package providing `icotool` command line before running the role 
-# and skip `icoutils` tag: 
-#  ansible-playbook alternc-playbook.yml --skip-tags icoutils
 alternc_icoutils_pkg: "icoutils"
 
 ...

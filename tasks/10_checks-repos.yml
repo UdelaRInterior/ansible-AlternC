@@ -75,7 +75,12 @@
     vars: 
       alternc_check_icoutils_pckg: 'ansible_facts.packages.{{ alternc_icoutils_pkg }}'
 
-  when: alternc_favicon is string and alternc_favicon != ''
+
+  when: 
+  - alternc_favicon_local_file != ''
+  - alternc_favicon_local_file | splitext | last != ".ico"
+  vars: 
+    alternc_favicon_local_file: alternc_logos | json_query('[?name==`favicon`].local_file') | splitext | last == ".ico"
   tags: icoutils
 
 - debug: 
